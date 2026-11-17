@@ -1,0 +1,10 @@
+A reusable collection & multi-facet filter component in React that powers the Gallery Pinboard SPA, Projects index, Works archive, and Media Ledger from plain .json and .txt files.
+
+Originally designed for the Media Ledger page, <Shelf /> (assets/scripts/components/Shelf.js) was extracted into a reusable React component that now powers all four collection pages across NRKI: Gallery, Projects, Works, and Media.
+
+## 1. How <Shelf /> Works
+The component accepts a declarative filters configuration array, an items dataset loaded from index.json + .txt files, and a custom renderCard function. It automatically extracts every unique #tag from the items to build an interactive tag filter bar alongside the primary category/status filters.
+
+## 2. The Gallery Pinboard SPA Overlay
+On pages/gallery.html, assets/scripts/gallery-spa.js wraps the <Shelf /> component inside a stateful Single-Page Application. Each card renders its visual study, the opening summary paragraph from its .txt file, connected board pins, and an external link to the primary motif. Clicking the card opens an accessible modal overlay containing the full essay from the .txt file and a curated list of all inspirations and motifs.
+

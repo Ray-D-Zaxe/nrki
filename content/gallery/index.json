@@ -1,0 +1,271 @@
+{
+  "filters": [
+    {
+      "key": "category",
+      "label": "Board Thread",
+      "options": [
+        {
+          "value": "all",
+          "label": "All Pins"
+        },
+        {
+          "value": "story",
+          "label": "Story & Lore"
+        },
+        {
+          "value": "art",
+          "label": "Art & Visuals"
+        },
+        {
+          "value": "motif",
+          "label": "Motifs & Spaces"
+        },
+        {
+          "value": "sound",
+          "label": "Sound & Mood"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "board-01",
+      "boardNumber": "Pin #01",
+      "category": "art",
+      "categoryLabel": "Art & Visuals",
+      "date": "Autumn Note",
+      "title": "Herbarium Plates & Pressed Botanical Ink",
+      "textFile": "board-01.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23e8e6dc%22%2F%3E%3Crect%20x%3D%2228%22%20y%3D%2224%22%20width%3D%22584%22%20height%3D%22312%22%20fill%3D%22%23f2efe7%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Cline%20x1%3D%22320%22%20y1%3D%2224%22%20x2%3D%22320%22%20y2%3D%22336%22%20stroke%3D%22%23848c7e%22%20stroke-width%3D%221%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Cpath%20d%3D%22M%20170%20290%20C%20170%20200%2C%20165%20130%2C%20180%2070%22%20fill%3D%22none%22%20stroke%3D%22%232d4f36%22%20stroke-width%3D%223%22%2F%3E%3Cellipse%20cx%3D%22145%22%20cy%3D%22180%22%20rx%3D%2234%22%20ry%3D%2214%22%20transform%3D%22rotate(-28%20145%20180)%22%20fill%3D%22%23475e4e%22%20opacity%3D%220.85%22%2F%3E%3Cellipse%20cx%3D%22205%22%20cy%3D%22150%22%20rx%3D%2234%22%20ry%3D%2214%22%20transform%3D%22rotate(25%20205%20150)%22%20fill%3D%22%232d4f36%22%20opacity%3D%220.85%22%2F%3E%3Cellipse%20cx%3D%22148%22%20cy%3D%22120%22%20rx%3D%2228%22%20ry%3D%2212%22%20transform%3D%22rotate(-22%20148%20120)%22%20fill%3D%22%232d4f36%22%20opacity%3D%220.85%22%2F%3E%3Cellipse%20cx%3D%22180%22%20cy%3D%2272%22%20rx%3D%2218%22%20ry%3D%2228%22%20fill%3D%22%236d673b%22%20opacity%3D%220.75%22%2F%3E%3Crect%20x%3D%22135%22%20y%3D%22235%22%20width%3D%2275%22%20height%3D%2216%22%20transform%3D%22rotate(-6%20135%20235)%22%20fill%3D%22%23edeacf%22%20stroke%3D%22%236d673b%22%2F%3E%3Ctext%20x%3D%2252%22%20y%3D%2256%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2213%22%20fill%3D%22%235d6359%22%3ESPECIMEN%20NO.%2014%20%C2%B7%20ARTEMISIA%3C%2Ftext%3E%3Ctext%20x%3D%22352%22%20y%3D%2278%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2222%22%20font-weight%3D%22bold%22%20fill%3D%22%23171b16%22%3EField%20Notes%20on%20Ink%3C%2Ftext%3E%3Cline%20x1%3D%22352%22%20y1%3D%2296%22%20x2%3D%22572%22%20y2%3D%2296%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%221.5%22%2F%3E%3Crect%20x%3D%22352%22%20y%3D%22196%22%20width%3D%22216%22%20height%3D%2298%22%20fill%3D%22%23deebe0%22%20stroke%3D%22%232d4f36%22%2F%3E%3Ctext%20x%3D%22368%22%20y%3D%22230%22%20font-family%3D%22Georgia%2C%20serif%22%20font-style%3D%22italic%22%20font-size%3D%2214%22%20fill%3D%22%23171b16%22%3E%E2%80%9CPaper%20remembers%20the%20weight%3C%2Ftext%3E%3Ctext%20x%3D%22368%22%20y%3D%22252%22%20font-family%3D%22Georgia%2C%20serif%22%20font-style%3D%22italic%22%20font-size%3D%2214%22%20fill%3D%22%23171b16%22%3Eof%20whatever%20was%20pressed%20inside.%E2%80%9D%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate I · Pressed specimen & marginalia layout",
+      "mainMotif": {
+        "label": "Linnean Society Herbarium Archive",
+        "url": "https://linnean-online.org/"
+      },
+      "relatedIds": [
+        "board-02",
+        "board-04"
+      ],
+      "tags": [
+        "herbarium",
+        "illustration",
+        "color-study",
+        "archival"
+      ],
+      "inspirations": [
+        {
+          "title": "The Linnean Society Digital Herbarium",
+          "url": "https://linnean-online.org/",
+          "note": "Primary visual motif for paper grain, tape strips, and handwritten taxonomy labels."
+        },
+        {
+          "title": "Ernst Haeckel — Kunstformen der Natur (1904)",
+          "url": "https://en.wikipedia.org/wiki/Kunstformen_der_Natur",
+          "note": "Symmetry and fine line-engraving composition studies."
+        },
+        {
+          "title": "The Elements of Typographic Style — Robert Bringhurst",
+          "url": "https://en.wikipedia.org/wiki/The_Elements_of_Typographic_Style",
+          "note": "Notes on classical page proportions and marginalia."
+        }
+      ]
+    },
+    {
+      "id": "board-02",
+      "boardNumber": "Pin #02",
+      "category": "story",
+      "categoryLabel": "Story & Lore",
+      "date": "Worldbuilding",
+      "title": "The Sunken Telegraph & Paper Cities",
+      "textFile": "board-02.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23181d19%22%2F%3E%3Ccircle%20cx%3D%22490%22%20cy%3D%2288%22%20r%3D%2242%22%20fill%3D%22%23c4b574%22%20opacity%3D%220.22%22%2F%3E%3Ccircle%20cx%3D%22490%22%20cy%3D%2288%22%20r%3D%2224%22%20fill%3D%22%23c4b574%22%20opacity%3D%220.55%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%22150%22%20width%3D%2275%22%20height%3D%22170%22%20fill%3D%22%23222923%22%20stroke%3D%22%237ea383%22%20stroke-width%3D%221.5%22%2F%3E%3Crect%20x%3D%22155%22%20y%3D%22110%22%20width%3D%2290%22%20height%3D%22210%22%20fill%3D%22%23222923%22%20stroke%3D%22%237ea383%22%20stroke-width%3D%221.5%22%2F%3E%3Crect%20x%3D%22270%22%20y%3D%22175%22%20width%3D%2285%22%20height%3D%22145%22%20fill%3D%22%23222923%22%20stroke%3D%22%237ea383%22%20stroke-width%3D%221.5%22%2F%3E%3Cpolygon%20points%3D%22430%2C60%20405%2C320%20455%2C320%22%20fill%3D%22none%22%20stroke%3D%22%23c4b574%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M%2095%20150%20Q%20200%2090%2C%20430%2065%22%20fill%3D%22none%22%20stroke%3D%22%238b9484%22%20stroke-width%3D%221.5%22%20stroke-dasharray%3D%225%203%22%2F%3E%3Ctext%20x%3D%2248%22%20y%3D%2248%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2214%22%20fill%3D%22%23c4b574%22%3ELORE%20FRAGMENT%2002%20%C2%B7%20SECTOR%20IV%20RELAY%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate II · Relay tower & overhead cable silhouette",
+      "mainMotif": {
+        "label": "Italo Calvino — Invisible Cities",
+        "url": "https://en.wikipedia.org/wiki/Invisible_Cities"
+      },
+      "relatedIds": [
+        "board-01",
+        "board-03",
+        "board-05"
+      ],
+      "tags": [
+        "worldbuilding",
+        "fiction",
+        "retro-futurism",
+        "telegraph"
+      ],
+      "inspirations": [
+        {
+          "title": "Invisible Cities — Italo Calvino (1972)",
+          "url": "https://en.wikipedia.org/wiki/Invisible_Cities",
+          "note": "Poetic vignette structure for describing imaginary urban architecture and memory."
+        },
+        {
+          "title": "Disco Elysium — Revachol Worldbuilding (ZA/UM)",
+          "url": "https://en.wikipedia.org/wiki/Disco_Elysium",
+          "note": "Weathered mid-century technology, radiocomputers, and oil-painted coastal fog."
+        },
+        {
+          "title": "19th-Century Paris Pneumatic Post Network",
+          "url": "https://en.wikipedia.org/wiki/Paris_pneumatic_post",
+          "note": "Real-world engineering history of pressurized underground message tubes."
+        }
+      ]
+    },
+    {
+      "id": "board-03",
+      "boardNumber": "Pin #03",
+      "category": "sound",
+      "categoryLabel": "Sound & Mood",
+      "date": "Audio Study",
+      "title": "Tape Loops, Rain & Shortwave Number Stations",
+      "textFile": "board-03.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23dcdecf%22%2F%3E%3Crect%20x%3D%2236%22%20y%3D%2232%22%20width%3D%22568%22%20height%3D%22296%22%20fill%3D%22%23f8f7f2%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22195%22%20cy%3D%22175%22%20r%3D%2272%22%20fill%3D%22%23e8e6dc%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%22195%22%20cy%3D%22175%22%20r%3D%2222%22%20fill%3D%22%232d4f36%22%2F%3E%3Ccircle%20cx%3D%22445%22%20cy%3D%22175%22%20r%3D%2272%22%20fill%3D%22%23e8e6dc%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%22445%22%20cy%3D%22175%22%20r%3D%2222%22%20fill%3D%22%236d673b%22%2F%3E%3Cline%20x1%3D%22195%22%20y1%3D%22103%22%20x2%3D%22445%22%20y2%3D%22103%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M%20195%20247%20Q%20320%20295%2C%20445%20247%22%20fill%3D%22none%22%20stroke%3D%22%232d4f36%22%20stroke-width%3D%222.5%22%2F%3E%3Ctext%20x%3D%2264%22%20y%3D%2268%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2214%22%20font-weight%3D%22bold%22%20fill%3D%22%23171b16%22%3ETAPE%20STUDY%2003%20%C2%B7%203.75%20IPS%20SATURATION%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate III · Physical tape loop path & splice diagram",
+      "mainMotif": {
+        "label": "The Conet Project (Shortwave Recordings)",
+        "url": "https://en.wikipedia.org/wiki/The_Conet_Project"
+      },
+      "relatedIds": [
+        "board-02",
+        "board-06"
+      ],
+      "tags": [
+        "soundscape",
+        "tape-loops",
+        "ambient",
+        "shortwave"
+      ],
+      "inspirations": [
+        {
+          "title": "The Conet Project — Recordings of Shortwave Number Stations",
+          "url": "https://en.wikipedia.org/wiki/The_Conet_Project",
+          "note": "Haunting 4-note interval signals and radio static textures."
+        },
+        {
+          "title": "William Basinski — The Disintegration Loops",
+          "url": "https://en.wikipedia.org/wiki/The_Disintegration_Loops",
+          "note": "How physical decay on magnetic tape creates evolving rhythmic space."
+        },
+        {
+          "title": "Burial — Untrue (2007)",
+          "url": "https://en.wikipedia.org/wiki/Untrue_(album)",
+          "note": "Rain, vinyl noise, and nocturnal urban solitude."
+        }
+      ]
+    },
+    {
+      "id": "board-04",
+      "boardNumber": "Pin #04",
+      "category": "motif",
+      "categoryLabel": "Motifs & Spaces",
+      "date": "Visual Motif",
+      "title": "Monoliths & Moss: Reclaimed Brutalist Geometry",
+      "textFile": "board-04.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23e4ebe5%22%2F%3E%3Cpolygon%20points%3D%22140%2C320%20190%2C60%20330%2C60%20330%2C320%22%20fill%3D%22%23848c7e%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Cpolygon%20points%3D%22330%2C320%20330%2C110%20490%2C110%20520%2C320%22%20fill%3D%22%235d6359%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22310%22%20cy%3D%22210%22%20r%3D%2248%22%20fill%3D%22%232d4f36%22%20opacity%3D%220.85%22%2F%3E%3Ccircle%20cx%3D%22355%22%20cy%3D%22245%22%20r%3D%2238%22%20fill%3D%22%23475e4e%22%20opacity%3D%220.9%22%2F%3E%3Ctext%20x%3D%2260%22%20y%3D%2248%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2214%22%20fill%3D%22%23171b16%22%3EMOTIF%2004%20%C2%B7%20CONCRETE%20%26%20BRYOPHYTES%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate IV · Angular concrete massing vs. organic canopy",
+      "mainMotif": {
+        "label": "Tarkovsky's 'The Zone' (Stalker, 1979)",
+        "url": "https://en.wikipedia.org/wiki/Stalker_(1979_film)"
+      },
+      "relatedIds": [
+        "board-01",
+        "board-02"
+      ],
+      "tags": [
+        "brutalism",
+        "architecture",
+        "botany",
+        "contrast"
+      ],
+      "inspirations": [
+        {
+          "title": "Andrei Tarkovsky — Stalker (1979)",
+          "url": "https://en.wikipedia.org/wiki/Stalker_(1979_film)",
+          "note": "Industrial ruins reclaimed by waist-high grass, water, and mist."
+        },
+        {
+          "title": "Spomenik Monument Database",
+          "url": "https://www.spomenikdatabase.org/",
+          "note": "Sculptural concrete memorials set deep inside mountain forests."
+        }
+      ]
+    },
+    {
+      "id": "board-05",
+      "boardNumber": "Pin #05",
+      "category": "story",
+      "categoryLabel": "Story & Lore",
+      "date": "Character Sketch",
+      "title": "The Archivist of Unsent Letters",
+      "textFile": "board-05.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23f2efe7%22%2F%3E%3Crect%20x%3D%2280%22%20y%3D%2264%22%20width%3D%22220%22%20height%3D%22140%22%20transform%3D%22rotate(-4%20190%20134)%22%20fill%3D%22%23f8f7f2%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Crect%20x%3D%22330%22%20y%3D%22130%22%20width%3D%22230%22%20height%3D%22145%22%20transform%3D%22rotate(5%20445%20202)%22%20fill%3D%22%23edeacf%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22445%22%20cy%3D%22202%22%20r%3D%2218%22%20fill%3D%22%236f221b%22%20opacity%3D%220.85%22%2F%3E%3Ctext%20x%3D%2264%22%20y%3D%2246%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2214%22%20fill%3D%22%235d6359%22%3ESTORY%20SEED%2005%20%C2%B7%20DEAD%20LETTER%20FOLIO%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate V · Cross-referenced correspondence thread",
+      "mainMotif": {
+        "label": "Herman Melville — Bartleby, the Scrivener",
+        "url": "https://en.wikipedia.org/wiki/Bartleby,_the_Scrivener"
+      },
+      "relatedIds": [
+        "board-01",
+        "board-02",
+        "board-06"
+      ],
+      "tags": [
+        "character",
+        "short-story",
+        "epistolary",
+        "mystery"
+      ],
+      "inspirations": [
+        {
+          "title": "Bartleby, the Scrivener — Herman Melville",
+          "url": "https://en.wikipedia.org/wiki/Bartleby,_the_Scrivener",
+          "note": "The closing rumor of the Dead Letter Office as a literary motif."
+        },
+        {
+          "title": "Griffin & Sabine — Nick Bantock",
+          "url": "https://en.wikipedia.org/wiki/Griffin_and_Sabine",
+          "note": "Tactile epistolary storytelling told through removable postcards and envelopes."
+        }
+      ]
+    },
+    {
+      "id": "board-06",
+      "boardNumber": "Pin #06",
+      "category": "motif",
+      "categoryLabel": "Motifs & Spaces",
+      "date": "System Note",
+      "title": "Zettelkasten & Why Ideas Need Visible Threads",
+      "textFile": "board-06.txt",
+      "image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20360%22%3E%3Crect%20width%3D%22640%22%20height%3D%22360%22%20fill%3D%22%23e8e6dc%22%2F%3E%3Cline%20x1%3D%22160%22%20y1%3D%22120%22%20x2%3D%22330%22%20y2%3D%2295%22%20stroke%3D%22%232d4f36%22%20stroke-width%3D%222%22%2F%3E%3Cline%20x1%3D%22330%22%20y1%3D%2295%22%20x2%3D%22490%22%20y2%3D%22160%22%20stroke%3D%22%232d4f36%22%20stroke-width%3D%222%22%2F%3E%3Crect%20x%3D%2295%22%20y%3D%2285%22%20width%3D%22130%22%20height%3D%2270%22%20fill%3D%22%23f8f7f2%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%22115%22%20y%3D%22125%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2213%22%20font-weight%3D%22bold%22%20fill%3D%22%23171b16%22%3EPIN%20%2301%20%C2%B7%20INK%3C%2Ftext%3E%3Crect%20x%3D%22265%22%20y%3D%2260%22%20width%3D%22130%22%20height%3D%2270%22%20fill%3D%22%23f8f7f2%22%20stroke%3D%22%23171b16%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%22285%22%20y%3D%22100%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2213%22%20font-weight%3D%22bold%22%20fill%3D%22%23171b16%22%3EPIN%20%2302%20%C2%B7%20CITY%3C%2Ftext%3E%3Crect%20x%3D%22425%22%20y%3D%22125%22%20width%3D%22130%22%20height%3D%2270%22%20fill%3D%22%23deebe0%22%20stroke%3D%22%232d4f36%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%22445%22%20y%3D%22165%22%20font-family%3D%22Courier%20New%2C%20monospace%22%20font-size%3D%2213%22%20font-weight%3D%22bold%22%20fill%3D%22%232d4f36%22%3EPIN%20%2305%20%C2%B7%20MAIL%3C%2Ftext%3E%3C%2Fsvg%3E",
+      "caption": "Plate VI · Cross-linked index cards (Zettelkasten graph)",
+      "mainMotif": {
+        "label": "Niklas Luhmann's Zettelkasten Archive",
+        "url": "https://en.wikipedia.org/wiki/Zettelkasten"
+      },
+      "relatedIds": [
+        "board-03",
+        "board-05"
+      ],
+      "tags": [
+        "zettelkasten",
+        "knowledge-graph",
+        "process",
+        "notes"
+      ],
+      "inspirations": [
+        {
+          "title": "Niklas Luhmann — Communicating with Slip Boxes",
+          "url": "https://en.wikipedia.org/wiki/Zettelkasten",
+          "note": "Numbered index cards linked by explicit branching IDs."
+        },
+        {
+          "title": "Aby Warburg — Mnemosyne Atlas",
+          "url": "https://warburg.sas.ac.uk/archive/bilderatlas-mnemosyne",
+          "note": "Black-cloth pinboards arranging art-history motifs by visual resonance rather than chronology."
+        }
+      ]
+    }
+  ]
+}

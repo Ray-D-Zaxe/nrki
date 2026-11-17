@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sample article and developer log template for NRKI.">
+    <title>Building NRKI: Architecture &amp; Post Template — NRKI</title>
+    <script>
+        (function () {
+            var saved = localStorage.getItem("nrki-theme");
+            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        })();
+    </script>
+    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <script defer src="../../assets/scripts/main.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page-shell">
+        <!-- ================================================================
+             SITE MASTHEAD & PRIMARY NAVIGATION
+             ================================================================ -->
+        <header class="site-header">
+            <div class="masthead-bar">
+                <p class="edition-line">Vol. I · Sec. 03 <span>—</span> Works &amp; Dispatches</p>
+                <div class="masthead-meta">
+                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+                        <time data-masthead-date>Thursday, Nov 5, 2026</time>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span data-masthead-time>18:50</span>
+                        <span data-masthead-tz>LOCAL</span>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
+                    </p>
+                    <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+                        Ink: Paper ☀
+                    </button>
+                </div>
+            </div>
+
+            <a class="wordmark" href="../../index.html" aria-label="NRKI home">NRKI</a>
+            <p class="masthead-note">Essays, poems, dev logs, articles, and web art.</p>
+
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="../../index.html">Home</a>
+                <a href="../gallery.html">Gallery</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../works.html" aria-current="page">Works</a>
+                <a href="../media.html">Media</a>
+                <a href="../about.html">About &amp; CV</a>
+            </nav>
+        </header>
+
+        <!-- ================================================================
+             ARTICLE / POST READING SHELL
+             Duplicate this file inside `pages/works/` whenever you publish a
+             new blog post, poem, dev log, or article, then add an entry linking
+             to it in `WORK_ITEMS` inside `assets/scripts/data/site-data.js`.
+             ================================================================ -->
+        <main id="main" class="article-shell">
+            <a class="back-link" href="../works.html">← Back to Works Shelf</a>
+
+            <article style="margin-top: 1.5rem;">
+                <header class="article-header">
+                    <p class="eyebrow">Dev Log · Template</p>
+                    <h1>Building NRKI: Why Start with Plain HTML, CSS &amp; JS</h1>
+                    <div class="article-byline">
+                        <span>By NRKI</span>
+                        <span>·</span>
+                        <time datetime="2026-11-05">November 5, 2026</time>
+                        <span>·</span>
+                        <span>4 min read</span>
+                    </div>
+                </header>
+
+                <div class="article-body">
+                    <p>
+                        This page serves as both a <strong>ready-to-copy post template</strong> for future blogs,
+                        essays, poems, and dev logs, and a living walkthrough of how NRKI comes together under the hood.
+                    </p>
+
+                    <blockquote>
+                        “Keep the foundation as simple and durable as newsprint; add interactivity only where it earns its place.”
+                    </blockquote>
+
+                    <h2>1. How the Stylesheet Works</h2>
+                    <p>
+                        All visual styling lives in a single, well-commented file: <code>assets/styles/style.css</code>.
+                        At the top of that file, <code>:root</code> defines the light <strong>Herbarium Newsprint</strong>
+                        palette, while <code>[data-theme="dark"]</code> defines the reversed <strong>Pine Charcoal</strong>
+                        palette. Because every component references semantic variables like <code>var(--bg-primary)</code>
+                        and <code>var(--ink-primary)</code>, toggling dark mode updates the entire site automatically.
+                    </p>
+
+                    <h2>2. How Interactive Filtering Works</h2>
+                    <p>
+                        In <code>assets/scripts/main.js</code>, the <code>initFilterGroups()</code> function looks for any
+                        section marked with <code>data-filter-scope</code>. Filter buttons specify
+                        <code>data-filter-key</code> and <code>data-filter-value</code>, while items specify matching
+                        <code>data-*</code> attributes:
+                    </p>
+                    <pre><code>&lt;!-- Example: Adding a new poem to index.html --&gt;
+&lt;a class="work-row" href="./pages/works/my-poem.html"
+   data-filter-item data-category="poem"&gt;
+    &lt;span class="work-category"&gt;Poem&lt;/span&gt;
+    &lt;span class="work-main"&gt;
+        &lt;strong&gt;Title of the Poem&lt;/strong&gt;
+        &lt;span&gt;A short one-line summary or opening verse.&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;time class="work-date"&gt;Nov 2026 →&lt;/time&gt;
+&lt;/a&gt;</code></pre>
+
+                    <h2>3. Adding React Islands or SPAs Later</h2>
+                    <p>
+                        When you are ready to drop a React component into a page (or build a standalone React mini-SPA
+                        under <code>pages/projects/</code>), you don’t need to rewrite the rest of the site. Simply add
+                        a mount container with <code>data-react-island="my-widget"</code>:
+                    </p>
+                    <div data-react-island="demo-slot" class="editorial-card" style="margin-block: 1.25rem;">
+                        <div class="card-meta">
+                            <span>React Island Mount Point</span>
+                            <span class="badge">Ready for Hydration</span>
+                        </div>
+                        <p style="margin-bottom: 0;">
+                            This block is tagged with <code>data-react-island="demo-slot"</code>. Open your browser console
+                            to see <code>main.js</code> detect it automatically.
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <!-- ================================================================
+             SITE FOOTER
+             ================================================================ -->
+        <footer class="site-footer">
+            <a class="footer-mark" href="../../index.html">NRKI</a>
+            <p>A personal broadsheet, made one page at a time.</p>
+            <a href="../../index.html#works">Back to works <span aria-hidden="true">→</span></a>
+        </footer>
+    </div>
+</body>
+</html>
+

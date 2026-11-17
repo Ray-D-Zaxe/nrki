@@ -1,0 +1,13 @@
+{
+  "id": "dummy-poem",
+  "category": "poem",
+  "categoryLabel": "Poem",
+  "date": "Nov 5, 2026",
+  "readTime": "5 min read",
+  "title": "Dummy Poem",
+  "textFile": "dummy-poem.txt",
+  "tags": [
+    "poem",
+    "dummy"
+  ]
+}

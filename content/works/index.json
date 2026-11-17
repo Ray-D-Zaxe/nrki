@@ -1,0 +1,94 @@
+{
+  "filters": [
+    {
+      "key": "category",
+      "label": "Format",
+      "options": [
+        {
+          "value": "all",
+          "label": "All Works"
+        },
+        {
+          "value": "blog",
+          "label": "Blogs"
+        },
+        {
+          "value": "poem",
+          "label": "Poems"
+        },
+        {
+          "value": "devlog",
+          "label": "Dev Logs"
+        },
+        {
+          "value": "article",
+          "label": "Articles"
+        },
+        {
+          "value": "webart",
+          "label": "Web Art"
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "sample-post",
+      "category": "devlog",
+      "categoryLabel": "Dev Log",
+      "date": "Nov 5, 2026",
+      "readTime": "4 min read",
+      "title": "Building NRKI: Plain HTML, CSS, React Islands & Flat-File TXT",
+      "textFile": "sample-post.txt",
+      "tags": [
+        "architecture",
+        "flat-file",
+        "react-islands",
+        "devlog"
+      ]
+    },
+    {
+      "id": "broadsheet-typography",
+      "category": "article",
+      "categoryLabel": "Article",
+      "date": "Nov 1, 2026",
+      "readTime": "6 min read",
+      "title": "On Minimalist Web Typography & Newsprint Grids",
+      "textFile": "broadsheet-typography.txt",
+      "tags": [
+        "typography",
+        "editorial",
+        "design-systems",
+        "css"
+      ]
+    },
+    {
+      "id": "static-before-signal",
+      "category": "poem",
+      "categoryLabel": "Poem",
+      "date": "Oct 18, 2026",
+      "readTime": "2 min read",
+      "title": "Static Before the Signal",
+      "textFile": "static-before-signal.txt",
+      "tags": [
+        "poetry",
+        "verse",
+        "nocturne",
+        "signal"
+      ]
+    },
+    {
+      "id": "dummy-poem",
+      "category": "poem",
+      "categoryLabel": "Poem",
+      "date": "Nov 5, 2026",
+      "readTime": "5 min read",
+      "title": "Dummy Poem",
+      "textFile": "dummy-poem.txt",
+      "tags": [
+        "poem",
+        "dummy"
+      ]
+    }
+  ]
+}

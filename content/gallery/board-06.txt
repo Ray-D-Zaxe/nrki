@@ -1,0 +1,6 @@
+Notes on Niklas Luhmann’s slip-box method: why a creative board works better when every note points explicitly to the other notes it argues with or builds upon.
+
+When we store ideas in strict hierarchical folders, an architectural photo never bumps into a poem or a synthesizer schematic. In a traditional slip-box (Zettelkasten) or an investigation pinboard, the magic is in the cross-references.
+
+That’s why every card on this Gallery board includes a 'Connects To' row (`relatedIds` in `content/gallery/index.json`). Clicking any connected chip jumps straight to that sister idea so you can trace a creative thread across art, story lore, and sound.
+

@@ -1,0 +1,117 @@
+{
+  "filters": [
+    {
+      "key": "shelf",
+      "label": "Shelf",
+      "options": [
+        { "value": "all", "label": "All Entries" },
+        { "value": "review", "label": "Reviews" },
+        { "value": "watchlist", "label": "Watchlist & Queue" }
+      ]
+    },
+    {
+      "key": "medium",
+      "label": "Medium",
+      "options": [
+        { "value": "all", "label": "All" },
+        { "value": "screen", "label": "Film & TV" },
+        { "value": "book", "label": "Books" },
+        { "value": "music", "label": "Music" },
+        { "value": "game", "label": "Games" }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "media-stalker",
+      "shelf": "review",
+      "medium": "screen",
+      "badgeLabel": "Review · Film",
+      "badgeVariant": "badge--accent",
+      "title": "Stalker (1979)",
+      "creator": "Dir. Andrei Tarkovsky",
+      "ratingOrStatus": "9.5 / 10",
+      "isRating": true,
+      "textFile": "media-stalker.txt",
+      "tags": ["cinema", "sci-fi", "tarkovsky", "essential"],
+      "footerLeft": "Status: Completed",
+      "footerRight": "Rewatch worthy"
+    },
+    {
+      "id": "media-untrue",
+      "shelf": "review",
+      "medium": "music",
+      "badgeLabel": "Review · Album",
+      "badgeVariant": "badge--accent",
+      "title": "Untrue (2007)",
+      "creator": "Burial",
+      "ratingOrStatus": "10 / 10",
+      "isRating": true,
+      "textFile": "media-untrue.txt",
+      "tags": ["electronic", "uk-garage", "ambient", "album"],
+      "footerLeft": "Status: Heavy Rotation",
+      "footerRight": "Essential"
+    },
+    {
+      "id": "media-disco",
+      "shelf": "review",
+      "medium": "game",
+      "badgeLabel": "Review · Game",
+      "badgeVariant": "badge--accent",
+      "title": "Disco Elysium",
+      "creator": "ZA/UM",
+      "ratingOrStatus": "9.8 / 10",
+      "isRating": true,
+      "textFile": "media-disco.txt",
+      "tags": ["crpg", "narrative", "art-direction", "pc"],
+      "footerLeft": "Status: Completed",
+      "footerRight": "CRPG / Narrative"
+    },
+    {
+      "id": "media-lain",
+      "shelf": "watchlist",
+      "medium": "screen",
+      "badgeLabel": "Watchlist · Series",
+      "badgeVariant": "badge--gold",
+      "title": "Serial Experiments Lain",
+      "creator": "Dir. Ryutaro Nakamura (1998)",
+      "ratingOrStatus": "Up Next",
+      "isRating": false,
+      "textFile": "media-lain.txt",
+      "tags": ["anime", "cyberpunk", "1990s", "queue"],
+      "footerLeft": "Queue: High Priority",
+      "footerRight": "13 Episodes"
+    },
+    {
+      "id": "media-bringhurst",
+      "shelf": "watchlist",
+      "medium": "book",
+      "badgeLabel": "Reading List · Book",
+      "badgeVariant": "badge--gold",
+      "title": "The Elements of Typographic Style",
+      "creator": "Robert Bringhurst",
+      "ratingOrStatus": "Reading Now",
+      "isRating": false,
+      "textFile": "media-bringhurst.txt",
+      "tags": ["typography", "design", "non-fiction", "reading"],
+      "footerLeft": "Queue: In Progress",
+      "footerRight": "Design & Print"
+    },
+    {
+      "id": "media-perfect-days",
+      "shelf": "watchlist",
+      "medium": "screen",
+      "badgeLabel": "Watchlist · Film",
+      "badgeVariant": "badge--gold",
+      "title": "Perfect Days (2023)",
+      "creator": "Dir. Wim Wenders",
+      "ratingOrStatus": "Queued",
+      "isRating": false,
+      "textFile": "media-perfect-days.txt",
+      "tags": ["cinema", "slice-of-life", "tokyo", "queue"],
+      "footerLeft": "Queue: Watchlist",
+      "footerRight": "124 min"
+    }
+  ]
+}
+

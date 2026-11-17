@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="About NRKI and browse specialized web and PDF resumes (General CV, Front-end, Back-end, System Design, Music).">
+    <title>About &amp; Resumes - NRKI</title>
+    <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem("nrki-theme");
+            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        })();
+    </script>
+    <link rel="stylesheet" href="../assets/styles/style.css">
+    <script defer src="../assets/scripts/main.js"></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page-shell">
+        <!-- ================================================================
+             SITE MASTHEAD & PRIMARY NAVIGATION
+             ================================================================ -->
+        <header class="site-header">
+            <div class="masthead-bar">
+                <p class="edition-line">Vol. I · Sec. 05 <span>-</span> Colophon &amp; Curriculum Vitae</p>
+                <div class="masthead-meta">
+                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+                        <time data-masthead-date>Thursday, Nov 5, 2026</time>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span data-masthead-time>18:50</span>
+                        <span data-masthead-tz>LOCAL</span>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                    </p>
+                    <div class="masthead-badgegroup">
+                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+                            Ink: Paper ☀
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <a class="wordmark accent" href="../index.html" aria-label="NRKI home">NRKI</a>
+            <p class="masthead-note">Context, philosophy, and tailored resumes in both Web and PDF formats.</p>
+
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="../index.html">Home</a>
+                <a href="./gallery.html">Gallery</a>
+                <a href="./projects.html">Projects</a>
+                <a href="./works.html">Works</a>
+                <a href="./media.html">Media</a>
+                <a href="./about.html" aria-current="page">About &amp; CV</a>
+            </nav>
+        </header>
+
+        <main id="main" class="about-page">
+            <!-- ============================================================
+                 ABOUT INTRO / COLOPHON
+                 ============================================================ -->
+            <section class="about-intro" aria-labelledby="about-title">
+                <p class="eyebrow">About this place</p>
+                <h1 id="about-title">Hello, I’m the person behind NRKI.</h1>
+                <p class="lead-summary">
+                    My name is Raj, a 23 year old dev from Kullu, a small town in the mountains of India also known as
+                    <em>Valley of the Gods</em>.
+                </p>
+                <p class="lead-summary">
+                    NRKI (pronounced <em>anarchy</em>) is my independent digital diary of sorts, a quiet,
+                    newspaper-inspired
+                    archive for the software I build, the essays and poems I write, and the ideas I’m exploring.
+                </p>
+
+                <div class="about-columns">
+                    <div>
+                        <p class="aside-label">Why a Newspaper?</p>
+                        <p>
+                            If you think about it, most sites today look and feel the same. The more one investigates
+                            the more they realise that almost every site is in some way or form a newspaper. It's not
+                            some rule or anything, it's just the most convinient way to present information using text
+                            and media. Most sites however try to go for the same old minimalistic 'professional'
+                            aesthetic that just ends up making them feel souless and boring.
+                        </p>
+                        <p>
+                            The way I see it, the only way out of this trap is to either completely rebel (rethink the
+                            way we present information) or embrace the paper and make it your own playground. The latter
+                            is what NRKI is about.
+                        </p>
+                    </div>
+                    <div>
+                        <p class="aside-label">How It’s Built</p>
+                        <p>
+                            The core shell is plain semantic HTML, a custom botanical newsprint CSS,
+                            and vanilla ES modules with clean mount points reserved for adding React islands and
+                            standalone mini-SPAs where interactivity calls for them.
+                        </p>
+                        <p>
+                            I believe, as devs we have a responsibility to balance developer convenience with
+                            creating something that is worth the user's attention.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 RESUMES & CURRICULUM VITAE DIRECTORY
+                 Each active resume entry provides:
+                 1. A Web View link (`./resumes/<track>.html`) which also supports
+                    one-click browser Print-to-PDF via `@media print`.
+                 2. A direct static PDF download link (`../assets/resumes/<file>.pdf`).
+                 ============================================================ -->
+            <section class="section-block resume-section" id="resumes" aria-labelledby="resume-title">
+                <div class="section-heading">
+                    <p class="eyebrow">A living document</p>
+                    <h2 id="resume-title">Resumes</h2>
+                    <p class="section-heading-note">
+                        Tailored versions of my background. Available to read directly on the web or download as PDF.
+                    </p>
+                </div>
+
+                <div class="section-content">
+                    <p class="section-intro">
+                        A few versions of my experience, each shaped for a different kind of craft.
+                        Currently focusing on the General CV and Front-End track.
+                    </p>
+
+                    <div class="resume-list">
+                        <!-- 01: General CV (Active) -->
+                        <div class="resume-card">
+                            <span class="resume-number">01</span>
+                            <div class="resume-copy">
+                                <strong>General CV</strong>
+                                <span>Comprehensive overview of my engineering background, projects, education, and
+                                    cross-disciplinary work.</span>
+                            </div>
+                            <div class="resume-actions">
+                                <a class="btn-editorial btn-editorial--primary" href="./resumes/general.html">
+                                    Web View ↗
+                                </a>
+                                <a class="btn-editorial" href="../assets/resumes/nrki-general-cv.pdf" download>
+                                    PDF ↓
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 02: Front-End Resume (Active) -->
+                        <div class="resume-card">
+                            <span class="resume-number">02</span>
+                            <div class="resume-copy">
+                                <strong>Front-End Engineering Resume</strong>
+                                <span>Focused on UI architecture, HTML/CSS design systems, TypeScript, React,
+                                    accessibility, and web performance.</span>
+                            </div>
+                            <div class="resume-actions">
+                                <a class="btn-editorial btn-editorial--primary" href="./resumes/resume.html">
+                                    Web View ↗
+                                </a>
+                                <a class="btn-editorial" href="../assets/resumes/nrki-frontend-resume.pdf" download>
+                                    PDF ↓
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 03: Back-End Resume (Planned Track) -->
+                        <div class="resume-card resume-card--planned">
+                            <span class="resume-number">03</span>
+                            <div class="resume-copy">
+                                <strong>Back-End &amp; APIs Resume</strong>
+                                <span>Server-side engineering, databases, API design, and distributed services.</span>
+                            </div>
+                            <div class="resume-actions">
+                                <span class="badge">In preparation</span>
+                            </div>
+                        </div>
+
+                        <!-- 04: System Design Resume (Planned Track) -->
+                        <div class="resume-card resume-card--planned">
+                            <span class="resume-number">04</span>
+                            <div class="resume-copy">
+                                <strong>System Design &amp; Architecture</strong>
+                                <span>High-level system modeling, scalability case studies, and technical
+                                    specifications.</span>
+                            </div>
+                            <div class="resume-actions">
+                                <span class="badge">In preparation</span>
+                            </div>
+                        </div>
+
+                        <!-- 05: Music & Sound Resume (Planned Track) -->
+                        <div class="resume-card resume-card--planned">
+                            <span class="resume-number">05</span>
+                            <div class="resume-copy">
+                                <strong>Music, Sound &amp; Creative Tech CV</strong>
+                                <span>Compositions, audio production, sound design, and creative coding
+                                    experiments.</span>
+                            </div>
+                            <div class="resume-actions">
+                                <span class="badge">In preparation</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="quiet-note">
+                        Tip: Every web resume page includes a built-in print stylesheet-click “Print / Save as PDF”
+                        on any web resume to generate a clean, masthead-free PDF directly from the browser.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- ================================================================
+             SITE FOOTER
+             ================================================================ -->
+        <footer class="site-footer">
+            <a class="footer-mark" href="../index.html">NRKI</a>
+            <p>A personal broadsheet, made one page at a time.</p>
+            <a href="../index.html">Back to the front page <span aria-hidden="true">→</span></a>
+        </footer>
+    </div>
+</body>
+
+</html>

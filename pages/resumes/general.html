@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="General Curriculum Vitae for NRKI - Web & Printable PDF edition.">
+    <title>General CV - NRKI</title>
+    <script>
+        (function () {
+            var saved = localStorage.getItem("nrki-theme");
+            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        })();
+    </script>
+    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <script defer src="../../assets/scripts/main.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page-shell">
+        <!-- ================================================================
+             SITE MASTHEAD (Automatically hidden when printing / saving PDF)
+             ================================================================ -->
+        <header class="site-header">
+            <div class="masthead-bar">
+                <p class="edition-line">Vol. I · Dossier 01 <span>-</span> Curriculum Vitae (General)</p>
+                <div class="masthead-meta">
+                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+                        <time data-masthead-date>Thursday, Nov 5, 2026</time>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span data-masthead-time>18:50</span>
+                        <span data-masthead-tz>LOCAL</span>
+                        <span class="dateline-sep" aria-hidden="true">·</span>
+                    </p>
+                    <div class="masthead-badgegroup">
+                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+                            Ink: Paper ☀
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <p class="masthead-note">Resume / General Overview</p>
+
+            <nav class="site-nav" aria-label="Main navigation">
+                <a href="../../index.html">Home</a>
+                <a href="../gallery.html">Gallery</a>
+                <a href="../projects.html">Projects</a>
+                <a href="../works.html">Works</a>
+                <a href="../media.html">Media</a>
+                <a href="../about.html" aria-current="page">About &amp; CV</a>
+            </nav>
+        </header>
+
+        <main id="main" class="resume-page">
+            <!-- ============================================================
+                 RESUME ACTION TOOLBAR (Hidden in @media print)
+                 ============================================================ -->
+            <div class="resume-toolbar">
+                <a class="back-link" href="../about.html#resumes">← All resumes</a>
+                <div class="resume-toolbar__actions">
+                    <button type="button" class="btn-editorial btn-editorial--primary" data-action="print-resume">
+                        Print / Save as PDF ⎙
+                    </button>
+                    <a class="btn-editorial" href="../../assets/resumes/nrki-general-cv.pdf" download>
+                        Download Static PDF ↓
+                    </a>
+                </div>
+            </div>
+
+            <!-- ============================================================
+                 THE RESUME SHEET
+                 Edit the sections below with your details. When you click
+                 "Print / Save as PDF", `@media print` in `style.css` strips
+                 away the site header/footer and formats this sheet cleanly
+                 for A4 / Letter paper.
+                 ============================================================ -->
+            <article class="resume-sheet" aria-label="General Curriculum Vitae">
+                <!-- Resume Header -->
+                <header class="resume-sheet__header">
+                    <div class="resume-sheet__title">
+                        <p class="eyebrow">Resume / 01</p>
+                        <h1>Raj Aryan (NRKI)</h1>
+                        <p class="resume-sheet__role">Software Engineer · Web Systems &amp; Creative Technologist</p>
+                    </div>
+                    <ul class="resume-contact" aria-label="Contact information">
+                        <li><a href="mailto:raj.aryanw400@gmail.com">raj.aryanw400@gmail.com</a></li>
+                        <li>
+                            <a href="https://github.com/Ray-D-Zaxe" target="_blank" rel="noopener">
+                                github.com/Ray-D-Zaxe
+                            </a>
+                        </li>
+                        <li><a href="../../index.html">nrki.dev</a></li>
+                        <li>
+                            <a href="https://www.linkedin.com/in/raj-aryan-zaxe" target="_blank" rel="noopener">
+                                linkedin.com/in/raj-aryan-zaxe
+                            </a>
+                        </li>
+                        <li>Himachal Pradesh, India</li>
+                    </ul>
+                </header>
+
+                <!-- 1. Summary -->
+                <section class="resume-section-block" aria-labelledby="cv-summary">
+                    <h2 class="resume-section-title" id="cv-summary">Profile</h2>
+                    <div>
+                        <p style="margin-bottom: 0;">
+                            Software engineer and MCA graduate focused on clean web architecture, thoughtful interfaces,
+                            and well-documented systems. Experienced across semantic HTML/CSS, JavaScript/TypeScript,
+                            React, and cross-platform UI (Flutter), alongside core computer science foundations in C/C++,
+                            Python, DBMS, and operating systems.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 2. Experience -->
+                <section class="resume-section-block" aria-labelledby="cv-experience">
+                    <h2 class="resume-section-title" id="cv-experience">Experience</h2>
+                    <div>
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>Associate Jr. Front-End Engineer <em>(Internship)</em> <span class="resume-item__org">- The Iron Network</span></h3>
+                                <span class="resume-item__date">Jan 2026 - July 2026</span>
+                            </div>
+                            <ul class="resume-bullets">
+                                <li>Developed responsive front-end components and single-page views using React, TypeScript, and modern CSS in collaboration with senior engineers.</li>
+                                <li>Integrated REST APIs and asynchronous state management into dynamic React interfaces with clean loading and error states.</li>
+                                <li>Applied component design patterns, semantic HTML5, and modular code practices to keep UI codebases maintainable.</li>
+                            </ul>
+                        </div>
+
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>Front-End Developer <em>(Freelance)</em> <span class="resume-item__org">- University (during Masters)</span></h3>
+                                <span class="resume-item__date">Aug 2025 - Dec 2025</span>
+                            </div>
+                            <ul class="resume-bullets">
+                                <li>Delivered responsive client websites from concept to deployment using HTML5, Tailwind CSS, Flowbite, and JavaScript.</li>
+                                <li>Accelerated UI prototyping and client review cycles using AI-assisted development workflows and component libraries.</li>
+                                <li>Collaborated with clients to gather requirements, iterate on layouts, and ship accessible web pages.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Selected Projects -->
+                <section class="resume-section-block" aria-labelledby="cv-projects">
+                    <h2 class="resume-section-title" id="cv-projects">Selected Work</h2>
+                    <div>
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>NRKI Personal Broadsheet &amp; Publishing Platform</h3>
+                                <span class="resume-item__date">HTML · CSS · JavaScript · React</span>
+                            </div>
+                            <ul class="resume-bullets">
+                                <li>Architected a minimalist newspaper-inspired personal site with custom light/dark botanical newsprint design tokens, a zero-flicker theme initializer, and print-ready web resumes.</li>
+                                <li>Built a flat-file JSON + plain-text content loader and parser alongside a reusable React <code>&lt;Shelf /&gt;</code> component for filtering projects, works, media, and gallery pinboards.</li>
+                            </ul>
+                        </div>
+
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>Interactive React Micro-Apps</h3>
+                                <span class="resume-item__date">React · TypeScript · Canvas</span>
+                            </div>
+                            <ul class="resume-bullets">
+                                <li>Modular React islands and standalone single-page tools embedded within a static HTML architecture.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Skills & Tools -->
+                <section class="resume-section-block" aria-labelledby="cv-skills">
+                    <h2 class="resume-section-title" id="cv-skills">Skills &amp; Craft</h2>
+                    <div class="skills-grid">
+                        <div class="skill-group">
+                            <h4>Languages</h4>
+                            <p>JavaScript (ES6+), TypeScript, HTML5, CSS3, C/C++, Python, Dart, SQL</p>
+                        </div>
+                        <div class="skill-group">
+                            <h4>Frameworks &amp; Web</h4>
+                            <p>React, Zustand, Tailwind CSS, Flutter, REST APIs, Semantic DOM, ARIA</p>
+                        </div>
+                        <div class="skill-group">
+                            <h4>Systems &amp; Tooling</h4>
+                            <p>DBMS, Operating Systems, Data Structures &amp; Algorithms, Git, AI-Assisted Workflows</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Education -->
+                <section class="resume-section-block" aria-labelledby="cv-education">
+                    <h2 class="resume-section-title" id="cv-education">Education</h2>
+                    <div>
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>Master of Computer Applications <em>(MCA)</em> <span class="resume-item__org">- Himachal Pradesh University (HPU), Shimla</span></h3>
+                                <span class="resume-item__date">2024 - 2026</span>
+                            </div>
+                            <p style="margin: 0; font-size: 0.94rem;">
+                                C, DSA, Python, DBMS, Operating Systems, Web Technologies &amp; Computer Networks.
+                            </p>
+                        </div>
+                        <div class="resume-item">
+                            <div class="resume-item__header">
+                                <h3>Bachelor of Computer Applications <em>(BCA)</em> <span class="resume-item__org">- Govt. College Kullu (HPU)</span></h3>
+                                <span class="resume-item__date">2021 - 2024</span>
+                            </div>
+                            <p style="margin: 0; font-size: 0.94rem;">
+                                C/C++, DBMS, Operating Systems &amp; Web Technologies.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <!-- ================================================================
+             SITE FOOTER (Hidden in @media print)
+             ================================================================ -->
+        <footer class="site-footer">
+            <a class="footer-mark" href="../../index.html">NRKI</a>
+            <p>A personal broadsheet, made one page at a time.</p>
+            <a href="../about.html#resumes">Back to resumes <span aria-hidden="true">→</span></a>
+        </footer>
+    </div>
+</body>
+</html>

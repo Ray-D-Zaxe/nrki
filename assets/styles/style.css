@@ -1,0 +1,1833 @@
+/* ==========================================================================
+   NRKI — EDITORIAL DESIGN SYSTEM & STYLESHEET
+   --------------------------------------------------------------------------
+   Architecture Overview:
+   1. DESIGN TOKENS (:root & [data-theme="dark"])
+      - Warm, fibrous newsprint surfaces & reversed dark pine-charcoal theme.
+      - Botanical inks, oxidized brass, and forest-ledger green accents.
+      - Fluid spacing and typographic scale variables.
+   2. RESETS & BASE TYPOGRAPHY
+      - Box-sizing, accessible focus outlines, and editorial serif defaults.
+   3. SITE SHELL, MASTHEAD & NAVIGATION
+      - Newspaper masthead, wordmark, edition bar, nav links, and theme toggle.
+   4. FRONT-PAGE LAYOUT & EDITORIAL SECTIONS
+      - Two-column lead story + "In This Issue" aside, and numbered section blocks.
+   5. GALLERY, PROJECTS & WORKS (CARDS & INTERACTIVE FILTERS)
+      - Broadsheet cards, metadata badges, and JS-powered category filter pills.
+   6. MEDIA LEDGER (REVIEWS & WATCHLIST)
+      - Critic's ledger cards, star/score stamps, status tags, and media filters.
+   7. ABOUT PAGE & RESUME DIRECTORY
+      - Editorial bio layout and multi-track resume index (Web + PDF links).
+   8. WEB RESUME & PRINT/PDF STYLESHEET (@media print)
+      - Structured CV layout that automatically formats as a clean PDF on print.
+   9. RESPONSIVE BREAKPOINTS & ACCESSIBILITY
+      - Mobile/tablet single-column collapses and reduced-motion preferences.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS (LIGHT & DARK BOTANICAL NEWSPRINT PALETTE)
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Typography Families --- */
+  --font-serif: Georgia, "Times New Roman", Baskerville, serif;
+  --font-sans: Arial, Helvetica, system-ui, -apple-system, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+
+  /* --- Layout Constraints --- */
+  --shell-max-width: 72rem;
+  --reading-max-width: 43rem;
+
+  /* --- Base Surfaces & Newsprint (Slightly Muted Herbarium Cast) --- */
+  --bg-primary: #f2efe7;
+  /* Classic fibrous newsprint background */
+  --bg-secondary: #e8e6dc;
+  /* Column tints & soft editorial panels */
+  --bg-tertiary: #dcdecf;
+  /* Olive/parchment tone for cards & pull-quotes */
+  --bg-sunbleached: #f8f7f2;
+  /* Elevated broadsheet surface (e.g. resume sheet) */
+
+  /* --- Ink System (Carbon-black cut with deep pine soot) --- */
+  --ink-primary: #171b16;
+  /* Deep timber-black headline ink */
+  --ink-secondary: #31362f;
+  /* Soft dark-cypress reading body ink */
+  --ink-tertiary: #5d6359;
+  /* Dried moss dateline, byline & caption ink */
+  --ink-faint: #8d9487;
+  /* Faded masthead rules & folio markings */
+
+  /* --- Accent System (Moss, Pine & Oxidized Brass) --- */
+  --accent-primary: #2d4f36;
+  /* Deep Forest / Ledger Green (links, lead tags) */
+  --accent-primary-hover: #1f3725;
+  --accent-primary-tint: #deebe0;
+
+  --accent-secondary: #475e4e;
+  /* Juniper & Lichen Sage (stamps, secondary pills) */
+  --accent-secondary-hover: #324337;
+  --accent-secondary-tint: #e4ebe5;
+
+  --accent-tertiary: #6d673b;
+  /* Antique Olive-Ocher (ratings, vintage seals) */
+  --accent-tertiary-hover: #524d29;
+  --accent-tertiary-tint: #edeacf;
+
+  /* --- Rules, Borders & Dividers --- */
+  --border-strong: #171b16;
+  /* Heavy front-page masthead & double rules */
+  --border-subtle: #848c7e;
+  /* Standard column & section dividers */
+  --border-faint: #c9cebe;
+  /* Light internal grid rules & card borders */
+
+  /* --- Editorial Status & Feedback Colors --- */
+  --warning-ink: #665005;
+  --warning-bg: #f5eed3;
+  --warning-border: #997c1a;
+
+  --alert-ink: #6f221b;
+  --alert-bg: #f4dedd;
+  --alert-border: #943932;
+
+  --success-ink: #1f4228;
+  --success-bg: #ddeede;
+  --success-border: #417551;
+
+  --info-ink: #264336;
+  --info-bg: #e2ede7;
+  --info-border: #4d7a65;
+
+  /* --- Element-Specific Tokens --- */
+  --link-color: var(--accent-primary);
+  --link-hover-color: var(--accent-tertiary);
+  --selection-bg: #c9d6c3;
+  --selection-color: #171b16;
+  --code-bg: #e3e6dd;
+  --code-ink: #283329;
+}
+
+/* Dark Mode Palette — Activated via <html data-theme="dark"> */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* --- Base Surfaces (Deep Charcoal, Pine & Peat Tones) --- */
+  --bg-primary: #121613;
+  /* Deep oxidized pine-charcoal backing */
+  --bg-secondary: #181d19;
+  /* Column shading & secondary article cards */
+  --bg-tertiary: #222923;
+  /* Inset quotes, code blocks, active cards */
+  --bg-sunbleached: #1b211c;
+  /* Elevated broadsheet surface */
+
+  /* --- Ink System (Reversed Botanical Inks — Soft Linen & Parchment) --- */
+  --ink-primary: #e6e8df;
+  /* Clear bleached linen headline text */
+  --ink-secondary: #c2c7ba;
+  /* Softened newsprint reading body text */
+  --ink-tertiary: #8b9484;
+  /* Bylines, dates, muted captions */
+  --ink-faint: #565f50;
+  /* Watermarks, inactive pagination */
+
+  /* --- Accent System (Sage, Lichen & Warm Brass) --- */
+  --accent-primary: #7ea383;
+  --accent-primary-hover: #98bfa0;
+  --accent-primary-tint: #1e2e22;
+
+  --accent-secondary: #90a58a;
+  --accent-secondary-hover: #adc2a6;
+  --accent-secondary-tint: #242f24;
+
+  --accent-tertiary: #c4b574;
+  --accent-tertiary-hover: #dbcc88;
+  --accent-tertiary-tint: #332f1c;
+
+  /* --- Rules, Borders & Dividers --- */
+  --border-strong: #8b9484;
+  --border-subtle: #3a4438;
+  --border-faint: #262f25;
+
+  /* --- Editorial Status & Feedback Colors --- */
+  --warning-ink: #eed382;
+  --warning-bg: #2b2513;
+  --warning-border: #755f24;
+
+  --alert-ink: #f09f99;
+  --alert-bg: #301a19;
+  --alert-border: #7d332f;
+
+  --success-ink: #9ed4a9;
+  --success-bg: #15291b;
+  --success-border: #35633e;
+
+  --info-ink: #a0cebc;
+  --info-bg: #162721;
+  --info-border: #3b6354;
+
+  /* --- Element-Specific Tokens --- */
+  --link-color: #8bb892;
+  --link-hover-color: #c4b574;
+  --selection-bg: #334836;
+  --selection-color: #f0f4ee;
+  --code-bg: #1a221b;
+  --code-ink: #dbe3d6;
+}
+
+
+/* ==========================================================================
+   2. RESETS & BASE TYPOGRAPHY
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-primary);
+  color: var(--ink-secondary);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-primary);
+  color: var(--ink-secondary);
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* Only animate theme colors when the user actively clicks the theme toggle button,
+   preventing any white flash / transition flicker when navigating between pages. */
+html.theme-transition,
+html.theme-transition body,
+html.theme-transition .site-nav,
+html.theme-transition .editorial-card,
+html.theme-transition .pin-card,
+html.theme-transition .media-entry {
+  transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink-primary);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--border-subtle);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 120ms ease, text-decoration-color 120ms ease;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration-color: currentColor;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+  background-color: var(--code-bg);
+  color: var(--code-ink);
+}
+
+code {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.88em;
+}
+
+pre {
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  border-left: 3px solid var(--accent-primary);
+}
+
+/* Utility class to hide filtered-out items via JavaScript */
+[hidden],
+.is-hidden {
+  display: none !important;
+}
+
+
+/* ==========================================================================
+   3. SITE SHELL, MASTHEAD & NAVIGATION
+   ========================================================================== */
+
+/* Accessibility skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: 1rem;
+  left: -9999px;
+  z-index: 100;
+  padding: 0.5rem 0.85rem;
+  background-color: var(--ink-primary);
+  color: var(--bg-primary);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 1rem;
+}
+
+/* Main centered newspaper container */
+.page-shell {
+  width: min(100% - 3rem, var(--shell-max-width));
+  margin-inline: auto;
+}
+
+/* Top newspaper masthead */
+.site-header {
+  padding-top: 1rem;
+  text-align: center;
+}
+
+/* Top newspaper dateline bar (Vol/No + Live Date/Time/TZ + Theme Toggle) */
+.masthead-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1.25rem;
+  padding-block: 0.55rem;
+  border-top: 2px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Live newspaper dateline strip (Date · Time · Timezone · Edition) */
+.masthead-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem 0.85rem;
+}
+
+.masthead-dateline {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--ink-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dateline-sep {
+  color: var(--ink-faint);
+  user-select: none;
+}
+
+.dateline-edition {
+  padding: 0.1rem 0.4rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-faint);
+  color: var(--ink-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+}
+
+/* Shared small uppercase editorial labels */
+.edition-line,
+.masthead-note,
+.eyebrow,
+.folio,
+.meta-label,
+.resume-number,
+.resume-status {
+  color: var(--ink-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.edition-line {
+  margin: 0;
+  color: var(--ink-secondary);
+  font-weight: 700;
+  letter-spacing: 0.11em;
+}
+
+.edition-line span,
+.folio span {
+  padding-inline: 0.35rem;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+/* Light / Dark theme toggle button in the masthead */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.22rem 0.6rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-sunbleached);
+  color: var(--ink-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--ink-primary);
+  color: var(--bg-primary);
+  border-color: var(--ink-primary);
+}
+
+/* Giant newspaper title wordmark ("NRKI") */
+.wordmark {
+  display: inline-block;
+  margin-block: 0.4rem -0.1rem;
+  color: var(--ink-primary);
+  font-size: clamp(4.2rem, 12vw, 8.2rem);
+  font-weight: 700;
+  letter-spacing: -0.09em;
+  line-height: 1.05;
+  text-decoration: none;
+}
+
+.wordmark.accent {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 600;
+}
+
+.wordmark:hover {
+  color: var(--ink-primary);
+}
+
+.masthead-note {
+  margin-bottom: 1.15rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-tertiary);
+}
+
+/* Horizontal double-ruled navigation bar */
+.site-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(0.9rem, 3.5vw, 2.75rem);
+  border-top: 3px double var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  background-color: var(--bg-sunbleached);
+  padding: 0.65rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--ink-secondary);
+  padding-block: 0.1rem;
+}
+
+.site-nav a:hover {
+  color: var(--accent-primary);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--accent-primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35rem;
+}
+
+
+/* ==========================================================================
+   4. FRONT-PAGE LAYOUT & EDITORIAL SECTIONS
+   ========================================================================== */
+
+/* Front-page hero / lead story split layout */
+.lead-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(14rem, 0.85fr);
+  gap: clamp(2rem, 6vw, 5.5rem);
+  align-items: center;
+  padding-block: clamp(3rem, 7vw, 6rem);
+  border-bottom: 3px double var(--border-strong);
+}
+
+.eyebrow {
+  margin-bottom: 0.75rem;
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.lead-story h1,
+.page-hero h1,
+.about-intro h1,
+.resume-page h1 {
+  max-width: 14ch;
+  margin-bottom: 1.15rem;
+  font-size: clamp(2.6rem, 6.5vw, 5.2rem);
+  letter-spacing: -0.05em;
+  line-height: 1.03;
+}
+
+.lead-summary {
+  max-width: 40rem;
+  color: var(--ink-tertiary);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+}
+
+.lead-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}
+
+.text-link,
+.back-link {
+  display: inline-block;
+  color: var(--accent-primary);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration-thickness: 1px;
+}
+
+/* Right-hand "In this issue" index box on the front page */
+.lead-aside {
+  border-left: 1px solid var(--border-subtle);
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+}
+
+.aside-label {
+  margin-bottom: 0.7rem;
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lead-aside ol {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.lead-aside li {
+  margin-block: 0.6rem;
+  padding-left: 0.2rem;
+}
+
+.lead-aside li::marker {
+  color: var(--ink-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+}
+
+.lead-aside a {
+  text-decoration: none;
+}
+
+.lead-aside a:hover {
+  text-decoration: underline;
+}
+
+.folio {
+  margin-top: 1.75rem;
+  margin-bottom: 0;
+  font-size: 0.65rem;
+}
+
+/* Standard 2-column horizontal section block (Heading left, Content right) */
+.section-block {
+  display: grid;
+  grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.75fr);
+  gap: clamp(1.5rem, 5vw, 4.5rem);
+  padding-block: clamp(2.5rem, 5.5vw, 4.25rem);
+  border-bottom: 1px solid var(--border-subtle);
+  scroll-margin-top: 1.5rem;
+}
+
+.section-heading h2 {
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.85rem, 3.8vw, 2.85rem);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.section-heading-note {
+  color: var(--ink-tertiary);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.section-content {
+  max-width: 100%;
+}
+
+.section-intro {
+  max-width: var(--reading-max-width);
+  margin-bottom: 1.75rem;
+  color: var(--ink-primary);
+  font-size: clamp(1.12rem, 2vw, 1.45rem);
+  line-height: 1.42;
+}
+
+.quiet-note {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  color: var(--ink-tertiary);
+  font-size: 0.92rem;
+  font-style: italic;
+}
+
+/* Sub-page intro banner (used on About, Media, and Post pages) */
+.page-hero,
+.about-intro {
+  padding-block: clamp(3rem, 7vw, 5rem);
+  border-bottom: 3px double var(--border-strong);
+}
+
+
+/* ==========================================================================
+   5. GALLERY, PROJECTS & WORKS (CARDS & INTERACTIVE FILTERS)
+   ========================================================================== */
+
+/* Interactive Filter Bar (used in Works and Media pages) */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1.75rem;
+}
+
+.filter-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--border-subtle);
+  background-color: transparent;
+  color: var(--ink-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--ink-primary);
+  color: var(--ink-primary);
+  background-color: var(--bg-secondary);
+}
+
+.filter-btn.is-active,
+.filter-btn[aria-pressed="true"] {
+  background-color: var(--ink-primary);
+  border-color: var(--ink-primary);
+  color: var(--bg-primary);
+  font-weight: 700;
+}
+
+/* Editorial Multi-Column Grid for Gallery Boards & Projects */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+  gap: 1.25rem;
+}
+
+.editorial-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-sunbleached);
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.editorial-card:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--ink-primary);
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+  color: var(--ink-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.badge--accent {
+  background-color: var(--accent-primary-tint);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.badge--gold {
+  background-color: var(--accent-tertiary-tint);
+  border-color: var(--accent-tertiary);
+  color: var(--accent-tertiary);
+}
+
+.editorial-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.editorial-card p {
+  margin-bottom: 1rem;
+  color: var(--ink-secondary);
+  font-size: 0.94rem;
+}
+
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-faint);
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  color: var(--ink-tertiary);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tag-list li {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-tertiary);
+}
+
+.tag-list li:not(:last-child)::after {
+  content: "·";
+  margin-left: 0.35rem;
+}
+
+/* Boxed Tag Pills (used on Projects, Works, Gallery, and Media cards) */
+.tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0.25rem 0 0.85rem;
+  padding: 0;
+}
+
+.tag-pill {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid var(--border-faint);
+  background-color: var(--bg-primary);
+  color: var(--ink-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.3;
+}
+
+/* Whole-card link / interactive card states (Projects, Works & Gallery SPA) */
+.editorial-card--link,
+.editorial-card--interactive {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+}
+
+.editorial-card--link:hover,
+.editorial-card--interactive:hover {
+  transform: translateY(-2px);
+  background-color: var(--bg-secondary);
+  border-color: var(--ink-primary);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  color: inherit;
+}
+
+.editorial-card--link:hover h3,
+.editorial-card--interactive:hover h3 {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Gallery Card Visual / Media Frame */
+.card-media {
+  position: relative;
+  margin: -1.25rem -1.25rem 1rem -1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-media img,
+.card-media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-media__caption {
+  position: absolute;
+  bottom: 0.45rem;
+  right: 0.55rem;
+  padding: 0.12rem 0.45rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  color: var(--ink-secondary);
+}
+
+/* Gallery Card Main Motif / Inspiration Row */
+.motif-row {
+  margin-bottom: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border-left: 2px solid var(--accent-tertiary);
+  background-color: var(--bg-primary);
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  color: var(--ink-tertiary);
+}
+
+.motif-row strong {
+  color: var(--ink-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.66rem;
+  margin-right: 0.35rem;
+}
+
+.motif-row a {
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+/* Gallery React SPA Article Overlay / Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background-color: rgba(18, 22, 19, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  width: min(100%, 50rem);
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--bg-sunbleached);
+  border: 2px solid var(--border-strong);
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.modal-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-media {
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.modal-media img,
+.modal-media svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.modal-dialog h2 {
+  font-size: clamp(1.75rem, 3.8vw, 2.5rem);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.modal-article p {
+  font-size: 1.02rem;
+  margin-bottom: 1.1rem;
+  color: var(--ink-secondary);
+}
+
+.modal-motifs-box {
+  margin-top: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+}
+
+.modal-motifs-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.modal-motifs-list li {
+  padding-block: 0.55rem;
+  border-bottom: 1px solid var(--border-faint);
+  font-size: 0.92rem;
+}
+
+.modal-motifs-list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Project Detail Page Repository / Live Links Bar */
+.project-links-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+}
+
+.shelf-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+/* Works Ledger List (Newspaper Index Style) */
+.works-ledger {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.work-row {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.15rem 0.35rem;
+  border-bottom: 1px solid var(--border-faint);
+  text-decoration: none;
+  transition: background-color 120ms ease;
+}
+
+.work-row:hover {
+  background-color: var(--bg-secondary);
+}
+
+.work-category {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.work-main strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--ink-primary);
+  font-size: 1.15rem;
+}
+
+.work-main span {
+  display: block;
+  color: var(--ink-tertiary);
+  font-size: 0.92rem;
+}
+
+.work-date {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--ink-tertiary);
+  white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   6. FULL-WIDTH SHELF LAYOUT & ART/STORY PINBOARD (GALLERY, PROJECTS, WORKS, MEDIA)
+   --------------------------------------------------------------------------
+   Unlike `.section-block` on the front page (which uses a narrow left column
+   for headings), `.shelf-section` spans the entire width of `.page-shell` from
+   the left edge to the right edge so there is zero wasted empty space on the left.
+   ========================================================================== */
+
+.shelf-section {
+  padding-block: clamp(2.25rem, 5vw, 3.75rem);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shelf-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shelf-header__titles h2 {
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.85rem, 3.5vw, 2.65rem);
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+}
+
+.shelf-header__note {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--ink-tertiary);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+.media-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem 1.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-faint);
+}
+
+/* Full-width 3-column responsive card grid */
+.media-grid,
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1.35rem;
+}
+
+/* Art / Story / Inspiration Pinboard Card (Gallery Page) */
+.pin-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-sunbleached);
+  cursor: pointer;
+  transition: transform 140ms ease, background-color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+
+/* Subtle top "brass pin / tape tab" accent on Gallery board cards */
+.pin-card::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.75rem;
+  height: 9px;
+  background-color: var(--accent-tertiary-tint);
+  border: 1px solid var(--accent-tertiary);
+  z-index: 2;
+}
+
+.pin-card:hover {
+  transform: translateY(-2px);
+  background-color: var(--bg-secondary);
+  border-color: var(--ink-primary);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+.pin-card:hover h3 {
+  color: var(--accent-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Connected Ideas Thread Row (links ideas that relate to other ideas) */
+.connected-row {
+  margin-bottom: 0.85rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px dashed var(--border-subtle);
+  background-color: var(--bg-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  color: var(--ink-tertiary);
+}
+
+.connected-row strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+}
+
+.connected-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.connected-chip {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid var(--accent-primary);
+  background-color: var(--accent-primary-tint);
+  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.connected-chip:hover {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.media-entry {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.35rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-sunbleached);
+}
+
+.media-entry__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.media-entry__title {
+  margin-bottom: 0.15rem;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.media-entry__creator {
+  margin-bottom: 0.75rem;
+  color: var(--ink-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.media-rating {
+  flex-shrink: 0;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--accent-tertiary);
+  background-color: var(--accent-tertiary-tint);
+  color: var(--accent-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.media-entry__notes {
+  margin-bottom: 1rem;
+  color: var(--ink-secondary);
+  font-size: 0.94rem;
+}
+
+.media-entry__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-faint);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+
+/* ==========================================================================
+   7. ABOUT PAGE & RESUME DIRECTORY
+   ========================================================================== */
+
+.about-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.resume-list {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.resume-card {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color 120ms ease;
+}
+
+.resume-card:hover {
+  background-color: var(--bg-secondary);
+}
+
+.resume-card--planned {
+  opacity: 0.72;
+}
+
+.resume-copy strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--ink-primary);
+  font-size: 1.15rem;
+}
+
+.resume-copy>span {
+  display: block;
+  color: var(--ink-tertiary);
+  font-size: 0.92rem;
+}
+
+.resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-editorial {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  background-color: transparent;
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.btn-editorial:hover {
+  background-color: var(--ink-primary);
+  color: var(--bg-primary);
+  text-decoration: none;
+}
+
+.btn-editorial--primary {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #f8f7f2;
+}
+
+.btn-editorial--primary:hover {
+  background-color: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  color: #f8f7f2;
+}
+
+
+/* ==========================================================================
+   8. WEB RESUME & PRINT/PDF STYLESHEET (@media print)
+   ========================================================================== */
+
+.resume-page {
+  padding-block: 2rem 4rem;
+}
+
+/* Action bar above the web resume (Back link + Print/PDF buttons) */
+.resume-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.resume-toolbar .back-link {
+  margin: 0;
+}
+
+.resume-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+/* Elevated broadsheet container representing the resume document */
+.resume-sheet {
+  padding: clamp(1.75rem, 5vw, 3.5rem);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-sunbleached);
+}
+
+.resume-sheet__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-strong);
+  margin-bottom: 2rem;
+}
+
+.resume-sheet__title h1 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(2.2rem, 4.5vw, 3.25rem);
+  letter-spacing: -0.04em;
+}
+
+.resume-sheet__role {
+  margin: 0;
+  color: var(--accent-primary);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.resume-contact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--ink-tertiary);
+  text-align: right;
+}
+
+.resume-contact li {
+  margin-bottom: 0.2rem;
+}
+
+.resume-section-block {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: 2rem;
+  padding-block: 1.5rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.resume-section-block:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.resume-section-title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+.resume-item {
+  margin-bottom: 1.5rem;
+}
+
+.resume-item:last-child {
+  margin-bottom: 0;
+}
+
+.resume-item__header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.resume-item__header h3 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.resume-item__org {
+  color: var(--accent-primary);
+  font-weight: 400;
+}
+
+.resume-item__date {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--ink-tertiary);
+}
+
+.resume-bullets {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.resume-bullets li {
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+
+.skill-group h4 {
+  margin-bottom: 0.3rem;
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+}
+
+.skill-group p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-secondary);
+}
+
+/* Article / Blog Post Reading View */
+.article-shell {
+  max-width: var(--reading-max-width);
+  margin-inline: auto;
+  padding-block: 2.5rem 4rem;
+}
+
+.article-header {
+  padding-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.article-header h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.08;
+  margin-bottom: 0.75rem;
+}
+
+.article-byline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-tertiary);
+}
+
+.article-body p,
+.article-body ul,
+.article-body ol,
+.article-body blockquote,
+.article-body pre,
+.modal-article p,
+.modal-article ul,
+.modal-article ol,
+.modal-article blockquote,
+.modal-article pre {
+  margin-bottom: 1.25rem;
+  font-size: 1.06rem;
+}
+
+.article-body h2,
+.modal-article h2 {
+  margin-top: 2rem;
+  margin-bottom: 0.65rem;
+  font-size: 1.55rem;
+}
+
+.article-body h3,
+.modal-article h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.article-body blockquote,
+.modal-article blockquote {
+  margin-inline: 0;
+  padding: 0.85rem 1.25rem;
+  border-left: 3px solid var(--accent-primary);
+  background-color: var(--bg-secondary);
+  color: var(--ink-primary);
+  font-style: italic;
+}
+
+.article-body ul,
+.modal-article ul,
+.formatted-list {
+  padding-left: 1.4rem;
+  list-style-type: disc;
+}
+
+.article-body ol,
+.modal-article ol {
+  padding-left: 1.4rem;
+  list-style-type: decimal;
+}
+
+.article-body li,
+.modal-article li {
+  margin-bottom: 0.35rem;
+}
+
+.article-body a,
+.modal-article a {
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Embedded Image, Audio & Video Figures inside Project View, Work View & Gallery Modal */
+.content-media {
+  margin: 1.35rem 0;
+  padding: 0.85rem;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+}
+
+.content-media__header {
+  margin-bottom: 0.55rem;
+  color: var(--accent-primary);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.content-media img,
+.content-media video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border-faint);
+  background-color: var(--bg-primary);
+}
+
+.content-media audio {
+  display: block;
+  width: 100%;
+}
+
+.content-media__caption {
+  margin-top: 0.5rem;
+  color: var(--ink-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  word-break: break-all;
+}
+
+.content-media__fallback {
+  padding: 0.75rem;
+  border: 1px dashed var(--border-subtle);
+  background-color: var(--bg-primary);
+  color: var(--ink-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
+/* Site Footer */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  padding-block: 1.75rem 2.5rem;
+  border-top: 3px double var(--border-strong);
+  color: var(--ink-tertiary);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.footer-mark {
+  color: var(--ink-primary);
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.08em;
+  text-decoration: none;
+}
+
+/* Print Stylesheet — Turns any web resume into a clean printable PDF */
+@media print {
+
+  :root,
+  [data-theme="dark"] {
+    --bg-primary: #ffffff;
+    --bg-sunbleached: #ffffff;
+    --ink-primary: #000000;
+    --ink-secondary: #1a1a1a;
+    --ink-tertiary: #444444;
+    --border-strong: #000000;
+    --border-subtle: #888888;
+    --border-faint: #dddddd;
+    --accent-primary: #000000;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  .site-header,
+  .site-footer,
+  .resume-toolbar,
+  .skip-link {
+    display: none !important;
+  }
+
+  .page-shell {
+    width: 100%;
+    margin: 0;
+  }
+
+  .resume-page {
+    padding: 0;
+  }
+
+  .resume-sheet {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .resume-section-block {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding-block: 0.85rem;
+    page-break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none;
+    color: #000000;
+  }
+}
+
+
+/* ==========================================================================
+   9. RESPONSIVE BREAKPOINTS & ACCESSIBILITY
+   ========================================================================== */
+
+@media (max-width: 1100px) and (min-width: 721px) {
+  .masthead-bar {
+    justify-content: center;
+  }
+
+  .masthead-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 2rem, var(--shell-max-width));
+  }
+
+  .masthead-bar {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .masthead-meta {
+    justify-content: center;
+  }
+
+  .masthead-dateline {
+    justify-content: center;
+  }
+
+  .masthead-badgegroup {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .site-nav {
+    position: sticky;
+    top: 0;
+    gap: 0.65rem 1rem;
+    font-size: 0.7rem;
+  }
+
+  .lead-story,
+  .section-block,
+  .resume-section-block {
+    grid-template-columns: 1fr;
+  }
+
+  .lead-story {
+    gap: 2rem;
+  }
+
+  .lead-aside {
+    border-left: 0;
+    border-top: 1px solid var(--border-subtle);
+    padding: 1.25rem 0 0;
+  }
+
+  .section-block {
+    gap: 1rem;
+  }
+
+  .work-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .resume-card {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .resume-sheet__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .resume-contact {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
