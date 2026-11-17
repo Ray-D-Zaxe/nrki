@@ -240,6 +240,6 @@ Just like Projects, `pages/work-view.html?id=<id>` renders the dedicated reading
 
 See [`CLOUDFLARE_HOSTING_GUIDE.md`](./CLOUDFLARE_HOSTING_GUIDE.md) for the complete step-by-step walkthrough on:
 1. Pushing NRKI to GitHub and deploying for free on **Cloudflare Pages**.
-2. Connecting your **GoDaddy domain** (`yourdomain.com`) to Cloudflare DNS.
-3. Adding **future React SPAs** on free custom subdomains (`app.yourdomain.com`) or subpaths.
+2. Connecting your **Hostinger domain** (`nrki.in`) to Cloudflare DNS.
+3. Adding **future React SPAs** on free custom subdomains (`app.nrki.in`) or subpaths.
 4. Creating and querying free serverless SQLite databases using **Cloudflare D1** and **Pages Functions**.
