@@ -1,6 +1,6 @@
 # NRKI — Cloudflare Hosting, Custom Domain, SPA & Database Guide
 
-This guide walks through how to host **NRKI** for free on **Cloudflare Pages**, connect your **GoDaddy domain**, deploy **multiple future React SPAs** (on subdomains or subpaths), and set up **Cloudflare D1 (SQLite) databases** for your personal database-backed projects.
+This guide walks through how to host **NRKI** for free on **Cloudflare Pages**, connect your **Hostinger domain** (`nrki.in`), deploy **multiple future React SPAs** (on subdomains or subpaths), and set up **Cloudflare D1 (SQLite) databases** for your personal database-backed projects.
 
 ---
 
@@ -8,7 +8,7 @@ This guide walks through how to host **NRKI** for free on **Cloudflare Pages**, 
 
 - **100% Free Tier (No Credit Card Required):** Cloudflare Pages, Cloudflare DNS, Cloudflare Workers, and Cloudflare D1 all work on the free plan without requiring a credit card upfront.
 - **Unlimited Static & SPA Bandwidth:** Your main site, `.txt`/`.json` content files, resumes, and future React SPAs get unlimited bandwidth on Cloudflare's global edge network.
-- **Unlimited Free Subdomains on 1 GoDaddy Domain:** Once your GoDaddy domain points to Cloudflare DNS, you only ever pay GoDaddy for the single base domain (`yourdomain.com`), while creating as many project subdomains as you like (`synth.yourdomain.com`, `notes.yourdomain.com`, `game.yourdomain.com`) for ₹0.
+- **Unlimited Free Subdomains on 1 Hostinger Domain:** Once your Hostinger domain (`nrki.in`) points to Cloudflare DNS, you only ever pay Hostinger for the single base domain (`nrki.in`), while creating as many project subdomains as you like (`synth.nrki.in`, `notes.nrki.in`, `game.nrki.in`) for ₹0.
 - **Serverless SQLite Database (Cloudflare D1):** Ideal for personal databases (catalogs, project logs, tools, trackers) with 5 GB free storage and no database sleep/pausing after 7 days of inactivity.
 
 ---
@@ -19,7 +19,7 @@ Your repository (`https://github.com/Ray-D-Zaxe/nrki.git`) is already initialize
 
 | Branch | Purpose | What Lives Here | Cloudflare Pages URL |
 | :--- | :--- | :--- | :--- |
-| **`main`** *(Production)* | Public live site | Clean general front page, **About & Resumes** live (`general.html` & `resume.html`), while **Gallery, Projects, Works, and Media** display an *"Under Construction"* page until you are ready to launch them. | `https://yourdomain.com` & `https://nrki.pages.dev` |
+| **`main`** *(Production)* | Public live site | Clean general front page, **About & Resumes** live (`general.html` & `resume.html`), while **Gallery, Projects, Works, and Media** display an *"Under Construction"* page until you are ready to launch them. | `https://nrki.in` & `https://nrki.pages.dev` |
 | **`dev`** *(Development / Staging)* | Full working build & content drafting | All interactive React `<Shelf />` pages, the Gallery Pinboard SPA (`gallery-spa.js`), `project-view.html` / `work-view.html`, and all `.txt` + `index.json` content files. | `https://dev.nrki.pages.dev` *(automatic preview URL!)* |
 
 ### Initial Push to GitHub (If Not Already Done)
@@ -94,40 +94,41 @@ git push origin main
 
 ---
 
-## Step 4: Connect Your GoDaddy Domain to Cloudflare
+## Step 4: Connect Your Hostinger Domain (`nrki.in`) to Cloudflare
 
-To use your own domain (e.g., `nrki.in` or `nrki.com`) and unlock free SSL + unlimited project subdomains:
+To use your Hostinger domain (`nrki.in`) and unlock free SSL + unlimited project subdomains:
 
 ### 4A. Add the Domain in Cloudflare
 1. In the Cloudflare dashboard sidebar, click **Websites** → **Add a domain**.
-2. Enter your GoDaddy domain name (e.g., `yourdomain.com`) and click **Continue**.
+2. Enter your Hostinger domain name (`nrki.in`) and click **Continue**.
 3. Scroll down, select the **Free ($0)** plan, and click **Continue**.
 4. Cloudflare will scan existing DNS records and then display **2 Cloudflare Nameservers**, which look like:
    - `ada.ns.cloudflare.com`
    - `bob.ns.cloudflare.com`
    *(Keep this tab open so you can copy them).*
 
-### 4B. Point GoDaddy Nameservers to Cloudflare
-1. Log in to your [GoDaddy Portfolio](https://dcc.godaddy.com/).
-2. Click your domain → go to the **DNS** tab → click **Nameservers**.
-3. Click **Change Nameservers** → select **"I'll use my own nameservers"**.
-4. Paste the **2 Cloudflare Nameservers** from Step 4A and click **Save** / **Continue**.
-5. Go back to Cloudflare and click **Check nameservers now**.
+### 4B. Point Hostinger Nameservers to Cloudflare
+1. Log in to your [Hostinger hPanel](https://hpanel.hostinger.com/).
+2. In the top navigation bar, go to **Domains** → click **Manage** next to **`nrki.in`**.
+3. In the left sidebar under **Domain Overview** (or **DNS / Nameservers**), click **Change** next to **Nameservers**.
+4. Select **"Change nameservers"** (instead of "Use Hostinger nameservers").
+5. Delete the existing `ns1.dns-parking.com` / `ns2.dns-parking.com` entries, paste the **2 Cloudflare Nameservers** from Step 4A into the first two boxes, and click **Save**.
+6. Go back to Cloudflare and click **Check nameservers now**.
    - *Note:* Nameserver propagation typically takes **10 to 30 minutes** (occasionally up to a few hours). Cloudflare will email you as soon as the domain status turns **Active**.
 
-### 4C. Attach the Domain to Your NRKI Pages Site
+### 4C. Attach `nrki.in` to Your NRKI Pages Site
 1. In Cloudflare, go to **Compute (Workers & Pages)** → click your **`nrki`** project.
 2. Open the **Custom domains** tab → click **Set up a custom domain**.
-3. Enter `yourdomain.com` → click **Continue** → click **Activate domain**.
-4. *(Optional)* Repeat for `www.yourdomain.com` so both `yourdomain.com` and `www.yourdomain.com` open NRKI with automatic HTTPS.
+3. Enter `nrki.in` → click **Continue** → click **Activate domain**.
+4. *(Optional)* Repeat for `www.nrki.in` so both `nrki.in` and `www.nrki.in` open NRKI with automatic HTTPS.
 
 ---
 
 ## Step 5: Hosting Future React SPAs
 
-As you build more projects and React SPAs, you have **two clean ways** to host them under your domain:
+As you build more projects and React SPAs, you have **two clean ways** to host them under `nrki.in`:
 
-### Method A: Separate Repo + Free Subdomain (`project.yourdomain.com`) — *Recommended for Full SPAs*
+### Method A: Separate Repo + Free Subdomain (`project.nrki.in`) — *Recommended for Full SPAs*
 Use this when you build a full React/TypeScript SPA using **Vite**, **Next.js (Static Export)**, or **Create React App**.
 
 1. Create a new GitHub repository for the project (e.g., `audio-synth-spa`) and push your React code.
@@ -138,20 +139,20 @@ Use this when you build a full React/TypeScript SPA using **Vite**, **Next.js (S
    - **Build output directory:** `dist`
 4. Click **Save and Deploy**.
    - *SPA Routing Note:* Cloudflare Pages automatically serves `index.html` for client-side routes (`React Router`) when there is no top-level `404.html` file.
-5. Open the project's **Custom domains** tab → click **Set up a custom domain** → type `synth.yourdomain.com`.
+5. Open the project's **Custom domains** tab → click **Set up a custom domain** → type `synth.nrki.in`.
 6. Cloudflare automatically adds the `CNAME` DNS record and SSL certificate!
 7. Finally, add the project to NRKI's Projects Shelf:
    - Create `content/projects/audio-synth.txt` with your project write-up.
-   - Add an entry in `content/projects/index.json` with a link to `https://synth.yourdomain.com`.
+   - Add an entry in `content/projects/index.json` with a link to `https://synth.nrki.in`.
 
 ---
 
-### Method B: Subfolder Inside the NRKI Repo (`yourdomain.com/pages/my-app.html`) — *Best for Mini Web-Art & Small React Islands*
+### Method B: Subfolder Inside the NRKI Repo (`nrki.in/pages/my-app.html`) — *Best for Mini Web-Art & Small React Islands*
 Use this for smaller single-page experiments, interactive poems, or web-art pieces that don't need their own separate repository:
 
 1. Create an HTML file inside `pages/` or a subfolder like `pages/webart/my-piece.html`.
 2. Mount React either using the included lightweight runtime (`assets/scripts/vendor/react-local.js`, just like `pages/gallery.html` does) or bundle a Vite app with `base: '/pages/webart/my-piece/'` in `vite.config.js` and copy its `dist/` output into that folder.
-3. Commit and `git push`—it will immediately be live at `https://yourdomain.com/pages/webart/my-piece/`.
+3. Commit and `git push`—it will immediately be live at `https://nrki.in/pages/webart/my-piece/`.
 
 ---
 
@@ -219,7 +220,7 @@ Inside your Cloudflare Pages project, any file placed in a `functions/` folder b
        .then((data) => setEntries(data));
    }, []);
    ```
-3. Push to GitHub—Cloudflare deploys both your React frontend and your `/api/entries` database endpoint together under the same subdomain (`https://my-project.yourdomain.com`).
+3. Push to GitHub—Cloudflare deploys both your React frontend and your `/api/entries` database endpoint together under the same subdomain (`https://my-project.nrki.in`).
 
 ---
 
@@ -227,10 +228,10 @@ Inside your Cloudflare Pages project, any file placed in a `functions/` folder b
 
 | What You Are Doing | Where / How You Do It | Cost |
 | :--- | :--- | :--- |
-| **Buying / Renewing Base Domain** (`yourdomain.com`) | GoDaddy (supports UPI / Google Pay) | Domain renewal only |
+| **Buying / Renewing Base Domain** (`nrki.in`) | Hostinger (`hostinger.in` — supports UPI / Google Pay) | Domain renewal only |
 | **Drafting & Previewing Content on `dev`** | `git checkout dev` → edit `content/<tab>/*.txt` + `index.json` → `git push origin dev` (`https://dev.nrki.pages.dev`) | Free |
 | **Promoting 1 Section from `dev` to `main`** | `git checkout main` → `git checkout dev -- pages/<page>.html content/<tab>/` → `git push origin main` | Free |
 | **Promoting All of `dev` to `main`** | `git checkout main` → `git merge dev` → `git push origin main` | Free |
-| **Adding a New Standalone React SPA** | New GitHub Repo → Cloudflare Pages → Custom Domain `app.yourdomain.com` | Free |
+| **Adding a New Standalone React SPA** | New GitHub Repo → Cloudflare Pages → Custom Domain `app.nrki.in` | Free |
 | **Adding a Personal SQL Database** | `npx wrangler d1 create <name>` + `functions/api/...` | Free (up to 5 GB & 5M reads/day) |
 
