@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="NRKI - a personal newspaper of ideas, projects, writing, resumes, and media notes.">
-    <title>NRKI - Notes from the edges</title>
+        content="NRKI - a personal broadsheet for software projects, writing, ideas, resumes, and media notes.">
+    <title>NRKI - Personal Broadsheet &amp; Portfolio</title>
     <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
     <script>
         (function () {
@@ -20,17 +20,15 @@
 </head>
 
 <body>
-    <!-- Accessibility shortcut for keyboard navigation -->
     <a class="skip-link" href="#main">Skip to content</a>
 
     <div class="page-shell">
         <!-- ================================================================
              SITE MASTHEAD & PRIMARY NAVIGATION
-             Shared across all pages. Every section has its own dedicated page.
              ================================================================ -->
         <header class="site-header">
             <div class="masthead-bar">
-                <p class="edition-line">Vol. I · No. 01 <span>-</span> Ungoverned Press &amp; Field Archive</p>
+                <p class="edition-line">Vol. I · No. 01 <span>-</span> Independent Press &amp; Personal Archive</p>
                 <div class="masthead-meta">
                     <p class="masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
@@ -49,8 +47,8 @@
             </div>
 
             <a class="wordmark" href="./index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Pronounced “anarchy” - Dispatches on code, visual motifs, stories, and works in
-                progress.</p>
+            <p class="masthead-note">Pronounced “anarchy” - Dispatches on software engineering, visual motifs, stories,
+                and works in progress.</p>
 
             <nav class="site-nav" aria-label="Main navigation">
                 <a href="./index.html" aria-current="page">Home</a>
@@ -71,226 +69,119 @@
                     <p class="eyebrow">The front page</p>
                     <h1 id="lead-title">A place for things<br>still becoming.</h1>
                     <p class="lead-summary">
-                        NRKI is my independent corner of the web-a minimalist broadsheet for collecting visual motifs,
-                        shipping code, publishing essays &amp; poems, and keeping a public ledger of what I’m
-                        building and watching.
+                        Welcome to NRKI—my independent corner of the web designed like a minimalist broadsheet for
+                        shipping software projects, collecting visual &amp; narrative ideas, publishing essays, and
+                        hosting my resumes.
                     </p>
                     <div class="lead-actions">
-                        <a class="text-link" href="./pages/works.html">Browse the Works Shelf <span
-                                aria-hidden="true">→</span></a>
-                        <a class="text-link" href="./pages/about.html#resumes">Resumes (Web &amp; PDF) <span
-                                aria-hidden="true">→</span></a>
+                        <a class="btn-editorial btn-editorial--primary" href="./pages/about.html#resumes">
+                            View Resumes (Web &amp; PDF) →
+                        </a>
+                        <a class="btn-editorial" href="./pages/about.html">
+                            About &amp; Contact →
+                        </a>
                     </div>
                 </div>
 
-                <aside class="lead-aside" aria-label="Issue contents">
-                    <p class="aside-label">In this issue</p>
+                <aside class="lead-aside" aria-label="Directory">
+                    <p class="aside-label">Site Directory</p>
                     <ol>
-                        <li><a href="./pages/gallery.html">Gallery (SPA) - Visual boards, motifs &amp; article
-                                overlays</a></li>
-                        <li><a href="./pages/projects.html">Projects - Tagged builds with dedicated dossier pages</a>
-                        </li>
-                        <li><a href="./pages/works.html">Works - Blogs, poems, dev logs, articles &amp; web art</a></li>
-                        <li><a href="./pages/media.html">Media Ledger - Reviews, ratings &amp; current watchlist</a>
-                        </li>
-                        <li><a href="./pages/about.html#resumes">Resumes - General CV, Front-end &amp; specialized
-                                tracks</a></li>
+                        <li><a href="./pages/about.html#resumes">Resumes - General CV &amp; Front-End Engineering</a></li>
+                        <li><a href="./pages/projects.html">Projects - Software builds &amp; experiments (Coming soon)</a></li>
+                        <li><a href="./pages/works.html">Works - Blogs, poems, dev logs &amp; articles (Coming soon)</a></li>
+                        <li><a href="./pages/gallery.html">Gallery - Art, story &amp; idea pinboard (Coming soon)</a></li>
+                        <li><a href="./pages/media.html">Media - Reviews, ratings &amp; watchlist (Coming soon)</a></li>
                     </ol>
-                    <p class="folio">No. 01 <span>·</span> HTML, CSS, ES Modules &amp; React Islands</p>
+                    <p class="folio">No. 01 <span>·</span> Built with HTML, CSS, JavaScript &amp; React</p>
                 </aside>
             </section>
 
             <!-- ============================================================
-                 01 / GALLERY PREVIEW (Full React SPA lives at `pages/gallery.html`)
+                 GENERAL OVERVIEW OF SECTIONS
                  ============================================================ -->
-            <section class="section-block" id="gallery" aria-labelledby="gallery-title">
+            <section class="section-block" aria-labelledby="overview-title">
                 <div class="section-heading">
-                    <p class="eyebrow">01 / Collect</p>
-                    <h2 id="gallery-title">Gallery</h2>
+                    <p class="eyebrow">Index</p>
+                    <h2 id="overview-title">Sections</h2>
                     <p class="section-heading-note">
-                        Art, story lore, and inspiration pinboard-where ideas connect to other ideas.
+                        What lives inside this broadsheet.
                     </p>
                 </div>
 
                 <div class="section-content">
-                    <p class="section-intro">
-                        A living wall for art studies, story seeds, visual motifs, and how they link together.
-                    </p>
-
                     <div class="editorial-grid">
-                        <a class="editorial-card editorial-card--link" href="./pages/gallery.html#board-01">
+                        <a class="editorial-card editorial-card--link" href="./pages/about.html#resumes">
                             <div>
                                 <div class="card-meta">
-                                    <span>Pin #01</span>
-                                    <span class="badge">Art &amp; Visuals</span>
+                                    <span>01 / Dossier</span>
+                                    <span class="badge badge--accent">Available</span>
                                 </div>
-                                <h3>Herbarium Plates &amp; Pressed Botanical Ink</h3>
+                                <h3>About &amp; Curriculum Vitae</h3>
                                 <p>
-                                    How 19th-century botanical specimen books pair faded Latin marginalia, oxidized
-                                    brass stamps, and pressed leaves.
+                                    Background, contact details, and dedicated web &amp; printable PDF resumes tailored
+                                    for General Software Engineering and Front-End Engineering.
                                 </p>
                             </div>
                             <div class="card-footer">
-                                <span>Connects to Pin #02 &amp; #04</span>
-                                <span class="text-link" style="margin: 0;">Open on Pinboard →</span>
+                                <span>Web &amp; Printable PDF</span>
+                                <span class="text-link" style="margin: 0;">Open Resumes →</span>
                             </div>
                         </a>
 
-                        <a class="editorial-card editorial-card--link" href="./pages/gallery.html#board-02">
+                        <a class="editorial-card editorial-card--link" href="./pages/projects.html">
                             <div>
                                 <div class="card-meta">
-                                    <span>Pin #02</span>
-                                    <span class="badge">Story &amp; Lore</span>
+                                    <span>02 / Build</span>
+                                    <span class="badge">Under Construction</span>
                                 </div>
-                                <h3>The Sunken Telegraph &amp; Paper Cities</h3>
+                                <h3>Projects &amp; Software Builds</h3>
                                 <p>
-                                    A worldbuilding concept: a coastal fog-bound city where networks failed, replaced by
-                                    pneumatic brass tubes and midnight print editions.
+                                    A curated shelf of software projects, front-end interfaces, and standalone React
+                                    single-page applications with source links.
                                 </p>
                             </div>
                             <div class="card-footer">
-                                <span>Connects to Pin #01, #03 &amp; #05</span>
-                                <span class="text-link" style="margin: 0;">Open on Pinboard →</span>
+                                <span>Status: Updating</span>
+                                <span class="text-link" style="margin: 0;">View Page →</span>
+                            </div>
+                        </a>
+
+                        <a class="editorial-card editorial-card--link" href="./pages/works.html">
+                            <div>
+                                <div class="card-meta">
+                                    <span>03 / Publish</span>
+                                    <span class="badge">Under Construction</span>
+                                </div>
+                                <h3>Works, Essays &amp; Verse</h3>
+                                <p>
+                                    Technical dev logs, articles, poetry, and experimental web pieces written in plain
+                                    text and typeset for the web.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <span>Status: Updating</span>
+                                <span class="text-link" style="margin: 0;">View Page →</span>
+                            </div>
+                        </a>
+
+                        <a class="editorial-card editorial-card--link" href="./pages/gallery.html">
+                            <div>
+                                <div class="card-meta">
+                                    <span>04 / Collect</span>
+                                    <span class="badge">Under Construction</span>
+                                </div>
+                                <h3>Gallery &amp; Idea Board</h3>
+                                <p>
+                                    An interactive pinboard for visual motifs, story seeds, and creative inspirations—plus
+                                    the Media Ledger of reviews and watchlists.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <span>Status: Updating</span>
+                                <span class="text-link" style="margin: 0;">View Page →</span>
                             </div>
                         </a>
                     </div>
-
-                    <p style="margin-top: 1.5rem; margin-bottom: 0;">
-                        <a class="btn-editorial btn-editorial--primary" href="./pages/gallery.html">
-                            Open Full Art, Story &amp; Idea Board (6 Pins) →
-                        </a>
-                    </p>
-                </div>
-            </section>
-
-            <!-- ============================================================
-                 02 / PROJECTS PREVIEW (Full Shelf lives at `pages/projects.html`)
-                 ============================================================ -->
-            <section class="section-block" id="projects" aria-labelledby="projects-title">
-                <div class="section-heading">
-                    <p class="eyebrow">02 / Build</p>
-                    <h2 id="projects-title">Projects</h2>
-                    <p class="section-heading-note">
-                        Selected repositories, web experiments, and standalone tools.
-                    </p>
-                </div>
-
-                <div class="section-content">
-                    <p class="section-intro">
-                        Small builds, useful tools, and experiments-each with its own dedicated dossier page and GitHub
-                        links.
-                    </p>
-
-                    <div class="editorial-grid">
-                        <a class="editorial-card editorial-card--link" href="./pages/project-view.html?id=nrki-engine">
-                            <div>
-                                <div class="card-meta">
-                                    <span>Project 01</span>
-                                    <span class="badge badge--accent">Active</span>
-                                </div>
-                                <h3>NRKI Broadsheet &amp; Publishing Engine</h3>
-                                <p>
-                                    Semantic HTML5, custom light/dark newsprint tokens, printable web resumes, and
-                                    a flat-file JSON + TXT content engine.
-                                </p>
-                                <ul class="tag-pills">
-                                    <li class="tag-pill">#html5</li>
-                                    <li class="tag-pill">#css-tokens</li>
-                                    <li class="tag-pill">#print-css</li>
-                                </ul>
-                            </div>
-                            <div class="card-footer">
-                                <span>Project Page &amp; GitHub</span>
-                                <span class="text-link" style="margin: 0;">Explore project →</span>
-                            </div>
-                        </a>
-
-                        <a class="editorial-card editorial-card--link"
-                            href="./pages/project-view.html?id=react-shelf-system">
-                            <div>
-                                <div class="card-meta">
-                                    <span>Project 02</span>
-                                    <span class="badge badge--gold">Shipped</span>
-                                </div>
-                                <h3>Declarative React &lt;Shelf /&gt; &amp; Pinboard SPA</h3>
-                                <p>
-                                    The shared React collection &amp; multi-facet tag filtering engine powering
-                                    Gallery, Projects, Works, and Media from JSON + TXT files.
-                                </p>
-                                <ul class="tag-pills">
-                                    <li class="tag-pill">#react</li>
-                                    <li class="tag-pill">#spa</li>
-                                    <li class="tag-pill">#json-txt-cms</li>
-                                </ul>
-                            </div>
-                            <div class="card-footer">
-                                <span>Project Page &amp; GitHub</span>
-                                <span class="text-link" style="margin: 0;">Explore project →</span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <p style="margin-top: 1.5rem; margin-bottom: 0;">
-                        <a class="btn-editorial btn-editorial--primary" href="./pages/projects.html">
-                            Browse All Projects &amp; Filter by Tag →
-                        </a>
-                    </p>
-                </div>
-            </section>
-
-            <!-- ============================================================
-                 03 / WORKS PREVIEW (Full Shelf lives at `pages/works.html`)
-                 ============================================================ -->
-            <section class="section-block works-block" id="works" aria-labelledby="works-title">
-                <div class="section-heading">
-                    <p class="eyebrow">03 / Publish</p>
-                    <h2 id="works-title">Works</h2>
-                    <p class="section-heading-note">
-                        Blogs, poems, dev logs, articles, and web art.
-                    </p>
-                </div>
-
-                <div class="section-content">
-                    <p class="section-intro">
-                        One shelf for whatever I make with words, code, or a little of both.
-                    </p>
-
-                    <div class="works-ledger">
-                        <a class="work-row" href="./pages/work-view.html?id=sample-post">
-                            <span class="work-category">Dev log</span>
-                            <span class="work-main">
-                                <strong>Building NRKI: Plain HTML, CSS, React Islands &amp; Flat-File TXT</strong>
-                                <span>Notes on designing a newspaper-inspired personal site where every entry is a .txt
-                                    file + JSON index.</span>
-                            </span>
-                            <time class="work-date" datetime="2026-11-05">Nov 2026 →</time>
-                        </a>
-
-                        <a class="work-row" href="./pages/work-view.html?id=broadsheet-typography">
-                            <span class="work-category">Article</span>
-                            <span class="work-main">
-                                <strong>On Minimalist Web Typography &amp; Newsprint Grids</strong>
-                                <span>How classical broadsheet rules and botanical ink contrast improve long-form
-                                    reading.</span>
-                            </span>
-                            <time class="work-date" datetime="2026-11-01">Nov 2026 →</time>
-                        </a>
-
-                        <a class="work-row" href="./pages/work-view.html?id=static-before-signal">
-                            <span class="work-category">Poem</span>
-                            <span class="work-main">
-                                <strong>Static Before the Signal</strong>
-                                <span>A short poem on late-night terminals, paper margins, and quiet rooms.</span>
-                            </span>
-                            <time class="work-date" datetime="2026-10-18">Oct 2026 →</time>
-                        </a>
-                    </div>
-
-                    <p style="margin-top: 1.5rem; margin-bottom: 0;">
-                        <a class="btn-editorial btn-editorial--primary" href="./pages/works.html">
-                            Open Full Works Shelf →
-                        </a>
-                    </p>
                 </div>
             </section>
         </main>

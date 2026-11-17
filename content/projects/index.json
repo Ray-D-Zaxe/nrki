@@ -11,37 +11,5 @@
       ]
     }
   ],
-  "items": [
-    {
-      "id": "nrki-engine",
-      "projectNumber": "Project 01",
-      "status": "active",
-      "statusLabel": "Active",
-      "badgeVariant": "badge--accent",
-      "title": "NRKI Broadsheet & Publishing Engine",
-      "textFile": "nrki-engine.txt",
-      "tags": ["html5", "css-tokens", "javascript", "print-css"],
-      "links": [
-        { "label": "GitHub Repository ↗", "url": "https://github.com/your-handle/nrki", "primary": true },
-        { "label": "Live Front Page ↗", "url": "../index.html", "primary": false },
-        { "label": "Printable CV Demo ↗", "url": "./about.html#resumes", "primary": false }
-      ]
-    },
-    {
-      "id": "react-shelf-system",
-      "projectNumber": "Project 02",
-      "status": "shipped",
-      "statusLabel": "Shipped",
-      "badgeVariant": "badge--gold",
-      "title": "Declarative React <Shelf /> & Pinboard SPA",
-      "textFile": "react-shelf-system.txt",
-      "tags": ["react", "spa", "zettelkasten", "json-txt-cms"],
-      "links": [
-        { "label": "GitHub Source ↗", "url": "https://github.com/your-handle/nrki", "primary": true },
-        { "label": "Open Gallery Pinboard SPA ↗", "url": "./gallery.html", "primary": false },
-        { "label": "View Media Shelf ↗", "url": "./media.html", "primary": false }
-      ]
-    }
-  ]
+  "items": []
 }
-

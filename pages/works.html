@@ -16,20 +16,12 @@
     </script>
     <link rel="stylesheet" href="../assets/styles/style.css">
     <script defer src="../assets/scripts/main.js"></script>
-    <script defer src="../assets/scripts/vendor/react-local.js"></script>
-    <script defer src="../assets/scripts/data/site-data.js"></script>
-    <script defer src="../assets/scripts/content-loader.js"></script>
-    <script defer src="../assets/scripts/components/Shelf.js"></script>
-    <script defer src="../assets/scripts/shelf-pages.js"></script>
 </head>
 
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <div class="page-shell">
-        <!-- ================================================================
-             SITE MASTHEAD & PRIMARY NAVIGATION
-             ================================================================ -->
         <header class="site-header">
             <div class="masthead-bar">
                 <p class="edition-line">Vol. I · Sec. 03 <span>-</span> Essays, Verse &amp; Technical Logs</p>
@@ -50,7 +42,7 @@
                 </div>
             </div>
 
-            <a class="wordmark accent" href="../index.html" aria-label="NRKI home">NRKI</a>
+            <a class="wordmark" href="../index.html" aria-label="NRKI home">NRKI</a>
             <p class="masthead-note">Blogs, poems, dev logs, articles, and mini web-art pages.</p>
 
             <nav class="site-nav" aria-label="Main navigation">
@@ -64,38 +56,20 @@
         </header>
 
         <main id="main">
-            <!-- ============================================================
-                 PAGE HERO
-                 ============================================================ -->
             <section class="page-hero" aria-labelledby="works-page-title">
-                <p class="eyebrow">03 / Publish</p>
-                <h1 id="works-page-title">Works, essays &amp; verse.</h1>
+                <p class="eyebrow">03 / Publish · Status: Under Construction</p>
+                <h1 id="works-page-title">Works archive is under construction.</h1>
                 <p class="lead-summary">
-                    A single shelf for everything I publish-from technical dev logs and design articles to poems
-                    and experimental web art. Filter by format or tag, and select any card to read the full piece.
+                    Essays, poems, dev logs, and articles are currently being typeset for the first issue. Check back
+                    soon as new pieces are published.
                 </p>
+                <div class="lead-actions">
+                    <a class="btn-editorial btn-editorial--primary" href="../index.html">← Back to Home</a>
+                    <a class="btn-editorial" href="./about.html#resumes">View About &amp; Resumes →</a>
+                </div>
             </section>
-
-            <!-- ============================================================
-                 FULL-WIDTH WORKS `<Shelf />` REACT COMPONENT MOUNT POINT
-                 Powered by `assets/scripts/shelf-pages.js` and `WORK_ITEMS`
-                 in `assets/scripts/data/site-data.js`.
-                 ============================================================ -->
-            <div id="shelf-root" data-shelf-page="works">
-                <section class="shelf-section">
-                    <div class="shelf-header">
-                        <div class="shelf-header__titles">
-                            <p class="eyebrow">03 / Publish</p>
-                            <h2>The Works Shelf</h2>
-                        </div>
-                    </div>
-                </section>
-            </div>
         </main>
 
-        <!-- ================================================================
-             SITE FOOTER
-             ================================================================ -->
         <footer class="site-footer">
             <a class="footer-mark" href="../index.html">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
