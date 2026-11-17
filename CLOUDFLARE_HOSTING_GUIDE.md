@@ -13,54 +13,92 @@ This guide walks through how to host **NRKI** for free on **Cloudflare Pages**, 
 
 ---
 
-## Step 1: Push the NRKI Project to GitHub
+## Step 1: Your Git Branch Setup (`main` vs `dev`)
 
-Cloudflare Pages connects to your GitHub repository and automatically deploys your site every time you run `git push`.
+Your repository (`https://github.com/Ray-D-Zaxe/nrki.git`) is already initialized and organized into two separate branches:
 
-1. Go to [github.com/new](https://github.com/new) and create a new repository (for example, `nrki-site`). It can be **Public** or **Private**.
-2. Open PowerShell / Terminal inside your project folder (`c:\Users\raydr\Projects\NRKI AG`) and run:
+| Branch | Purpose | What Lives Here | Cloudflare Pages URL |
+| :--- | :--- | :--- | :--- |
+| **`main`** *(Production)* | Public live site | Clean general front page, **About & Resumes** live (`general.html` & `resume.html`), while **Gallery, Projects, Works, and Media** display an *"Under Construction"* page until you are ready to launch them. | `https://yourdomain.com` & `https://nrki.pages.dev` |
+| **`dev`** *(Development / Staging)* | Full working build & content drafting | All interactive React `<Shelf />` pages, the Gallery Pinboard SPA (`gallery-spa.js`), `project-view.html` / `work-view.html`, and all `.txt` + `index.json` content files. | `https://dev.nrki.pages.dev` *(automatic preview URL!)* |
 
+### Initial Push to GitHub (If Not Already Done)
 ```powershell
-git init
-git add .
-git commit -m "Initial NRKI broadsheet site"
-git branch -M main
-git remote add origin https://github.com/<your-github-username>/nrki-site.git
-git push -u origin main
+git remote add origin https://github.com/Ray-D-Zaxe/nrki.git
+git push -u origin dev
+git push -u origin main --force
 ```
-
-> **Tip for Routine Content Updates:** Later, whenever you add a new `.txt` file and update `index.json` inside `content/`, just run:
-> ```powershell
-> git add .
-> git commit -m "Add new entry"
-> git push
-> ```
-> Cloudflare will automatically rebuild and publish your changes within ~20 seconds.
 
 ---
 
-## Step 2: Deploy NRKI on Cloudflare Pages
+## Step 2: How to Work on `dev` and Promote Sections to `main` (Prod)
+
+Because `main` and `dev` are independent branches, you can safely write drafts, test formatting, and build sections on `dev` without affecting your public `main` site.
+
+### A. Day-to-Day Editing on `dev`
+Whenever you want to write new `.txt` posts, add projects, or tweak the full shelves:
+```powershell
+# 1. Switch to the dev branch
+git checkout dev
+
+# 2. Edit your files (e.g. content/projects/index.json + .txt), then commit & push
+git add .
+git commit -m "Add new project entry on dev"
+git push origin dev
+```
+*(Every push to `dev` updates your live staging preview at `https://dev.nrki.pages.dev` automatically without touching `main`!)*
+
+### B. Publishing ONLY ONE Section from `dev` to `main` (While Others Stay "Under Construction")
+Suppose you finish adding your real **Projects** on `dev`, and want **Projects** to go live on `main` while keeping Gallery, Works, and Media under construction:
+```powershell
+# 1. Switch to the production branch
+git checkout main
+
+# 2. Pull ONLY the Projects page and its content folder from dev into main
+git checkout dev -- pages/projects.html pages/project-view.html content/projects/
+
+# 3. Commit and push to main (Cloudflare deploys this to your live domain in ~20s)
+git add .
+git commit -m "Publish Projects section to production"
+git push origin main
+```
+You can do the exact same thing later for **Works** (`git checkout dev -- pages/works.html pages/work-view.html content/works/`), **Gallery** (`git checkout dev -- pages/gallery.html content/gallery/`), or **Media** (`git checkout dev -- pages/media.html content/media/`).
+
+### C. Publishing EVERYTHING from `dev` to `main` at Once
+Once all four sections on `dev` are ready to replace the "Under Construction" pages on `main`:
+```powershell
+git checkout main
+git merge dev
+git push origin main
+```
+*(Note: `git merge dev` **never** deletes the `dev` branch—you can switch right back with `git checkout dev` anytime).*
+
+---
+
+## Step 3: Deploy NRKI on Cloudflare Pages
 
 1. Sign up or log in at [dash.cloudflare.com](https://dash.cloudflare.com/).
 2. In the left sidebar, click **Compute (Workers & Pages)** → click **Create**.
 3. Select the **Pages** tab at the top → click **Connect to Git**.
-4. Connect your GitHub account and choose your **`nrki-site`** repository.
+4. Connect your GitHub account and choose your **`Ray-D-Zaxe/nrki`** repository.
 5. On the **Set up builds and deployments** screen, fill in:
-   - **Project name:** `nrki` *(gives you a free `https://nrki.pages.dev` preview URL)*
+   - **Project name:** `nrki` *(gives you `https://nrki.pages.dev` for `main` and `https://dev.nrki.pages.dev` for `dev`)*
    - **Production branch:** `main`
    - **Framework preset:** `None`
    - **Build command:** *(Leave completely empty — NRKI uses plain HTML, CSS, and JS with no build step)*
    - **Build output directory:** `/` *(or leave empty so Cloudflare serves the root directory)*
 6. Click **Save and Deploy**.
-7. Wait ~30 seconds. Your site is now live at `https://nrki.pages.dev`!
+7. Wait ~30 seconds:
+   - Your production **`main`** branch is now live at `https://nrki.pages.dev`.
+   - Whenever you push to **`dev`**, Cloudflare Pages also builds a separate preview at `https://dev.nrki.pages.dev`.
 
 ---
 
-## Step 3: Connect Your GoDaddy Domain to Cloudflare
+## Step 4: Connect Your GoDaddy Domain to Cloudflare
 
 To use your own domain (e.g., `nrki.in` or `nrki.com`) and unlock free SSL + unlimited project subdomains:
 
-### 3A. Add the Domain in Cloudflare
+### 4A. Add the Domain in Cloudflare
 1. In the Cloudflare dashboard sidebar, click **Websites** → **Add a domain**.
 2. Enter your GoDaddy domain name (e.g., `yourdomain.com`) and click **Continue**.
 3. Scroll down, select the **Free ($0)** plan, and click **Continue**.
@@ -69,15 +107,15 @@ To use your own domain (e.g., `nrki.in` or `nrki.com`) and unlock free SSL + unl
    - `bob.ns.cloudflare.com`
    *(Keep this tab open so you can copy them).*
 
-### 3B. Point GoDaddy Nameservers to Cloudflare
+### 4B. Point GoDaddy Nameservers to Cloudflare
 1. Log in to your [GoDaddy Portfolio](https://dcc.godaddy.com/).
 2. Click your domain → go to the **DNS** tab → click **Nameservers**.
 3. Click **Change Nameservers** → select **"I'll use my own nameservers"**.
-4. Paste the **2 Cloudflare Nameservers** from Step 3A and click **Save** / **Continue**.
+4. Paste the **2 Cloudflare Nameservers** from Step 4A and click **Save** / **Continue**.
 5. Go back to Cloudflare and click **Check nameservers now**.
    - *Note:* Nameserver propagation typically takes **10 to 30 minutes** (occasionally up to a few hours). Cloudflare will email you as soon as the domain status turns **Active**.
 
-### 3C. Attach the Domain to Your NRKI Pages Site
+### 4C. Attach the Domain to Your NRKI Pages Site
 1. In Cloudflare, go to **Compute (Workers & Pages)** → click your **`nrki`** project.
 2. Open the **Custom domains** tab → click **Set up a custom domain**.
 3. Enter `yourdomain.com` → click **Continue** → click **Activate domain**.
@@ -85,7 +123,7 @@ To use your own domain (e.g., `nrki.in` or `nrki.com`) and unlock free SSL + unl
 
 ---
 
-## Step 4: Hosting Future React SPAs
+## Step 5: Hosting Future React SPAs
 
 As you build more projects and React SPAs, you have **two clean ways** to host them under your domain:
 
@@ -117,11 +155,11 @@ Use this for smaller single-page experiments, interactive poems, or web-art piec
 
 ---
 
-## Step 5: Adding a Personal Database Later (Cloudflare D1 + Pages Functions)
+## Step 6: Adding a Personal Database Later (Cloudflare D1 + Pages Functions)
 
 When you build a project that needs a database for your own data (e.g., a custom tracker, archive, or dynamic project):
 
-### 5A. Create a Free Serverless SQLite Database (D1)
+### 6A. Create a Free Serverless SQLite Database (D1)
 1. Inside your new project's folder, open the terminal and log in to Cloudflare's Wrangler CLI:
    ```powershell
    npx wrangler login
@@ -142,7 +180,7 @@ When you build a project that needs a database for your own data (e.g., a custom
    database_id = "<your-database-id-from-terminal>"
    ```
 
-### 5B. Create Tables & Seed Your Data
+### 6B. Create Tables & Seed Your Data
 1. Create a `schema.sql` file in your project:
    ```sql
    CREATE TABLE IF NOT EXISTS entries (
@@ -159,7 +197,7 @@ When you build a project that needs a database for your own data (e.g., a custom
    npx wrangler d1 execute my-project-db --remote --file=./schema.sql
    ```
 
-### 5C. Query the Database from Your Project (Pages Functions)
+### 6C. Query the Database from Your Project (Pages Functions)
 Inside your Cloudflare Pages project, any file placed in a `functions/` folder becomes a serverless API endpoint automatically!
 
 1. Create `functions/api/entries.js`:
@@ -187,10 +225,12 @@ Inside your Cloudflare Pages project, any file placed in a `functions/` folder b
 
 ## Quick Reference Summary
 
-| What You Are Doing | Where You Do It | Cost |
+| What You Are Doing | Where / How You Do It | Cost |
 | :--- | :--- | :--- |
 | **Buying / Renewing Base Domain** (`yourdomain.com`) | GoDaddy (supports UPI / Google Pay) | Domain renewal only |
-| **Publishing New NRKI Works / Projects / Pins** | Edit `content/<tab>/*.txt` + `index.json` → `git push` | Free |
+| **Drafting & Previewing Content on `dev`** | `git checkout dev` → edit `content/<tab>/*.txt` + `index.json` → `git push origin dev` (`https://dev.nrki.pages.dev`) | Free |
+| **Promoting 1 Section from `dev` to `main`** | `git checkout main` → `git checkout dev -- pages/<page>.html content/<tab>/` → `git push origin main` | Free |
+| **Promoting All of `dev` to `main`** | `git checkout main` → `git merge dev` → `git push origin main` | Free |
 | **Adding a New Standalone React SPA** | New GitHub Repo → Cloudflare Pages → Custom Domain `app.yourdomain.com` | Free |
 | **Adding a Personal SQL Database** | `npx wrangler d1 create <name>` + `functions/api/...` | Free (up to 5 GB & 5M reads/day) |
 
