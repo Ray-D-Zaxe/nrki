@@ -203,11 +203,29 @@ function initFilterGroups() {
  * 4. RESUME PRINT / SAVE AS PDF
  */
 function initPrintButtons() {
+  const printTitleEl = document.querySelector("[data-print-title]");
+  const printTitle = printTitleEl
+    ? printTitleEl.getAttribute("data-print-title")
+    : null;
+  const originalTitle = document.title;
+
+  if (printTitle) {
+    window.addEventListener("beforeprint", () => {
+      document.title = printTitle;
+    });
+    window.addEventListener("afterprint", () => {
+      document.title = originalTitle;
+    });
+  }
+
   const printButtons = document.querySelectorAll(
     '[data-action="print-resume"]'
   );
   printButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
+      if (printTitle) {
+        document.title = printTitle;
+      }
       window.print();
     });
   });

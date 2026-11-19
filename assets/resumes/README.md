@@ -2,8 +2,8 @@
 
 Place your static, downloadable PDF resume files in this directory so the **PDF ↓** buttons on `pages/about.html` and the individual resume pages resolve directly:
 
-- `nrki-general-cv.pdf` — Linked from the General CV card & `pages/resumes/general.html`
-- `nrki-frontend-resume.pdf` — Linked from the Front-End Resume card & `pages/resumes/resume.html`
+- `Raj_CV_General.pdf` — Linked from the General CV card & `pages/resumes/general.html`
+- `Raj_CV_Frontend.pdf` — Linked from the Front-End Resume card & `pages/resumes/resume.html`
 
 ## Generating a PDF Directly from the Web Resume
 
