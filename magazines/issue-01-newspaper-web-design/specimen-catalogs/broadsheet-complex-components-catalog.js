@@ -41,7 +41,19 @@
     </div>
   </div>
   <a class="nrki-wordmark nrki-wordmark-compact" href="#specimen-preview">NRKI</a>
-  <p class="nrki-masthead-tagline">Dispatches on code, design systems, and quiet archives.</p>
+  <div class="nrki-masthead-subbar">
+    <label class="nrki-theme-picker">
+      <span class="nrki-sr-only">Select broadsheet theme</span>
+      <select class="nrki-theme-select" aria-label="Select broadsheet theme">
+        <option value="classic">Theme: Classic</option>
+        <option value="ancient">Theme: Ancient</option>
+        <option value="minimalistic">Theme: Minimalistic</option>
+        <option value="uwu">Theme: UwU</option>
+      </select>
+    </label>
+    <p class="nrki-masthead-tagline">Dispatches on code, design systems, and quiet archives.</p>
+    <button type="button" class="nrki-theme-toggle" aria-pressed="false">Ink: Paper ☀</button>
+  </div>
   <nav class="nrki-site-nav" aria-label="Sample broadsheet navigation">
     <a href="#specimen-preview">Home</a>
     <a href="#specimen-preview">Magazines</a>
@@ -60,6 +72,21 @@
     </div>
   </div>
   <a class="nrki-wordmark" href="/">NRKI</a>
+  <div class="nrki-masthead-subbar">
+    <label class="nrki-theme-picker">
+      <span class="nrki-sr-only">Select broadsheet theme</span>
+      <select class="nrki-theme-select" data-theme-select>
+        <option value="classic">Theme: Classic</option>
+        <option value="ancient">Theme: Ancient</option>
+        <option value="minimalistic">Theme: Minimalistic</option>
+        <option value="uwu">Theme: UwU</option>
+      </select>
+    </label>
+    <p class="nrki-masthead-tagline">Dispatches on code, design systems, and quiet archives.</p>
+    <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+      Ink: Paper ☀
+    </button>
+  </div>
   <nav class="nrki-site-nav" aria-label="Primary navigation">
     <a href="/" aria-current="page">Home</a>
     <a href="/magazines">Magazines</a>

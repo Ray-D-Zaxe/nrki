@@ -2359,6 +2359,30 @@
     letter-spacing: -0.04em;
   }
 
+  /* Sub-bar positioned directly below the NRKI wordmark: places the theme
+     selector at the left edge, the tagline centered, and the Light/Dark
+     mode toggle at the right edge. */
+  .nrki-masthead-subbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.65rem 1.25rem;
+    margin-block: 0.25rem 0.9rem;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-picker {
+    justify-self: start;
+  }
+
+  .nrki-masthead-subbar .nrki-masthead-tagline {
+    margin: 0;
+    text-align: center;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-toggle {
+    justify-self: end;
+  }
+
   .nrki-masthead-tagline {
     margin-bottom: 0.9rem;
     color: var(--nrki-ink-muted);
@@ -3762,6 +3786,16 @@
       display: flex;
       justify-content: center;
       width: 100%;
+    }
+
+    .nrki-masthead-subbar {
+      grid-template-columns: 1fr auto;
+      gap: 0.55rem 0.75rem;
+    }
+
+    .nrki-masthead-subbar .nrki-masthead-tagline {
+      grid-column: 1 / -1;
+      order: -1;
     }
 
     .nrki-site-nav {

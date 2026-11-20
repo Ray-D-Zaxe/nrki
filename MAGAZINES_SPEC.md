@@ -53,7 +53,7 @@ Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** spl
 *(In Magazine Issue 01, `magazine.shell` slots cleanly between `nrki.components` and `nrki.utilities` so utility states and print rules always win cleanly without `!important`.)*
 
 - **Zero-Specificity Theme Base Selectors (`:where()`):** Base theme overrides on shared UI classes (e.g., `:where([data-theme="minimalistic"]) .nrki-button`, `.nrki-theme-toggle`, `.nrki-theme-select`, `.nrki-badge`, `.nrki-callout`, `.nrki-filter-button`) use `:where(...)` so the selector stays at `(0, 1, 0)` specificity instead of `(0, 2, 0)`. Variant modifiers like `.nrki-button-primary`, `.nrki-button-small`, `.nrki-button-large`, and `.nrki-button-danger` always override base background and ink colors without hover or `!important`.
-- **Site Header Theme + Mode Controls:** Every NRKI site page exposes `<select class="nrki-theme-select" data-theme-select>` inside `.nrki-masthead-badgegroup` alongside `<button class="nrki-theme-toggle" data-theme-toggle>`, synchronized by `assets/scripts/main.js` (`nrki-broadsheet-theme` + `nrki-broadsheet-mode`) and restored pre-paint in `<head>`.
+- **Site Header Theme + Mode Controls (`.nrki-masthead-subbar`):** Every NRKI site page positions `<select class="nrki-theme-select" data-theme-select>` on the left and `<button class="nrki-theme-toggle" data-theme-toggle>` on the right directly below the `.nrki-wordmark` (`NRKI` title) inside `.nrki-masthead-subbar` (flanking `.nrki-masthead-tagline`), synchronized by `assets/scripts/main.js` (`nrki-broadsheet-theme` + `nrki-broadsheet-mode`) and restored pre-paint in `<head>`.
 
 ---
 
@@ -127,7 +127,7 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 ## 5. Specimen Container Specification
 
 Every specimen on `#layouts`, `#elements`, and `#components` renders inside the reusable `.specimen-container`:
-- **Per-Specimen Dual Controls:** Independent **Theme (`Classic | Ancient | Minimalistic | UwU`)** + **Mode (`☀ | ☾`)** buttons controlling `data-theme` and `data-mode` directly on `.specimen-preview-stage` (all specimens—including #11 Media Figure Frame—are controlled strictly from these external header controls).
+- **Per-Specimen Dual Controls:** Independent **Theme (`Classic | Ancient | Minimalistic | UwU`)** buttons + a **single Light/Dark Mode toggle button (`☀ Light` / `☾ Dark`, `[data-specimen-mode-toggle]`)** controlling `data-theme` and `data-mode` directly on `.specimen-preview-stage` (matching the single global mode toggle `[data-global-mode-toggle]` in the Issue 01 masthead and mobile drawer; all specimens—including #11 Media Figure Frame—are controlled strictly from these external header controls).
 - **Inert Preview Guard:** Links (`a[href]`) and forms inside `.specimen-preview-stage` have default navigation and submission prevented so users can inspect visuals and local widget interactions without changing URL hash, active magazine page, or scroll position.
 - **Syntax-Highlighted Code Inspection & Copy:** `HTML`, `CSS`, and conditional `JS` *(shown strictly when `jsSnippet` exists)* toggles with a single-pass tokenizer (`.nrki-tok-*`) rendered in each theme's readable `--nrki-font-mono`, paired with a language header bar and context-aware `Copy <LANG>` button.
 

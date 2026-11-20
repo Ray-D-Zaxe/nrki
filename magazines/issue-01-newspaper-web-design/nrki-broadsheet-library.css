@@ -641,6 +641,7 @@
    2. RESET & BASE TYPOGRAPHIC DEFAULTS (`@layer nrki.reset`)
    ========================================================================== */
 @layer nrki.reset {
+
   *,
   *::before,
   *::after {
@@ -764,6 +765,7 @@
    3. ATOMIC ELEMENTS & THEME-ADAPTIVE DIVIDERS (`@layer nrki.elements`)
    ========================================================================== */
 @layer nrki.elements {
+
   .nrki-eyebrow,
   .nrki-edition-line,
   .nrki-masthead-note,
@@ -996,12 +998,10 @@
     justify-content: center;
     margin-block: 1.5rem;
     min-height: 1.25rem;
-    background: linear-gradient(
-      transparent calc(50% - 0.5px),
-      var(--nrki-border-subtle) calc(50% - 0.5px),
-      var(--nrki-border-subtle) calc(50% + 0.5px),
-      transparent calc(50% + 0.5px)
-    );
+    background: linear-gradient(transparent calc(50% - 0.5px),
+        var(--nrki-border-subtle) calc(50% - 0.5px),
+        var(--nrki-border-subtle) calc(50% + 0.5px),
+        transparent calc(50% + 0.5px));
   }
 
   .nrki-ornate-divider::after {
@@ -1284,7 +1284,7 @@
     color: var(--nrki-ink-muted);
   }
 
-  .nrki-breadcrumb li + li::before {
+  .nrki-breadcrumb li+li::before {
     content: "/";
     margin-right: 0.45rem;
     color: var(--nrki-ink-faint);
@@ -1951,7 +1951,7 @@
     padding: 0.9rem 1rem;
   }
 
-  .nrki-stat-cell + .nrki-stat-cell {
+  .nrki-stat-cell+.nrki-stat-cell {
     border-left: 1px solid var(--nrki-border-faint);
   }
 
@@ -2070,9 +2070,12 @@
   }
 
   @keyframes nrki-skeleton-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
       opacity: 0.55;
     }
+
     50% {
       opacity: 1;
     }
@@ -2084,6 +2087,7 @@
    4. REUSABLE BROADSHEET LAYOUTS & INTERACTIVE COMPONENTS (`@layer nrki.components`)
    ========================================================================== */
 @layer nrki.components {
+
   /* --- Shell & 6 Reusable Newspaper Layouts --- */
   .nrki-page-shell {
     width: min(100% - 3rem, var(--nrki-shell-max-width));
@@ -2098,7 +2102,7 @@
     align-items: start;
   }
 
-  .nrki-layout-frontpage > * + * {
+  .nrki-layout-frontpage>*+* {
     border-left: 1px solid var(--nrki-border-subtle);
     padding-left: 1.35rem;
   }
@@ -2198,7 +2202,7 @@
     padding: 1.35rem;
   }
 
-  .nrki-spread-page + .nrki-spread-page {
+  .nrki-spread-page+.nrki-spread-page {
     border-left: 1px solid var(--nrki-border-subtle);
     box-shadow: inset 12px 0 18px -14px rgba(0, 0, 0, 0.22);
   }
@@ -2357,6 +2361,30 @@
     font-size: clamp(1.8rem, 4.8vw, 3rem);
     font-weight: 600;
     letter-spacing: -0.04em;
+  }
+
+  /* Sub-bar positioned directly below the NRKI wordmark: places the theme
+     selector at the left edge, the tagline centered, and the Light/Dark
+     mode toggle at the right edge. */
+  .nrki-masthead-subbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.65rem 1.25rem;
+    margin-block: 0.25rem 0.9rem;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-picker {
+    justify-self: start;
+  }
+
+  .nrki-masthead-subbar .nrki-masthead-tagline {
+    margin: 0;
+    text-align: center;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-toggle {
+    justify-self: end;
   }
 
   .nrki-masthead-tagline {
@@ -3092,7 +3120,7 @@
     background-color: var(--nrki-surface-panel);
   }
 
-  .nrki-accordion-item[open] > .nrki-accordion-summary {
+  .nrki-accordion-item[open]>.nrki-accordion-summary {
     color: var(--nrki-accent-primary);
   }
 
@@ -3496,6 +3524,7 @@
     from {
       transform: scaleX(1);
     }
+
     to {
       transform: scaleX(0);
     }
@@ -3545,7 +3574,7 @@
     font-size: 1.12rem;
   }
 
-  .nrki-resume-copy > span {
+  .nrki-resume-copy>span {
     display: block;
     color: var(--nrki-ink-muted);
     font-size: 0.92rem;
@@ -3764,6 +3793,16 @@
       width: 100%;
     }
 
+    .nrki-masthead-subbar {
+      grid-template-columns: 1fr auto;
+      gap: 0.55rem 0.75rem;
+    }
+
+    .nrki-masthead-subbar .nrki-masthead-tagline {
+      grid-column: 1 / -1;
+      order: -1;
+    }
+
     .nrki-site-nav {
       position: sticky;
       top: 0;
@@ -3786,7 +3825,7 @@
       grid-template-columns: 1fr;
     }
 
-    .nrki-stat-cell + .nrki-stat-cell {
+    .nrki-stat-cell+.nrki-stat-cell {
       border-left: 0;
       border-top: 1px solid var(--nrki-border-faint);
     }
@@ -3797,9 +3836,9 @@
       gap: 0.2rem;
     }
 
-    .nrki-layout-frontpage > * + *,
+    .nrki-layout-frontpage>*+*,
     .nrki-lead-aside,
-    .nrki-spread-page + .nrki-spread-page {
+    .nrki-spread-page+.nrki-spread-page {
       border-left: 0;
       border-top: 1px solid var(--nrki-border-subtle);
       padding-left: 0;
@@ -3838,6 +3877,7 @@
    5. UTILITY CLASSES (`@layer nrki.utilities`)
    ========================================================================== */
 @layer nrki.utilities {
+
   [hidden],
   .nrki-hidden {
     display: none;
@@ -3906,6 +3946,7 @@
 
 @layer nrki.print {
   @media print {
+
     /* Reset any active theme or dark polarity cleanly to crisp black-on-white
        print ink and standard serif/sans CV typography without using `!important` */
     :root,
@@ -3933,8 +3974,6 @@
       --nrki-border-faint: #dddddd;
       --nrki-accent-primary: #000000;
       --nrki-surface-texture: none;
-      --nrki-code-surface: #f0f0f0;
-      --nrki-code-ink: #111111;
       --nrki-radius-control: 0px;
       --nrki-radius-surface: 0px;
       --nrki-radius-pill: 0px;

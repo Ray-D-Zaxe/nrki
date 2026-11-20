@@ -343,6 +343,27 @@
     }
   }
 
+  /**
+   * Updates a single Light/Dark mode toggle button (`[data-global-mode-toggle]`
+   * or `[data-specimen-mode-toggle]`) so one button cleanly toggles and
+   * displays the active polarity (`☀ Light` vs. `☾ Dark`).
+   *
+   * @param {HTMLButtonElement} modeToggleButton
+   * @param {string} activeModeKey
+   */
+  function synchronizeModeToggleButtonState(modeToggleButton, activeModeKey) {
+    const isDarkMode = activeModeKey === "dark";
+    modeToggleButton.setAttribute("data-current-mode", activeModeKey);
+    modeToggleButton.setAttribute("aria-pressed", String(isDarkMode));
+    modeToggleButton.textContent = isDarkMode ? "☾ Dark" : "☀ Light";
+    modeToggleButton.setAttribute(
+      "aria-label",
+      isDarkMode
+        ? "Dark mode active — click to switch to Light mode"
+        : "Light mode active — click to switch to Dark mode"
+    );
+  }
+
   function applyGlobalThemeAndMode(nextThemeKey, nextModeKey, syncStages) {
     const resolvedTheme =
       nextThemeKey ||
@@ -373,11 +394,9 @@
       });
 
     browserDocument
-      .querySelectorAll("[data-global-mode-option]")
-      .forEach((modeButton) => {
-        const isSelected =
-          modeButton.getAttribute("data-global-mode-option") === resolvedMode;
-        modeButton.setAttribute("aria-pressed", String(isSelected));
+      .querySelectorAll("[data-global-mode-toggle]")
+      .forEach((modeToggleButton) => {
+        synchronizeModeToggleButtonState(modeToggleButton, resolvedMode);
       });
 
     if (syncStages) {
@@ -406,14 +425,11 @@
             });
 
           specimenContainer
-            .querySelectorAll("[data-specimen-mode-option]")
-            .forEach((stageModeButton) => {
-              stageModeButton.setAttribute(
-                "aria-pressed",
-                String(
-                  stageModeButton.getAttribute("data-specimen-mode-option") ===
-                    resolvedMode
-                )
+            .querySelectorAll("[data-specimen-mode-toggle]")
+            .forEach((stageModeToggleButton) => {
+              synchronizeModeToggleButtonState(
+                stageModeToggleButton,
+                resolvedMode
               );
             });
         });
@@ -444,14 +460,18 @@
       });
 
     browserDocument
-      .querySelectorAll("[data-global-mode-option]")
-      .forEach((modeButton) => {
-        modeButton.addEventListener("click", () => {
+      .querySelectorAll("[data-global-mode-toggle]")
+      .forEach((modeToggleButton) => {
+        modeToggleButton.addEventListener("click", () => {
           const currentTheme =
             browserDocument.documentElement.getAttribute("data-theme") ||
             "classic";
-          const chosenMode = modeButton.getAttribute("data-global-mode-option");
-          applyGlobalThemeAndMode(currentTheme, chosenMode, true);
+          const currentMode =
+            browserDocument.documentElement.getAttribute("data-mode") === "dark"
+              ? "dark"
+              : "light";
+          const nextMode = currentMode === "dark" ? "light" : "dark";
+          applyGlobalThemeAndMode(currentTheme, nextMode, true);
         });
       });
 
@@ -562,34 +582,21 @@
     polarityDivider.setAttribute("aria-hidden", "true");
     stageControlsBar.appendChild(polarityDivider);
 
-    BROADSHEET_MODE_DEFINITIONS.forEach((modeDefinition) => {
-      const modeOptionButton = browserDocument.createElement("button");
-      modeOptionButton.type = "button";
-      modeOptionButton.className = "specimen-mode-button";
-      modeOptionButton.textContent = `${modeDefinition.iconPrefix} ${modeDefinition.displayLabel}`;
-      modeOptionButton.setAttribute(
-        "data-specimen-mode-option",
-        modeDefinition.modeKey
-      );
-      modeOptionButton.setAttribute(
-        "aria-pressed",
-        String(modeDefinition.modeKey === initialModeKey)
-      );
+    const specimenModeToggleButton = browserDocument.createElement("button");
+    specimenModeToggleButton.type = "button";
+    specimenModeToggleButton.className = "specimen-mode-button";
+    specimenModeToggleButton.setAttribute("data-specimen-mode-toggle", "");
+    synchronizeModeToggleButtonState(specimenModeToggleButton, initialModeKey);
 
-      modeOptionButton.addEventListener("click", () => {
-        previewStage.setAttribute("data-mode", modeDefinition.modeKey);
-        stageControlsBar
-          .querySelectorAll("[data-specimen-mode-option]")
-          .forEach((peerButton) => {
-            peerButton.setAttribute(
-              "aria-pressed",
-              String(peerButton === modeOptionButton)
-            );
-          });
-      });
-
-      stageControlsBar.appendChild(modeOptionButton);
+    specimenModeToggleButton.addEventListener("click", () => {
+      const currentStageMode =
+        previewStage.getAttribute("data-mode") === "dark" ? "dark" : "light";
+      const nextStageMode = currentStageMode === "dark" ? "light" : "dark";
+      previewStage.setAttribute("data-mode", nextStageMode);
+      synchronizeModeToggleButtonState(specimenModeToggleButton, nextStageMode);
     });
+
+    stageControlsBar.appendChild(specimenModeToggleButton);
 
     headerBar.appendChild(headerDetails);
     headerBar.appendChild(stageControlsBar);

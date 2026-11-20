@@ -153,6 +153,12 @@
     border-width: 2px;
   }
 
+  .magazine-mode-pill {
+    border-color: var(--nrki-border-strong);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+  }
+
   .magazine-theme-pill:hover,
   .magazine-mode-pill:hover {
     border-color: var(--nrki-border-strong);
@@ -630,6 +636,11 @@
     text-transform: uppercase;
     cursor: pointer;
     transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .specimen-mode-button[data-specimen-mode-toggle] {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
   }
 
   .specimen-mode-button:hover {
