@@ -4,14 +4,18 @@
  * ----------------------------------------------------------------------------
  * Zero-dependency browser runtime for all NRKI broadsheet pages:
  *
- * 1. initializeMastheadDateline()    — Live date, 5-minute clock, time zone,
- *                                      and edition stamp inside `.nrki-site-header`.
- * 2. initializeBroadsheetThemeAndMode() — 2-axis theme (`[data-theme]`) +
- *                                      mode (`[data-mode]`) persistence and
- *                                      synchronized header controls.
- * 3. initializeFilterGroups()        — Declarative category filtering on static
- *                                      HTML shelves using `.nrki-hidden`.
- * 4. initializePrintButtons()        — Browser Print-to-PDF hooks on resumes.
+ * 1. initializeMastheadDateline()       — Live date, 5-minute clock, time zone,
+ *                                         and edition stamp inside `.nrki-site-header`.
+ * 2. initializeMobileAndTabletBottomBar() — Builds the fixed mobile/tablet
+ *                                         (`max-width: 1024px`) bottom nav bar
+ *                                         and 1-tap theme/mode drawer sheet
+ *                                         directly from `.nrki-site-nav`.
+ * 3. initializeBroadsheetThemeAndMode() — 2-axis theme (`[data-theme]`) +
+ *                                         mode (`[data-mode]`) persistence and
+ *                                         synchronized header & bottom-bar controls.
+ * 4. initializeFilterGroups()           — Declarative category filtering on static
+ *                                         HTML shelves using `.nrki-hidden`.
+ * 5. initializePrintButtons()           — Browser Print-to-PDF hooks on resumes.
  * ============================================================================
  */
 
@@ -19,6 +23,12 @@ const STORAGE_KEY_BROADSHEET_THEME = "nrki-broadsheet-theme";
 const STORAGE_KEY_BROADSHEET_MODE = "nrki-broadsheet-mode";
 const LEGACY_STORAGE_KEY_MODE = "nrki-theme";
 const VALID_BROADSHEET_THEMES = ["classic", "ancient", "minimalistic", "uwu"];
+const BROADSHEET_THEME_LABELS = [
+  { themeKey: "classic", displayLabel: "Classic" },
+  { themeKey: "ancient", displayLabel: "Ancient" },
+  { themeKey: "minimalistic", displayLabel: "Minimalistic" },
+  { themeKey: "uwu", displayLabel: "UwU" },
+];
 const VALID_COLOR_MODES = ["light", "dark"];
 const THEME_TRANSITION_DURATION_MS = 220;
 const DATELINE_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
@@ -99,12 +109,208 @@ function initializeMastheadDateline() {
 }
 
 /* ============================================================================
-   2. 2-AXIS BROADSHEET THEME & COLOR MODE SYSTEM
+   2. MOBILE & TABLET STICKY BOTTOM BAR + THEME & MODE DRAWER (`max-width: 1024px`)
    ----------------------------------------------------------------------------
-   Maintains orthogonal `[data-theme]` ("classic" | "ancient" | "minimalistic"
-   | "uwu") and `[data-mode]` ("light" | "dark") attributes on `<html>`.
-   Using two independent axes avoids multiplying token blocks by 8 and lets
-   the theme dropdown and the Light/Dark ink button operate independently.
+   Mirrors Issue 01's Pocket Newspaper bottom bar across all NRKI site pages on
+   mobile and tablet viewports: turns `.nrki-site-nav` into a bottom navigation
+   bar paired with a 1-tap theme & mode trigger button and popup sheet.
+   ============================================================================ */
+
+/**
+ * Maps full desktop nav link labels to compact mobile/tablet bottom-bar labels.
+ *
+ * @param {string} rawNavLabel
+ * @returns {string}
+ */
+function formatCompactBottomNavLabel(rawNavLabel) {
+  const cleanedLabel = (rawNavLabel || "").trim();
+  if (/^magazines$/i.test(cleanedLabel)) return "Mags";
+  if (/^about/i.test(cleanedLabel)) return "About";
+  return cleanedLabel;
+}
+
+/**
+ * Synchronizes the mobile/tablet bottom-bar theme trigger text (`classic ☀`)
+ * and the drawer's `[data-theme-option]` pill states.
+ */
+function synchronizeMobileBottomBarControls() {
+  const activeTheme =
+    document.documentElement.getAttribute("data-theme") || "classic";
+  const activeMode =
+    document.documentElement.getAttribute("data-mode") === "dark"
+      ? "dark"
+      : "light";
+  const modeIcon = activeMode === "dark" ? "☾" : "☀";
+
+  document
+    .querySelectorAll("[data-mobile-theme-drawer-toggle]")
+    .forEach((triggerButton) => {
+      triggerButton.textContent = `${activeTheme} ${modeIcon}`;
+    });
+
+  document
+    .querySelectorAll("[data-theme-option]")
+    .forEach((themePillButton) => {
+      const isSelected =
+        themePillButton.getAttribute("data-theme-option") === activeTheme;
+      themePillButton.setAttribute("aria-pressed", String(isSelected));
+    });
+}
+
+/**
+ * Mounts `.nrki-mobile-theme-sheet` and `.nrki-mobile-bottom-bar` onto `document.body`
+ * for any NRKI site page that contains `.nrki-site-header .nrki-site-nav`.
+ */
+function initializeMobileAndTabletBottomBar() {
+  const primarySiteNav = document.querySelector(
+    ".nrki-site-header .nrki-site-nav"
+  );
+  if (
+    !primarySiteNav ||
+    document.querySelector(".nrki-mobile-bottom-bar")
+  ) {
+    return;
+  }
+
+  const navAnchors = Array.from(primarySiteNav.querySelectorAll("a[href]"));
+  if (navAnchors.length === 0) return;
+
+  document.body.classList.add("nrki-has-mobile-bar");
+
+  // 1. Build 1-Tap Bottom Theme & Mode Drawer Sheet
+  const themeSheetElement = document.createElement("div");
+  themeSheetElement.className = "nrki-mobile-theme-sheet";
+  themeSheetElement.hidden = true;
+  themeSheetElement.setAttribute("role", "dialog");
+  themeSheetElement.setAttribute(
+    "aria-label",
+    "Mobile and tablet theme and mode switcher"
+  );
+  themeSheetElement.setAttribute("data-mobile-theme-sheet", "");
+
+  const topBarElement = document.createElement("div");
+  topBarElement.className = "nrki-modal-topbar";
+  topBarElement.style.marginBottom = "0.75rem";
+  topBarElement.style.paddingBottom = "0.5rem";
+
+  const sheetEyebrow = document.createElement("span");
+  sheetEyebrow.className = "nrki-eyebrow";
+  sheetEyebrow.style.margin = "0";
+  sheetEyebrow.textContent = "Broadsheet Edition & Ink";
+
+  const closeSheetButton = document.createElement("button");
+  closeSheetButton.type = "button";
+  closeSheetButton.className = "nrki-button nrki-button-small";
+  closeSheetButton.setAttribute("data-mobile-theme-sheet-close", "");
+  closeSheetButton.textContent = "Done ×";
+
+  topBarElement.appendChild(sheetEyebrow);
+  topBarElement.appendChild(closeSheetButton);
+
+  const stackContainer = document.createElement("div");
+  stackContainer.className = "nrki-stack-sm";
+
+  const themeSection = document.createElement("div");
+  const themeHeading = document.createElement("p");
+  themeHeading.className = "nrki-aside-label";
+  themeHeading.style.marginBottom = "0.35rem";
+  themeHeading.textContent = "Theme Personality";
+
+  const themeOptionsGroup = document.createElement("div");
+  themeOptionsGroup.className = "nrki-mobile-theme-options";
+
+  BROADSHEET_THEME_LABELS.forEach((themeDefinition) => {
+    const themeButton = document.createElement("button");
+    themeButton.type = "button";
+    themeButton.className = "nrki-mobile-theme-pill";
+    themeButton.setAttribute("data-theme-option", themeDefinition.themeKey);
+    themeButton.setAttribute("aria-pressed", "false");
+    themeButton.textContent = themeDefinition.displayLabel;
+    themeOptionsGroup.appendChild(themeButton);
+  });
+
+  themeSection.appendChild(themeHeading);
+  themeSection.appendChild(themeOptionsGroup);
+
+  const modeSection = document.createElement("div");
+  const modeHeading = document.createElement("p");
+  modeHeading.className = "nrki-aside-label";
+  modeHeading.style.marginBottom = "0.35rem";
+  modeHeading.textContent = "Color Polarity";
+
+  const modeToggleInSheet = document.createElement("button");
+  modeToggleInSheet.type = "button";
+  modeToggleInSheet.className = "nrki-theme-toggle";
+  modeToggleInSheet.setAttribute("data-theme-toggle", "");
+  modeToggleInSheet.setAttribute("aria-pressed", "false");
+  modeToggleInSheet.textContent = "Ink: Paper ☀";
+
+  modeSection.appendChild(modeHeading);
+  modeSection.appendChild(modeToggleInSheet);
+
+  stackContainer.appendChild(themeSection);
+  stackContainer.appendChild(modeSection);
+
+  themeSheetElement.appendChild(topBarElement);
+  themeSheetElement.appendChild(stackContainer);
+
+  // 2. Build Sticky Bottom Navigation + Theme Trigger Bar
+  const bottomBarNav = document.createElement("nav");
+  bottomBarNav.className = "nrki-mobile-bottom-bar";
+  bottomBarNav.setAttribute("aria-label", "Mobile and tablet navigation");
+
+  navAnchors.forEach((sourceAnchor) => {
+    const mobileNavLink = document.createElement("a");
+    mobileNavLink.className = "nrki-mobile-nav-link";
+    mobileNavLink.href = sourceAnchor.getAttribute("href") || "#";
+    mobileNavLink.textContent = formatCompactBottomNavLabel(
+      sourceAnchor.textContent
+    );
+    if (sourceAnchor.getAttribute("aria-current") === "page") {
+      mobileNavLink.setAttribute("aria-current", "page");
+    }
+    bottomBarNav.appendChild(mobileNavLink);
+  });
+
+  const drawerToggleButton = document.createElement("button");
+  drawerToggleButton.type = "button";
+  drawerToggleButton.className = "nrki-mobile-theme-trigger";
+  drawerToggleButton.setAttribute("data-mobile-theme-drawer-toggle", "");
+  drawerToggleButton.setAttribute("aria-expanded", "false");
+  drawerToggleButton.setAttribute(
+    "aria-label",
+    "Toggle theme and color mode drawer"
+  );
+  drawerToggleButton.textContent = "classic ☀";
+
+  bottomBarNav.appendChild(drawerToggleButton);
+
+  document.body.appendChild(themeSheetElement);
+  document.body.appendChild(bottomBarNav);
+
+  function setDrawerOpenState(shouldOpen) {
+    themeSheetElement.hidden = !shouldOpen;
+    drawerToggleButton.setAttribute("aria-expanded", String(shouldOpen));
+  }
+
+  drawerToggleButton.addEventListener("click", () => {
+    setDrawerOpenState(themeSheetElement.hidden);
+  });
+
+  closeSheetButton.addEventListener("click", () => {
+    setDrawerOpenState(false);
+  });
+
+  document.addEventListener("keydown", (keyboardEvent) => {
+    if (keyboardEvent.key === "Escape" && !themeSheetElement.hidden) {
+      setDrawerOpenState(false);
+      drawerToggleButton.focus();
+    }
+  });
+}
+
+/* ============================================================================
+   3. 2-AXIS BROADSHEET THEME & COLOR MODE SYSTEM
    ============================================================================ */
 
 /**
@@ -121,7 +327,7 @@ function triggerThemeTransitionAnimation() {
 
 /**
  * Applies the selected theme personality to `<html>`, syncs all theme `<select>`
- * controls on the page, and persists the preference in localStorage.
+ * and mobile drawer controls on the page, and persists in localStorage.
  *
  * @param {string} requestedTheme
  */
@@ -140,6 +346,8 @@ function applyBroadsheetTheme(requestedTheme) {
         themeSelectElement.value = resolvedTheme;
       }
     });
+
+  synchronizeMobileBottomBarControls();
 }
 
 /**
@@ -156,7 +364,6 @@ function applyColorMode(requestedMode) {
 
   document.documentElement.setAttribute("data-mode", resolvedMode);
   localStorage.setItem(STORAGE_KEY_BROADSHEET_MODE, resolvedMode);
-  // Keep legacy key synchronized for backwards compatibility across cached pages.
   localStorage.setItem(LEGACY_STORAGE_KEY_MODE, resolvedMode);
 
   document
@@ -167,11 +374,14 @@ function applyColorMode(requestedMode) {
         ? "Ink: Night ☾"
         : "Ink: Paper ☀";
     });
+
+  synchronizeMobileBottomBarControls();
 }
 
 /**
  * Restores saved theme + mode preferences and binds the masthead dropdown
- * (`[data-theme-select]`) and Light/Dark ink button (`[data-theme-toggle]`).
+ * (`[data-theme-select]`), mobile drawer pills (`[data-theme-option]`),
+ * and Light/Dark ink buttons (`[data-theme-toggle]`).
  */
 function initializeBroadsheetThemeAndMode() {
   const storedTheme = localStorage.getItem(STORAGE_KEY_BROADSHEET_THEME);
@@ -205,6 +415,16 @@ function initializeBroadsheetThemeAndMode() {
     });
 
   document
+    .querySelectorAll("[data-theme-option]")
+    .forEach((themePillButton) => {
+      themePillButton.addEventListener("click", () => {
+        const chosenTheme = themePillButton.getAttribute("data-theme-option");
+        triggerThemeTransitionAnimation();
+        applyBroadsheetTheme(chosenTheme);
+      });
+    });
+
+  document
     .querySelectorAll("[data-theme-toggle]")
     .forEach((modeToggleButton) => {
       modeToggleButton.addEventListener("click", () => {
@@ -220,7 +440,7 @@ function initializeBroadsheetThemeAndMode() {
 }
 
 /* ============================================================================
-   3. DECLARATIVE CATEGORY FILTERING (Static HTML Shelves)
+   4. DECLARATIVE CATEGORY FILTERING (Static HTML Shelves)
    ============================================================================ */
 
 /**
@@ -298,7 +518,7 @@ function initializeFilterGroups() {
 }
 
 /* ============================================================================
-   4. RESUME PRINT / SAVE AS PDF
+   5. RESUME PRINT / SAVE AS PDF
    ============================================================================ */
 
 /**
@@ -333,11 +553,12 @@ function initializePrintButtons() {
 }
 
 /* ============================================================================
-   5. INITIALIZATION ENTRYPOINT
+   6. INITIALIZATION ENTRYPOINT
    ============================================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeMastheadDateline();
+  initializeMobileAndTabletBottomBar();
   initializeBroadsheetThemeAndMode();
   initializeFilterGroups();
   initializePrintButtons();

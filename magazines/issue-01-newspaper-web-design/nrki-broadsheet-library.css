@@ -2429,6 +2429,45 @@
     text-underline-offset: 0.35rem;
   }
 
+  /* --- Mobile & Tablet Sticky Bottom Navigation Bar & Theme/Mode Sheet --- */
+  .nrki-mobile-bottom-bar,
+  .nrki-mobile-theme-sheet {
+    display: none;
+  }
+
+  .nrki-mobile-theme-options {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .nrki-mobile-theme-pill {
+    padding: 0.32rem 0.62rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .nrki-mobile-theme-pill:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-mobile-theme-pill[aria-pressed="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
   /* --- Cards (Adapts Borders & Corners Dynamically Across All 4 Themes) --- */
   .nrki-card,
   .nrki-pin-card,
@@ -3763,6 +3802,106 @@
     }
   }
 
+  /* Tablet & Mobile (`max-width: 1024px`):
+     Replaces the top `.nrki-site-nav` ribbon and header theme/mode selectors
+     with a fixed Pocket Bottom Navigation Bar + 1-Tap Theme & Mode Drawer. */
+  @media screen and (max-width: 1024px) {
+    body.nrki-has-mobile-bar {
+      padding-bottom: 4.75rem;
+    }
+
+    .nrki-site-header .nrki-site-nav,
+    .nrki-masthead-subbar .nrki-theme-picker,
+    .nrki-masthead-subbar .nrki-theme-toggle {
+      display: none;
+    }
+
+    .nrki-masthead-subbar {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      margin-block: 0.15rem 0.5rem;
+    }
+
+    .nrki-mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 110;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.15rem;
+      padding: 0.42rem 0.45rem;
+      border-top: 2px solid var(--nrki-border-strong);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .nrki-mobile-nav-link {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.32rem 0.22rem;
+      border-radius: var(--nrki-radius-control);
+      color: var(--nrki-ink-muted);
+      font-family: var(--nrki-font-ui);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-decoration: none;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .nrki-mobile-nav-link:hover {
+      color: var(--nrki-ink-heading);
+    }
+
+    .nrki-mobile-nav-link[aria-current="page"] {
+      background-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+    }
+
+    .nrki-mobile-theme-trigger {
+      flex: 0 0 auto;
+      padding: 0.36rem 0.52rem;
+      border: 1px solid var(--nrki-border-strong);
+      border-radius: var(--nrki-radius-pill);
+      background-color: var(--nrki-surface-panel);
+      color: var(--nrki-ink-heading);
+      font-family: var(--nrki-font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nrki-mobile-theme-sheet {
+      position: fixed;
+      bottom: 3.45rem;
+      left: 0.65rem;
+      right: 0.65rem;
+      max-width: 28rem;
+      margin-inline: auto;
+      z-index: 115;
+      display: block;
+      padding: 1rem;
+      border: var(--nrki-card-border);
+      border-radius: var(--nrki-radius-surface);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: var(--nrki-shadow-overlay);
+    }
+
+    .nrki-mobile-theme-sheet[hidden] {
+      display: none;
+    }
+  }
+
   /* Mobile-only layout stacking wrapped cleanly in `@media screen` so print
      engines never collapse grids on narrower print pages */
   @media screen and (max-width: 767px) {
@@ -4004,7 +4143,9 @@
     .nrki-site-footer,
     .nrki-resume-toolbar,
     .nrki-skip-link,
-    .nrki-toast-stack {
+    .nrki-toast-stack,
+    .nrki-mobile-bottom-bar,
+    .nrki-mobile-theme-sheet {
       display: none;
     }
 

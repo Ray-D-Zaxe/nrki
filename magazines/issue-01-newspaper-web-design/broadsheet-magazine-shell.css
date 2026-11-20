@@ -174,48 +174,12 @@
 
 
   /* ========================================================================
-     2. THREE-PART NEWSPAPER FLAG ROW (EARS + WORDMARK) & SECTION RIBBON
+     2. NEWSPAPER FLAG ROW (WORDMARK) & SECTION RIBBON
      ======================================================================== */
   .magazine-flag-row {
-    display: grid;
-    grid-template-columns: minmax(10rem, 14rem) minmax(0, 1fr) minmax(10rem, 14rem);
-    align-items: center;
-    gap: 1rem;
-    padding-block: 0.85rem;
-  }
-
-  .magazine-ear-box {
-    padding: 0.5rem 0.65rem;
-    border: var(--nrki-card-border);
-    border-radius: var(--nrki-radius-control);
-    background-color: var(--nrki-surface-panel);
-    box-shadow: var(--nrki-card-frame-shadow);
-    font-family: var(--nrki-font-ui);
-    font-size: 0.68rem;
-    line-height: 1.4;
-    color: var(--nrki-ink-muted);
-    text-align: center;
-  }
-
-  [data-theme="ancient"] .magazine-ear-box {
-    overflow: visible;
-    padding: 0.65rem 0.85rem;
-    border-style: solid;
-    border-width: 2px;
-    border-image-source: var(--nrki-ancient-frame-svg);
-    border-image-slice: 30;
-    border-image-width: 18px;
-    border-image-outset: 4px;
-    border-image-repeat: stretch;
-    box-shadow: none;
-  }
-
-  .magazine-ear-box strong {
     display: block;
-    color: var(--nrki-ink-heading);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    text-align: center;
+    padding-block: 0.85rem;
   }
 
   .magazine-flag-center {
@@ -837,14 +801,12 @@
     }
 
     .magazine-theme-mode-bar,
-    .magazine-ear-box,
     .magazine-section-ribbon,
     .magazine-directory-column {
       display: none;
     }
 
     .magazine-flag-row {
-      grid-template-columns: 1fr;
       padding-block: 0.65rem 0.5rem;
     }
 

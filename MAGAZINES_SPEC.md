@@ -53,7 +53,7 @@ Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** spl
 *(In Magazine Issue 01, `magazine.shell` slots cleanly between `nrki.components` and `nrki.utilities` so utility states and print rules always win cleanly without `!important`.)*
 
 - **Zero-Specificity Theme Base Selectors (`:where()`):** Base theme overrides on shared UI classes (e.g., `:where([data-theme="minimalistic"]) .nrki-button`, `.nrki-theme-toggle`, `.nrki-theme-select`, `.nrki-badge`, `.nrki-callout`, `.nrki-filter-button`) use `:where(...)` so the selector stays at `(0, 1, 0)` specificity instead of `(0, 2, 0)`. Variant modifiers like `.nrki-button-primary`, `.nrki-button-small`, `.nrki-button-large`, and `.nrki-button-danger` always override base background and ink colors without hover or `!important`.
-- **Site Header Theme + Mode Controls (`.nrki-masthead-subbar`):** Every NRKI site page positions `<select class="nrki-theme-select" data-theme-select>` on the left and `<button class="nrki-theme-toggle" data-theme-toggle>` on the right directly below the `.nrki-wordmark` (`NRKI` title) inside `.nrki-masthead-subbar` (flanking `.nrki-masthead-tagline`), synchronized by `assets/scripts/main.js` (`nrki-broadsheet-theme` + `nrki-broadsheet-mode`) and restored pre-paint in `<head>`.
+- **Site Header Theme + Mode Controls (`.nrki-masthead-subbar`) & Mobile/Tablet Bottom Bar (`.nrki-mobile-bottom-bar`):** On desktop (`min-width: 1025px`), every NRKI site page positions `<select class="nrki-theme-select" data-theme-select>` on the left and `<button class="nrki-theme-toggle" data-theme-toggle>` on the right directly below the `.nrki-wordmark` (`NRKI` title) inside `.nrki-masthead-subbar` (flanking `.nrki-masthead-tagline`). On mobile and tablet displays (`max-width: 1024px`), the top `.nrki-site-nav` and header theme/mode selectors hide, replaced by a sticky bottom bar (`.nrki-mobile-bottom-bar`) containing the site navigation links and a 1-tap theme/mode trigger (`[data-mobile-theme-drawer-toggle]`) that opens `.nrki-mobile-theme-sheet`.
 
 ---
 
@@ -62,7 +62,7 @@ Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** spl
 Issue 01 is structured as a **5-Page Newspaper Monograph**:
 
 ### Page 01: Front Page — Intro, Manifesto & Interactive Index (`#intro`)
-- Authentic 3-part Newspaper Masthead (Left Edition Ear + centered `THE NRKI BROADSHEET` nameplate + Right Folio Ear), double-ruled 5-section ribbon, 3-column broadsheet Front Page grid (Lead Story + Multi-column copy | Interactive Magazine Index & Live 8-Token Swatch Ledger).
+- Centered Newspaper Masthead (`THE NRKI BROADSHEET` nameplate without ear boxes), double-ruled 5-section ribbon, 3-column broadsheet Front Page grid (Lead Story + Multi-column copy | Interactive Magazine Index & Live 8-Token Swatch Ledger).
 
 ### Page 02: Broadsheet Layouts (`#layouts` — 6 Reusable Specimens)
 1. **Classic 3-Column Broadsheet Front Page** (`.nrki-layout-frontpage`)
