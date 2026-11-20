@@ -1,0 +1,8 @@
+# Exclude repository metadata, configs, and docs from deployed static assets
+.git/
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+CLOUDFLARE_HOSTING_GUIDE.md
+SITE_GUIDE.md
