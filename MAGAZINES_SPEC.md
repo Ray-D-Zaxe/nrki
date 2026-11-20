@@ -1,17 +1,17 @@
 # NRKI Broadsheet CSS Library & Design Magazine Spec (`MAGAZINES_SPEC.md`)
 
-This document defines the **standalone NRKI Broadsheet CSS Library** (the primary focus of the v2 rework) and **Magazine Issue 01**, which serves as its live interactive documentation and specimen showcase.
+This document defines the **standalone NRKI Broadsheet CSS Library** (the primary focus of the v2 rework) and **Magazine Issue 01 — The NRKI Broadsheet**, which serves as its newspaper-styled live interactive documentation and specimen workbench.
 
 ---
 
 ## 1. Core Vision & Scope
 
-- **Primary Focus:** Build a **standalone, extensible, zero-dependency Editorial/Newspaper CSS Library** (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`).
+- **Primary Focus:** Build a **standalone, extensible, zero-dependency Newspaper & Editorial CSS Library** (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`).
 - **Use Cases:**
   1. Powers **NRKI** (`nrki.in`) and all future NRKI pages/SPAs.
-  2. Works as a **drop-in standalone CSS library** for external websites, blogs, portfolios, and documentation sites—structured cleanly enough to extend in the future.
-- **Role of Magazine Issue 01:** Acts as the library's interactive Storybook / showcase (replacing `Gallery` with a barebones `Magazines` index at `pages/magazines-index.html` containing Issue 01 for now). Every element and component supported by the library is rendered live inside Issue 01 with 5-mode switching, HTML/CSS/JS inspection, and one-click copy.
-- **Safety:** For now, this CSS library lives independently for the Magazine on `dev` and does **not** overwrite the existing `assets/styles/style.css` until we are ready to migrate NRKI over to it.
+  2. Works as a **drop-in standalone CSS library** for external websites, blogs, portfolios, and documentation sites—reusable anywhere with zero build step and **zero `!important`**.
+- **Newspaper Role of Magazine Issue 01:** Replaces `Gallery` with a barebones `Magazines` index at `pages/magazines-index.html`. Issue 01 looks and reads like an authentic multi-edition newspaper—featuring a classic **Broadsheet Spread** on desktop/tablet (`min-width: 768px`) and a vertical **Pocket Newspaper** edition on mobile (`max-width: 767px`).
+- **Safety:** For now, this CSS library lives independently inside `magazines/issue-01-newspaper-web-design/` on `dev` and does **not** overwrite `assets/styles/style.css`. `main` keeps `pages/magazines-index.html` Under Construction until ready to launch.
 
 ---
 
@@ -25,128 +25,128 @@ To combine editorial polish with modern standalone CSS ergonomics, `nrki-broadsh
 | **Pico CSS** | Semantic-first element defaults (`blockquote`, `table`, `details`, form controls) styled cleanly without "div soup" | Allows dropping `nrki-broadsheet-library.css` onto plain semantic HTML pages while offering explicit `.nrki-*` classes where needed. |
 | **PaperCSS** | Tactile print/paper border character (`1px` solid hairlines, `3px double` masthead dividers, pinned brass accents) | Reinforces the physical broadsheet feel without heavy drop-shadow clutter. |
 | **Matcha CSS** | Zero-build drop-in stylesheet usability across blogs and personal sites | Works directly via `<link rel="stylesheet">` with zero bundler, preprocessor, or JavaScript requirement for base styling. |
-| **Open Props** | Multi-tier CSS custom properties paired with native `@layer` cascade isolation | Lets external consumers override tokens or extend rules cleanly without `!important` or specificity wars. |
+| **Open Props** | Multi-tier CSS custom properties paired with native `@layer` cascade control | Lets external consumers override tokens or extend rules cleanly without `!important` or specificity wars. |
 
 ---
 
-## 2. Upgraded Token System & 5 Theme Modes
+## 2. Upgraded 2-Axis Token Architecture (`data-theme` × `data-mode`)
 
-### Why Upgrade the Existing Token System?
-NRKI's existing semantic variables (`--bg-primary`, `--ink-primary`, `--border-strong`, `--accent-primary`, etc.) are already a strong foundation. To turn them into a **reusable 5-mode CSS library**, we upgrade them in 3 ways:
+### Why Orthogonal `data-theme` + `data-mode` Replaces Flat Mode Names?
+Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** splits visual personality (**`data-theme`**) from ink brightness (**`data-mode`**):
+1. **`data-theme`** defines each personality's **default typography stack**, **border grammar** (hairline/double vs. ornate scrollwork vs. near-borderless vs. chunky pastel), **corner radii**, **ornament masks**, and **shadow depth**.
+2. **`data-mode`** flips **color polarity (`light` vs. `dark`)** inside *each* of those 4 themes—producing **8 cohesive, high-contrast editions** (`4 × 2`).
+3. **Container-Scoped Isolation:** Every theme × mode combination is scoped cleanly to attribute selectors (`[data-theme="..."]` + `[data-mode="..."]`), so both `<html>` and any nested preview container (`.nrki-theme-surface`, `.specimen-preview-stage`) can switch independently without leaking fonts, paper textures, or borders to parent containers.
 
-1. **Container-Scoped Themes (`[data-theme="..."]`):**
-   - Theme tokens attach to `:root, [data-theme="light"]`, `[data-theme="dark"]`, `[data-theme="accent"]`, `[data-theme="faded"]`, and `[data-theme="uwu"]`.
-   - Because themes work on **any element** (not just `<html>`), every **Specimen Container** in the Magazine can toggle between all 5 modes independently—*and* any site using the library can theme either the whole page or a single section/card!
-2. **Native CSS Cascade Layers (`@layer`) — Zero `!important`:**
-   ```css
-   @layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
-   ```
-   - Allows future projects to override or extend any rule cleanly without `!important` or specificity battles.
-3. **Extended Semantic Tokens (`--nrki-*`):**
-   - **Surfaces:** `--nrki-surface-canvas`, `--nrki-surface-panel`, `--nrki-surface-inset`, `--nrki-surface-elevated`
-   - **Inks:** `--nrki-ink-heading`, `--nrki-ink-body`, `--nrki-ink-muted`, `--nrki-ink-faint`, `--nrki-ink-on-accent`
-   - **Accents:** `--nrki-accent-primary`, `--nrki-accent-primary-hover`, `--nrki-accent-primary-tint`, `--nrki-accent-secondary`, `--nrki-accent-secondary-hover`, `--nrki-accent-secondary-tint`, `--nrki-accent-highlight`, `--nrki-accent-highlight-hover`, `--nrki-accent-highlight-tint`
-   - **Borders:** `--nrki-border-strong`, `--nrki-border-subtle`, `--nrki-border-faint`
-   - **Status:** `--nrki-status-info-*`, `--nrki-status-success-*`, `--nrki-status-warning-*`, `--nrki-status-danger-*` (`-ink`, `-surface`, `-border`)
-   - **Geometry, Depth & Interactive:** `--nrki-radius-control`, `--nrki-radius-surface`, `--nrki-radius-pill`, `--nrki-shadow-surface`, `--nrki-shadow-overlay`, `--nrki-focus-ring`, `--nrki-selection-surface`, `--nrki-selection-ink`, `--nrki-code-surface`, `--nrki-code-ink`
-   - **Typography & Spacing:** `--nrki-font-serif`, `--nrki-font-sans`, `--nrki-font-mono`, `--nrki-shell-max-width`, `--nrki-reading-max-width`, `--nrki-space-1`..`--nrki-space-6`, `--nrki-transition-fast`
+### The 4 Themes × 2 Modes = 8 Editions
 
-### The 5 Supported Modes (`data-theme`)
+| Theme (`data-theme`) | Personality & Border Grammar | Default Font Pairing (with Native Fallbacks) | Light Mode (`data-mode="light"`) | Dark Mode (`data-mode="dark"`) |
+| :--- | :--- | :--- | :--- | :--- |
+| **`classic`** *(Default)* | Metropolitan broadsheet: `1px solid` column hairlines, `3px double` major rules, razor `0px` corners. | **Playfair Display** (masthead), **Newsreader / Georgia** (body), **Libre Franklin** (UI), **JetBrains Mono** (code). | Dried-sage botanical newsprint (`#f2efe7`), deep pine-carbon ink (`#171b16`), forest green (`#2d4f36`). | Pine-charcoal ink (`#121613`), linen parchment text (`#e6e8df`), luminous sage (`#7ea383`). |
+| **`ancient`** | Old Fantasy Kingdom Chronicle: ornate `4px double` frames + inset outline, CSS `mask-image` SVG corner/divider scrollwork filigree, subtle aged vignette texture. | **UnifrakturMaguntia** (blackletter nameplate), **Cinzel** (royal small-caps headings/UI), **IM Fell English / Palatino** (prose). | Aged royal vellum (`#efe3c6`), deep walnut-sepia ink (`#2a1c11`), crimson wax seal (`#7d1f1a`), antique gold (`#8c6821`). | Candlelit obsidian leather (`#16120d`), warm ivory vellum (`#efe1c4`), gilded gold (`#d6ae55`), ember crimson (`#d45d54`). |
+| **`minimalistic`** | Swiss Neo-Editorial: **barely any borders** (`0px` card borders, soft tonal surface elevation instead of outlines, single whisper `1px` section dividers). | **Space Grotesk** (display/headings), **Inter / system-ui** (body/UI), **IBM Plex Mono** (code). | Pure gallery alabaster (`#fafaf9`), stone panel (`#f1f1ef`), pure carbon ink (`#111213`). | Deep matte obsidian (`#0d0e10`), elevated graphite (`#15171a`), crisp chalk (`#f3f4f6`). |
+| **`uwu`** | Kawaii Pastel Zine: chunky `2px solid` / `2px dashed` pastel frames, offset candy shadows (`3px 3px 0`), rounded `12px–999px` pill geometry, floral divider ornaments (`✿ ✧ ✿`). | **Fredoka** (display/UI), **Nunito / Trebuchet MS** (body), **Fira Code** (code). | Sakura milk (`#fff4f9`), strawberry cream (`#fce4ef`), plum-berry ink (`#3f1d38`), sakura magenta (`#cf3581`). | Velvet midnight plum (`#1a101d`), berry dusk (`#25172b`), cotton-candy white (`#fdf2f8`), neon sakura (`#f472b6`). |
 
-| Mode Value | Display Name | Visual Character |
-| :--- | :--- | :--- |
-| `light` | **Light / Day** *(Default)* | Warm dried-sage botanical newsprint (`#f2efe7`), deep pine-carbon ink (`#171b16`), forest-ledger green accent (`#2d4f36`). |
-| `dark` | **Dark / Night** | Reversed pine-charcoal ink (`#141815`), warm parchment-cream text (`#ebe8dc`), luminous sage accent (`#8db596`). |
-| `accent` | **Accent / Highlighted** | High-impact editorial feature band—deep botanical forest surface (`#1f3725`) with crisp cream ink (`#f8f7f2`) and oxidized brass/gold highlights (`#d4c77e`). |
-| `faded` | **Faded / Low-Contrast** | Soft, sun-bleached archival paper (`#eae7df`) with muted charcoal-moss ink (`#434840`) and gentle hairlines for low-glare, quiet reading. |
-| `uwu` | **UwU / OwO** | Playful sakura-cream paper (`#fff5f8`), plum-berry ink (`#3b2338`), rose-magenta & lavender accents (`#d14d8b`, `#9b72cf`), and softly rounded corners (`--radius-sm: 6px`). |
-
----
-
-## 3. Complete CSS Library Coverage (Elements & Components)
-
-The standalone library (`nrki-broadsheet-library.css`) covers **everything in NRKI's current `main` & `dev` CSS** plus extensible library primitives using semantic defaults and `.nrki-*` classes:
-
-### A. 11 Simple Elements (Magazine Page 2: `#elements`)
-1. **Editorial Typography & Headings:** `h1`–`h6`, `.nrki-eyebrow`, `.nrki-lead-summary`, `.nrki-quiet-note`, `.nrki-drop-cap`, `<mark>`, `<kbd>`, `<code>`, `<abbr>`.
-2. **Section Headers, Rules & Tufte Sidenote:** `.nrki-page-hero`, `.nrki-section-heading`, `.nrki-rule-single`, `.nrki-rule-double`, `.nrki-rule-dashed`, `.nrki-sidenote`.
-3. **Buttons (Variants, Sizes & Groups):** `.nrki-button`, `.nrki-button-primary`, `.nrki-button-secondary`, `.nrki-button-ghost`, `.nrki-button-danger`, `.nrki-button-small`, `.nrki-button-large`, `:disabled`, `.nrki-button-group`.
-4. **Links & Breadcrumbs:** `.nrki-text-link`, `.nrki-back-link`, `.nrki-skip-link`, `.nrki-breadcrumb`.
-5. **Badges, Stamps & Tag Pills:** `.nrki-badge`, `.nrki-badge-accent`, `.nrki-badge-highlight`, `.nrki-badge-success`, `.nrki-badge-warning`, `.nrki-badge-danger`, `.nrki-rating-stamp`, `.nrki-tag-pill`, `.nrki-tag-pills`, `.nrki-connected-chip`.
-6. **Lists & Metadata:** Editorial `ul`/`ol`, `.nrki-editorial-list`, `<dl>`/`<dt>`/`<dd>`, `.nrki-inline-meta-list`.
-7. **Editorial Blockquotes & Code Blocks:** `blockquote` + `<cite>`, `<pre><code>`.
-8. **Forms & Validation States:** `.nrki-field`, `.nrki-label`, `.nrki-input`, `.nrki-textarea`, `.nrki-select`, `.nrki-checkbox-row`, `.nrki-radio-row`, `.nrki-field-help`, `.nrki-field-error`, `.nrki-input-invalid`.
-9. **Tables & Data Ledgers:** `.nrki-table-wrap`, `.nrki-table`, `.nrki-table-compact`, `.nrki-table-striped`, `.nrki-cell-numeric`.
-10. **Editorial Callouts & Notices:** `.nrki-callout`, `.nrki-callout-info`, `.nrki-callout-success`, `.nrki-callout-warning`, `.nrki-callout-danger`.
-11. **Media Figure Frame & Theme Toggle:** `.nrki-media-figure`, `.nrki-media-header`, `.nrki-media-caption`, `.nrki-theme-toggle` *(includes interactive `JS` tab)*.
-
-### B. 9 Complex Components (Magazine Page 3: `#components`)
-1. **Newspaper Masthead Bar, Wordmark, Live Clock & Nav:** `.nrki-site-header`, `.nrki-masthead-bar`, `.nrki-wordmark`, `.nrki-wordmark-compact`, `.nrki-site-nav` *(includes `JS` clock & edition updater)*.
-2. **Editorial & Interactive Link Cards:** `.nrki-card`, `.nrki-card-link`, `.nrki-card-meta`, `.nrki-card-footer`.
-3. **Pinboard Card & Media Ledger Card:** `.nrki-pin-card`, `.nrki-card-media`, `.nrki-motif-row`, `.nrki-connected-row`, `.nrki-media-card`.
-4. **Broadsheet Lead Story, Section Grid & Prose Columns:** `.nrki-page-shell`, `.nrki-lead-story`, `.nrki-lead-aside`, `.nrki-section-block`, `.nrki-card-grid`, `.nrki-shelf-grid`, `.nrki-columns-prose`.
-5. **Interactive Filter Bar & Shelf Controls:** `.nrki-shelf-section`, `.nrki-shelf-header`, `.nrki-filter-controls`, `.nrki-filter-bar`, `.nrki-filter-button`, `.nrki-shelf-status-bar` *(includes interactive filter `JS`)*.
-6. **Works Ledger & Resume Dossier Rows:** `.nrki-works-ledger`, `.nrki-work-row`, `.nrki-resume-row`.
-7. **Accessible Modal / Article Overlay:** `.nrki-modal-backdrop`, `.nrki-modal-dialog`, `.nrki-modal-topbar`, `.nrki-modal-motifs-box` *(includes open/Escape/close `JS`)*.
-8. **Newspaper Tabs & Expandable Accordions:** `.nrki-tabs`, `.nrki-tab-list`, `.nrki-tab-trigger`, `.nrki-tab-panel`, `.nrki-accordion`, `.nrki-accordion-item` *(includes tab switching `JS`)*.
-9. **Print-Ready Resume Sheet & Site Footer:** `.nrki-resume-toolbar`, `.nrki-resume-sheet`, `.nrki-resume-header`, `.nrki-resume-section`, `.nrki-skills-grid`, `.nrki-site-footer`, and cross-browser `@page` + `@media print`.
-
----
-
-## 4. Specimen Container Behavior (Inside Magazine Issue 01)
-
-Every Simple Element and Complex Component in Issue 01 is rendered inside a standardized **Specimen Container**:
-
-```text
-+-------------------------------------------------------------------------+
-| [Specimen Title]               Mode: [Light][Dark][Accent][Faded][UwU]  |
-| Short description of the element or component.                          |
-+-------------------------------------------------------------------------+
-|  (Preview area styled with `data-theme="<selected-mode>"`)              |
-|                                                                         |
-|                       LIVE RENDERED PREVIEW                             |
-|                                                                         |
-+-------------------------------------------------------------------------+
-|  [ HTML ]   [ CSS ]   [ JS* ]                           [ Copy <Tab> ]  |
-+-------------------------------------------------------------------------+
-|  /* Code drawer showing ONLY the active tab (HTML, CSS, or JS) */       |
-+-------------------------------------------------------------------------+
+### Cascade Layer Order (Zero `!important`)
+```css
+@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
 ```
-
-- **Main Mode Toggle (5 Modes):** Switches `data-theme` (`light` | `dark` | `accent` | `faded` | `uwu`) directly on that specimen's preview stage (plus an optional global page toggle in the magazine header).
-- **Code Toggles:** `HTML`, `CSS`, and conditional `JS` *(only rendered if the specimen uses JS)*.
-- **Copy Button:** Copies **only** the code currently displayed in the active tab (`Copy HTML` / `Copy CSS` / `Copy JS`) with `Copied! ✓` feedback.
+*(In Magazine Issue 01, `magazine.shell` slots cleanly between `nrki.components` and `nrki.utilities` so utility states and print rules always win cleanly without `!important`.)*
 
 ---
 
-## 5. Proposed File Structure (Descriptive Naming Standard)
+## 3. Complete Library Coverage & The 5 Magazine Pages
 
-Per [`GEMINI.md`](./GEMINI.md), every file, folder, variable, and class uses an explicit, context-specific name (no generic names like `data`, `style.css`, or `elements.js`):
+Issue 01 is structured as a **5-Page Newspaper Monograph**:
+
+### Page 01: Front Page — Intro, Manifesto & Interactive Index (`#intro`)
+- Authentic 3-part Newspaper Masthead (Left Edition Ear + centered `THE NRKI BROADSHEET` nameplate + Right Folio Ear), double-ruled 5-section ribbon, 3-column broadsheet Front Page grid (Lead Story + Multi-column copy | Interactive Magazine Index & Live 8-Token Swatch Ledger).
+
+### Page 02: Broadsheet Layouts (`#layouts` — 6 Reusable Specimens)
+1. **Classic 3-Column Broadsheet Front Page** (`.nrki-layout-frontpage`)
+2. **Asymmetric Lead Feature + Contents Rail** (`.nrki-lead-story` + `.nrki-lead-aside`)
+3. **Editorial Reading Measure + Tufte Marginalia Rail** (`.nrki-layout-marginalia`)
+4. **Flowing Multi-Column Newspaper Prose & Spanning Quote** (`.nrki-columns-prose` + `.nrki-column-span-all`)
+5. **Collection Shelf with Sticky Filter Sidebar** (`.nrki-layout-shelf-sidebar` — includes interactive filter `JS`)
+6. **Two-Page Newspaper Spread & Mobile Folio Stack** (`.nrki-spread-grid`)
+
+### Page 03: Simple Elements (`#elements` — 11 Specimens)
+1. **Editorial Typography & Headings** (`h1`–`h6`, `.nrki-eyebrow`, `.nrki-lead-summary`, `.nrki-drop-cap`, `<mark>`, `<kbd>`, `<code>`, `<abbr>`)
+2. **Headers, Structural Rules & Tufte Sidenote** (`.nrki-page-hero`, `.nrki-section-heading`, `.nrki-ornate-divider`, `.nrki-rule-double`, `.nrki-sidenote`)
+3. **Buttons — Variants, Sizes & Button Groups** (`.nrki-button`, `-primary`, `-secondary`, `-ghost`, `-danger`, `-small`, `-large`, `:disabled`)
+4. **Links, Back-Links & Breadcrumbs** (`.nrki-text-link`, `.nrki-back-link`, `.nrki-skip-link`, `.nrki-breadcrumb`)
+5. **Badges, Status Stamps, Rating Seal & Tag Pills** (`.nrki-badge-*`, `.nrki-rating-stamp`, `.nrki-tag-pill`, `.nrki-connected-chip`)
+6. **Lists, Definition Lists & Inline Metadata** (`.nrki-editorial-list`, `.nrki-definition-list`, `.nrki-inline-meta-list`)
+7. **Editorial Blockquotes & Preformatted Code** (`blockquote` / `.nrki-quote`, `<pre><code>`)
+8. **Form Inputs, Selects, Checkboxes & Validation** (`.nrki-field`, `.nrki-input`, `.nrki-textarea`, `.nrki-select`, `.nrki-input-invalid`, `.nrki-field-error`)
+9. **Newspaper Tables & Structured Ledgers** (`.nrki-table`, `.nrki-table-compact`, `.nrki-table-striped`, `.nrki-cell-numeric`)
+10. **Editorial Callouts & Status Notices** (`.nrki-callout`, `-info`, `-success`, `-warning`, `-danger`)
+11. **Media Figure Frame & Theme/Mode Cycle** (`.nrki-media-figure`, `.nrki-theme-toggle` — includes `JS` tab cycling themes + light/dark mode)
+
+### Page 04: Complex Components (`#components` — 9 Specimens)
+1. **Newspaper Masthead Bar, Wordmark, Live Clock & Nav** *(includes `JS`)*
+2. **Editorial & Interactive Link Cards** (`.nrki-card`, `.nrki-card-link`, `.nrki-framed-panel`)
+3. **Pinboard Card & Media Ledger Card** (`.nrki-pin-card`, `.nrki-media-card`)
+4. **Lead Story Split, Section Grid & Prose Columns** (`.nrki-lead-story`, `.nrki-section-block`)
+5. **Interactive Filter Bar & Shelf Controls** *(includes `JS`)*
+6. **Works Newspaper Index & Resume Dossier Rows** (`.nrki-works-ledger`, `.nrki-resume-row`)
+7. **Accessible Modal & Article Overlay** *(includes `JS`)*
+8. **Newspaper Tabs & Expandable Accordions (`<details>`)** *(includes `JS`)*
+9. **Print-Ready Resume Sheet & Site Footer** (cross-browser `@page` + `@media print`)
+
+### Page 05: Colophon — GitHub Stylesheet, Reusability & Credits (`#colophon`)
+- Direct GitHub links to `nrki-broadsheet-library.css`, `@layer` extension snippets, and full lineage/inspirations list.
+
+---
+
+## 4. Responsive Broadsheet Architecture (Desktop Spread vs. Mobile Pocket Newspaper)
+
+### Desktop & Tablet (`min-width: 768px`) — Non-Scrolling Broadsheet Spread
+- **Why not a long vertical scroll on desktop?** A real newspaper gives you a table of contents column alongside the active story page rather than one endless scroll.
+- On `#layouts`, `#elements`, and `#components`, desktop renders a **2-column Broadsheet Spread**:
+  - **Left Ruled Index Column:** Numbered newspaper directory of all specimens in that section, category/`JS` badges, `← Prev` / `Next →` specimen turn controls, and a **`Spread View` / `Full Sheet`** toggle button (defaulting to `Spread View`, showing one specimen cleanly inside the viewport).
+  - **Right Specimen Broadsheet Stage:** Active Specimen Container + bottom **Running Folio Bar** (`Specimen X of Y · ← Previous | Next →`, keyboard shortcuts `Alt+←` / `Alt+→`).
+
+### Mobile (`max-width: 767px`) — Pocket Newspaper Edition
+- On mobile, natural vertical scrolling **is** ergonomic—so Issue 01 shifts into a dedicated mobile newspaper layout:
+  1. **Edge-to-Edge Scrollable Stream:** All specimens in the active section stack cleanly with minimal side gutters (`0.75rem`) and tactile print dividers (`ARTICLE 02 OF 11 · ✦`) so zero horizontal space is wasted.
+  2. **Top Reading Progress Ink Rule:** 3px fixed top indicator bar tracking scroll progress through the section.
+  3. **Horizontal Scroll-Snap Quick-Jump Strip:** Swipeable pill index at the top of each catalog section (`01`, `02`, `03`…).
+  4. **Sticky Bottom Pocket Folio Bar + 1-Tap Theme Drawer:** Fixed bottom navigation (`Front`, `Layouts`, `Elem`, `Comp`, `Info`) paired with a compact theme trigger (`Classic ☀`) that opens an accessible bottom sheet to switch Themes (`Classic / Ancient / Minimalistic / UwU`) & Modes (`Light / Dark`) seamlessly one-handed.
+
+---
+
+## 5. Specimen Container Specification
+
+Every specimen on `#layouts`, `#elements`, and `#components` renders inside the reusable `.specimen-container`:
+- **Per-Specimen Dual Controls:** Independent **Theme (`Classic | Ancient | Minimalistic | UwU`)** + **Mode (`☀ | ☾`)** buttons controlling `data-theme` and `data-mode` directly on `.specimen-preview-stage`.
+- **Code Inspection & Copy:** `HTML`, `CSS`, and conditional `JS` *(shown strictly when `jsSnippet` exists)* toggles + context-aware `Copy <LANG>` button (with `file://` clipboard fallback).
+
+---
+
+## 6. File System Structure (Descriptive Naming Standard)
+
+Per [`GEMINI.md`](./GEMINI.md), every file, folder, variable, and class uses explicit domain-specific naming:
 
 ```text
 NRKI AG/
-├── GEMINI.md                                               # Always-on coding, CSS (no !important) & naming rules
+├── GEMINI.md                                               # Always-on CSS, naming, rationale & spec-sync rules
 ├── pages/
-│   └── magazines-index.html                                # Barebones Magazines index (replaces gallery.html)
+│   └── magazines-index.html                                # Barebones Magazines index (Under Construction on main)
 └── magazines/
     └── issue-01-newspaper-web-design/
-        ├── nrki-broadsheet-library.css                     # THE standalone, extensible CSS library (5 modes + @layer)
-        ├── broadsheet-magazine-shell.css                   # Dedicated CSS solely for magazine chrome & specimen box
-        ├── newspaper-design-magazine.html                  # Issue 01 SPA shell (#intro, #elements, #components, #colophon)
-        ├── broadsheet-magazine-viewer.js                   # View router, 5-mode specimen switcher, code tabs & copy logic
+        ├── nrki-broadsheet-library.css                     # Standalone reusable 4-theme × 2-mode CSS library (@layer)
+        ├── broadsheet-magazine-shell.css                   # Issue 01 desktop spread + mobile pocket newspaper chrome
+        ├── newspaper-design-magazine.html                  # Issue 01 5-page hash-routed SPA (#intro..#colophon)
+        ├── broadsheet-magazine-viewer.js                   # Spread/Mobile router, dual theme controller, copy engine
         └── specimen-catalogs/
-            ├── broadsheet-simple-elements-catalog.js       # Simple Elements specimens (html, css, optional js)
-            └── broadsheet-complex-components-catalog.js    # Complex Components specimens (html, css, optional js)
+            ├── broadsheet-layouts-catalog.js               # Page 02: 6 Reusable Broadsheet Layouts
+            ├── broadsheet-simple-elements-catalog.js       # Page 03: 11 Simple Element specimens
+            └── broadsheet-complex-components-catalog.js    # Page 04: 9 Complex Component specimens
 ```
 
 ---
 
-## 6. Simplified Workflow Going Forward
+## 7. Solo-Dev Workflow
 
-1. **Build on `dev` only** (`main` stays live at `nrki.in` with your resumes, clean front page, and Under Construction placeholders—including `pages/magazines-index.html` replacing `pages/gallery.html`—while Issue 01 & the full library stay on `dev`).
-2. **Build Order:**
-   - **Step 1:** Write `magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css` (5-mode token system + `@layer` architecture + zero `!important` + all elements & components).
-   - **Step 2:** Create the barebones `pages/magazines-index.html` (replacing `pages/gallery.html`) and the Issue 01 viewer (`newspaper-design-magazine.html`, `broadsheet-magazine-shell.css`, `broadsheet-magazine-viewer.js`) with the 5-mode Specimen Container.
-   - **Step 3:** Populate `specimen-catalogs/broadsheet-simple-elements-catalog.js` and `specimen-catalogs/broadsheet-complex-components-catalog.js` + the Colophon (GitHub stylesheet link, credits & inspirations).
-   - **Step 4:** Visually inspect and refine `nrki-broadsheet-library.css` inside Issue 01 across all 5 modes (`light`, `dark`, `accent`, `faded`, `uwu`).
-   - **Step 5 (Later):** Once satisfied with the library, migrate the main NRKI pages onto `nrki-broadsheet-library.css` (and publish it as a standalone repo/package if desired).
+1. **Build on `dev` only** (`main` keeps `nrki.in` live with resumes, general front page, and Under Construction placeholders—including `pages/magazines-index.html`—while Issue 01 & the CSS library evolve on `dev`).
+2. Refine `nrki-broadsheet-library.css` visually across all 8 Theme × Mode editions inside Issue 01 on `dev.nrki.pages.dev` before migrating main NRKI pages or publishing standalone.

@@ -78,60 +78,57 @@
     },
 
     /* ----------------------------------------------------------------------
-       02. Section Headers, Structural Rules & Tufte Sidenote
+       02. Section Headers, Theme-Adaptive Borders, Rules & Tufte Sidenote
        ---------------------------------------------------------------------- */
     {
       specimenId: "simple-headers-rules-sidenote",
-      specimenTitle: "02. Headers, Structural Rules & Tufte Sidenote",
-      categoryLabel: "Structure",
+      specimenTitle: "02. Headers, Theme Borders, Rules & Tufte Sidenote",
+      categoryLabel: "Structure & Borders",
       usageRationale:
-        "Replaces blurry drop shadows with 1px hairlines, 3px double masthead borders, and Tufte-inspired marginalia sidenotes.",
+        "Showcases how each theme defines its own border & divider grammar—Classic double hairlines, Ancient SVG scrollwork filigree, Minimalistic borderless quietness, and UwU pastel dashes.",
       previewHtml: `<div>
   <div class="nrki-section-heading">
     <p class="nrki-eyebrow">02 / Architecture</p>
-    <h2>Section Heading Block</h2>
-    <p class="nrki-section-heading-note">Short editorial note summarizing the section below.</p>
+    <h2>Section Heading &amp; Theme Borders</h2>
+    <p class="nrki-section-heading-note">Switch between Classic, Ancient, Minimalistic, and UwU above to see frames &amp; ornaments transform.</p>
   </div>
-  <hr class="nrki-rule-double">
-  <div class="nrki-sidenote-layout">
-    <p style="margin-bottom: 0;">
-      Print newspapers divide competing dispatches using deliberate structural rules rather than
-      floating boxes. On wide viewports, marginal commentary sits peacefully alongside body prose.
-    </p>
-    <aside class="nrki-sidenote">
-      <strong>Marginal Note:</strong> Inspired by Edward Tufte's sidenote placement for self-contained context.
-    </aside>
+  <div class="nrki-ornate-divider" aria-hidden="true"></div>
+  <div class="nrki-framed-panel" style="margin-bottom: 1rem;">
+    <div class="nrki-sidenote-layout">
+      <p style="margin-bottom: 0;">
+        This framed container automatically adopts double inlaid borders in <strong>Ancient</strong>,
+        clean hairlines in <strong>Classic</strong>, soft borderless lift in <strong>Minimalistic</strong>,
+        and chunky pastel dashes in <strong>UwU</strong>.
+      </p>
+      <aside class="nrki-sidenote">
+        <strong>Marginal Note:</strong> Inspired by Edward Tufte's sidenote placement for self-contained context.
+      </aside>
+    </div>
   </div>
-  <hr class="nrki-rule-dashed">
 </div>`,
       htmlSnippet: `<div class="nrki-section-heading">
   <p class="nrki-eyebrow">02 / Architecture</p>
-  <h2>Section Heading Block</h2>
-  <p class="nrki-section-heading-note">Short section note.</p>
+  <h2>Section Heading</h2>
 </div>
-<hr class="nrki-rule-double">
-<div class="nrki-sidenote-layout">
-  <p>Main broadsheet column prose...</p>
-  <aside class="nrki-sidenote">Marginal commentary beside prose.</aside>
+<div class="nrki-ornate-divider" aria-hidden="true"></div>
+<div class="nrki-framed-panel">
+  <div class="nrki-sidenote-layout">
+    <p>Main broadsheet column prose...</p>
+    <aside class="nrki-sidenote">Marginal commentary beside prose.</aside>
+  </div>
 </div>`,
-      cssSnippet: `.nrki-rule-double {
-  border: 0;
-  border-top: 3px double var(--nrki-border-strong);
-  margin-block: 1.75rem;
+      cssSnippet: `.nrki-framed-panel {
+  padding: 1.25rem;
+  border: var(--nrki-panel-border);
+  border-radius: var(--nrki-radius-surface);
+  background-color: var(--nrki-surface-elevated);
+  box-shadow: var(--nrki-card-frame-shadow);
 }
 
-.nrki-sidenote-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
-  gap: 1.5rem;
-}
-
-.nrki-sidenote {
-  padding: 0.6rem 0.85rem;
-  border-left: 2px solid var(--nrki-accent-primary);
-  background-color: var(--nrki-surface-panel);
-  font-family: var(--nrki-font-sans);
-  font-size: 0.8rem;
+[data-theme="ancient"] .nrki-ornate-divider {
+  height: 18px;
+  background-color: var(--nrki-border-ornament);
+  mask-image: url("data:image/svg+xml,...");
 }`,
     },
 
@@ -404,7 +401,7 @@ pre {
       specimenTitle: "08. Form Inputs, Selects, Checkboxes & Validation",
       categoryLabel: "Forms",
       usageRationale:
-        "Extends NRKI beyond pure static blogs so SPAs and interactive tools can render accessible forms in any of the 5 modes.",
+        "Extends NRKI beyond pure static blogs so SPAs and interactive tools can render accessible forms across all 4 themes × Light/Dark.",
       previewHtml: `<form class="nrki-form-stack" onsubmit="return false;">
   <div class="nrki-field">
     <label class="nrki-label" for="specimen-title-input">Dispatch Headline</label>
@@ -576,20 +573,23 @@ pre {
     },
 
     /* ----------------------------------------------------------------------
-       11. Media Figure Frame & Interactive Theme Toggle (Includes JS)
+       11. Media Figure Frame & Dual Theme/Mode Toggle (Includes JS)
        ---------------------------------------------------------------------- */
     {
       specimenId: "simple-media-theme-toggle",
-      specimenTitle: "11. Media Figure Frame & Scoped Theme Cycle",
+      specimenTitle: "11. Media Figure Frame & Dual Theme / Light-Dark Toggle",
       categoryLabel: "Interactive Element",
       usageRationale:
-        "Pairs an editorial plate figure with a JavaScript theme-cycle button showing how `[data-theme]` works on any container.",
+        "Pairs an editorial plate figure with JavaScript toggles showing how `[data-theme]` (4 themes) and `[data-mode]` (Light/Dark) combine orthogonally.",
       previewHtml: `<div class="nrki-stack-md">
   <div class="nrki-button-group">
     <button type="button" class="nrki-theme-toggle" data-specimen-cycle-theme>
-      Stage Mode: Inherited (Click to Cycle)
+      Theme: Classic (Next →)
     </button>
-    <span class="nrki-badge nrki-badge-accent" data-specimen-current-mode-badge>Active: sync</span>
+    <button type="button" class="nrki-button nrki-button-secondary" data-specimen-toggle-mode>
+      Mode: Light / Dark ◐
+    </button>
+    <span class="nrki-badge nrki-badge-accent" data-specimen-current-mode-badge>classic · light</span>
   </div>
   <figure class="nrki-media-figure" style="margin: 0;">
     <div class="nrki-media-header">Plate I · Herbarium Broadsheet Geometry</div>
@@ -599,14 +599,13 @@ pre {
       <line x1="210" y1="20" x2="210" y2="160" stroke="var(--nrki-border-subtle)" stroke-width="1" />
       <circle cx="115" cy="90" r="36" fill="var(--nrki-accent-primary-tint)" stroke="var(--nrki-accent-primary)" stroke-width="2" />
       <text x="235" y="75" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="var(--nrki-ink-heading)">Token-Driven SVG Illustration</text>
-      <text x="235" y="105" font-family="Courier New, monospace" font-size="13" fill="var(--nrki-ink-muted)">Responds automatically to all 5 data-theme modes.</text>
+      <text x="235" y="105" font-family="Courier New, monospace" font-size="13" fill="var(--nrki-ink-muted)">Responds automatically to 4 Themes × 2 Modes.</text>
     </svg>
     <figcaption class="nrki-media-caption">Figure 1.1 · Tokenized figure frame inside scoped stage.</figcaption>
   </figure>
 </div>`,
-      htmlSnippet: `<button type="button" class="nrki-theme-toggle" data-theme-cycle-trigger>
-  Cycle Theme Mode
-</button>
+      htmlSnippet: `<button type="button" class="nrki-theme-toggle" data-theme-cycle-trigger>Cycle Theme</button>
+<button type="button" class="nrki-button" data-mode-toggle-trigger>Toggle Light/Dark</button>
 <figure class="nrki-media-figure">
   <div class="nrki-media-header">Plate I · Editorial Media Frame</div>
   <img src="specimen-plate.png" alt="Botanical specimen plate">
@@ -614,71 +613,100 @@ pre {
 </figure>`,
       cssSnippet: `.nrki-media-figure {
   padding: 0.85rem;
-  border: 1px solid var(--nrki-border-subtle);
+  border: var(--nrki-card-border);
   border-radius: var(--nrki-radius-surface);
   background-color: var(--nrki-surface-panel);
-}
-
-.nrki-theme-toggle {
-  padding: 0.48rem 0.9rem;
-  border: 1px solid var(--nrki-border-strong);
-  font-family: var(--nrki-font-sans);
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  box-shadow: var(--nrki-card-frame-shadow);
 }`,
-      jsSnippet: `const themeRotationSequence = ["light", "dark", "accent", "faded", "uwu"];
+      jsSnippet: `const themeSequence = ["classic", "ancient", "minimalistic", "uwu"];
 
-function cycleContainerThemeMode(stageContainer, toggleTrigger) {
-  let currentModeIndex = themeRotationSequence.indexOf(
-    stageContainer.getAttribute("data-theme") || "light"
-  );
+function bindDualThemeControls(stageElement, themeCycleBtn, modeToggleBtn) {
+  themeCycleBtn.addEventListener("click", () => {
+    const activeTheme = stageElement.getAttribute("data-theme") || "classic";
+    const nextTheme = themeSequence[(themeSequence.indexOf(activeTheme) + 1) % themeSequence.length];
+    stageElement.setAttribute("data-theme", nextTheme);
+    themeCycleBtn.textContent = "Theme: " + nextTheme.toUpperCase();
+  });
 
-  toggleTrigger.addEventListener("click", () => {
-    currentModeIndex = (currentModeIndex + 1) % themeRotationSequence.length;
-    const nextThemeMode = themeRotationSequence[currentModeIndex];
-    stageContainer.setAttribute("data-theme", nextThemeMode);
-    toggleTrigger.textContent = "Stage Mode: " + nextThemeMode.toUpperCase();
+  modeToggleBtn.addEventListener("click", () => {
+    const activeMode = stageElement.getAttribute("data-mode") || "light";
+    stageElement.setAttribute("data-mode", activeMode === "dark" ? "light" : "dark");
   });
 }`,
       initializePreview(previewStageElement) {
-        const themeRotationSequence = ["light", "dark", "accent", "faded", "uwu"];
+        const themeRotationSequence = [
+          "classic",
+          "ancient",
+          "minimalistic",
+          "uwu",
+        ];
         const cycleButton = previewStageElement.querySelector(
           "[data-specimen-cycle-theme]"
+        );
+        const modeButton = previewStageElement.querySelector(
+          "[data-specimen-toggle-mode]"
         );
         const modeBadge = previewStageElement.querySelector(
           "[data-specimen-current-mode-badge]"
         );
-        if (!cycleButton || !modeBadge) return;
+        if (!cycleButton || !modeButton || !modeBadge) return;
 
-        cycleButton.addEventListener("click", () => {
-          const activeTheme =
-            previewStageElement.getAttribute("data-theme") || "light";
-          const currentIndex = themeRotationSequence.indexOf(activeTheme);
-          const nextIndex = (currentIndex + 1) % themeRotationSequence.length;
-          const nextMode = themeRotationSequence[nextIndex];
+        function synchronizeSpecimenStageControls() {
+          const currentTheme =
+            previewStageElement.getAttribute("data-theme") || "classic";
+          const currentMode =
+            previewStageElement.getAttribute("data-mode") || "light";
+          modeBadge.textContent = `${currentTheme} · ${currentMode}`;
 
-          previewStageElement.setAttribute("data-theme", nextMode);
-          modeBadge.textContent = `Active: ${nextMode}`;
-          cycleButton.textContent = `Stage Mode: ${nextMode.toUpperCase()} (Cycle)`;
-
-          // Keep the parent Specimen Container's 5-mode pill bar synchronized
           const parentContainer = previewStageElement.closest(
             ".specimen-container"
           );
-          if (parentContainer) {
-            parentContainer
-              .querySelectorAll("[data-specimen-mode-option]")
-              .forEach((modeOptionButton) => {
-                const isSelected =
+          if (!parentContainer) return;
+
+          parentContainer
+            .querySelectorAll("[data-specimen-theme-option]")
+            .forEach((themeOptionButton) => {
+              themeOptionButton.setAttribute(
+                "aria-pressed",
+                String(
+                  themeOptionButton.getAttribute(
+                    "data-specimen-theme-option"
+                  ) === currentTheme
+                )
+              );
+            });
+
+          parentContainer
+            .querySelectorAll("[data-specimen-mode-option]")
+            .forEach((modeOptionButton) => {
+              modeOptionButton.setAttribute(
+                "aria-pressed",
+                String(
                   modeOptionButton.getAttribute("data-specimen-mode-option") ===
-                  nextMode;
-                modeOptionButton.setAttribute(
-                  "aria-pressed",
-                  String(isSelected)
-                );
-              });
-          }
+                    currentMode
+                )
+              );
+            });
+        }
+
+        cycleButton.addEventListener("click", () => {
+          const activeTheme =
+            previewStageElement.getAttribute("data-theme") || "classic";
+          const nextIndex =
+            (themeRotationSequence.indexOf(activeTheme) + 1) %
+            themeRotationSequence.length;
+          const nextTheme = themeRotationSequence[nextIndex];
+          previewStageElement.setAttribute("data-theme", nextTheme);
+          cycleButton.textContent = `Theme: ${nextTheme.toUpperCase()} (Next →)`;
+          synchronizeSpecimenStageControls();
+        });
+
+        modeButton.addEventListener("click", () => {
+          const activeMode =
+            previewStageElement.getAttribute("data-mode") || "light";
+          const nextMode = activeMode === "dark" ? "light" : "dark";
+          previewStageElement.setAttribute("data-mode", nextMode);
+          synchronizeSpecimenStageControls();
         });
       },
     },

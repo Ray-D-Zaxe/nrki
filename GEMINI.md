@@ -10,7 +10,7 @@ These rules apply **always** to all new code, stylesheets, scripts, files, and f
   ```css
   @layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
   ```
-- **Container-Scoped Theming:** Scope theme custom properties using `[data-theme="light" | "dark" | "accent" | "faded" | "uwu"]` so themes work on `<html>` *and* on individual preview containers/sections independently.
+- **Container-Scoped 2-Axis Theming (`[data-theme]` × `[data-mode]`):** Scope theme personality (`[data-theme="classic" | "ancient" | "minimalistic" | "uwu"]`) and color polarity (`[data-mode="light" | "dark"]`) as independent orthogonal attributes so any theme works on `<html>` *and* on individual preview containers/sections in both Light and Dark mode without affecting parent styles.
 - **Accessibility & Print:** Always include visible `:focus-visible` rings, semantic landmarks, `prefers-reduced-motion` support, and clean `@page` / `@media print` rules.
 
 ---

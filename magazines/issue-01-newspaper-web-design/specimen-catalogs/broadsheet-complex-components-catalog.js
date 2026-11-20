@@ -4,9 +4,8 @@
  * (`specimen-catalogs/broadsheet-complex-components-catalog.js`)
  * ----------------------------------------------------------------------------
  * Documents every multi-part layout and stateful interactive component from
- * NRKI and extends them with full library components (Tabs, Accordions, Multi-
- * Column Prose, Modals, Print-Ready Resume Sheets). Every specimen works inside
- * all 5 theme modes without overwriting global page state.
+ * Components work cleanly across all 4 themes × Light/Dark (8 editions)
+ * without overwriting global page state.
  * ============================================================================
  */
 
@@ -402,7 +401,7 @@
     <article class="nrki-card" data-preview-filter-card="build">
       <div class="nrki-card-meta"><span>Build</span><span>#css</span></div>
       <h3>NRKI Token Engine</h3>
-      <p style="margin-bottom: 0;">5 scoped modes powered by CSS Cascade Layers.</p>
+      <p style="margin-bottom: 0;">4 themes × Light/Dark powered by @layer.</p>
     </article>
     <article class="nrki-card" data-preview-filter-card="essay">
       <div class="nrki-card-meta"><span>Essay</span><span>#notes</span></div>
@@ -599,8 +598,8 @@
       <h2 id="specimen-modal-heading" style="margin-bottom: 0.75rem;">Editorial Reading Modal</h2>
       <p>
         Because tokens cascade from the specimen wrapper, this dialog automatically honors
-        <code>light</code>, <code>dark</code>, <code>accent</code>, <code>faded</code>, and
-        <code>uwu</code> styling without separate overlay stylesheets.
+        <strong>Classic</strong>, <strong>Ancient</strong>, <strong>Minimalistic</strong>, and
+        <strong>UwU</strong> in both <strong>Light</strong> and <strong>Dark</strong> modes.
       </p>
       <div class="nrki-modal-motifs-box">
         <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Connected References</p>
@@ -728,7 +727,7 @@
       Cascade layers keep tokens, resets, elements, components, and print completely ordered with zero !important rules.
     </div>
     <div class="nrki-tab-panel nrki-hidden" role="tabpanel" data-preview-tab-panel="panel-theming">
-      Switch any parent or section between Light, Dark, Accent, Faded, and UwU using a single data-theme attribute.
+      Switch any parent or section independently across Classic, Ancient, Minimalistic, and UwU in Light or Dark mode.
     </div>
     <div class="nrki-tab-panel nrki-hidden" role="tabpanel" data-preview-tab-panel="panel-portability">
       Drop nrki-broadsheet-library.css into external static sites, SPAs, or documentation portals with zero bundler.

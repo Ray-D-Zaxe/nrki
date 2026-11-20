@@ -1,248 +1,332 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="classic" data-mode="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="NRKI Magazine Issue 01 — The Newspaper Web Design Magazine showcasing the standalone 5-mode nrki-broadsheet-library.css design system.">
-    <title>Issue 01: Newspaper Web Design Magazine — NRKI</title>
+        content="The NRKI Broadsheet (Issue 01) — Newspaper-styled design system documenting 4 themes (Classic, Ancient, Minimalistic, UwU) across Light & Dark modes, Layouts, Simple Elements, and Complex Components.">
+    <title>Issue 01: The NRKI Broadsheet — Newspaper Web Design Magazine</title>
 
     <!-- ====================================================================
-         PRE-PAINT THEME RESTORE SCRIPT
-         Why this runs synchronously in <head>: Applying `data-theme` on <html>
-         before CSS stylesheets paint prevents any light-to-dark flash.
+         PRE-PAINT THEME & LIGHT/DARK RESTORE SCRIPT
+         Why this runs synchronously in <head>: Applying both `data-theme`
+         (theme personality) and `data-mode` (Light/Dark) on <html> before CSS
+         stylesheets render prevents any flash of unstyled or wrong-mode ink.
          ==================================================================== -->
     <script>
-        (function restoreBroadsheetMagazineTheme() {
-            var storedThemeMode = localStorage.getItem("nrki-broadsheet-magazine-theme");
-            var allowedModes = ["light", "dark", "accent", "faded", "uwu"];
-            var resolvedMode = allowedModes.indexOf(storedThemeMode) !== -1
-                ? storedThemeMode
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
                 : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-            document.documentElement.setAttribute("data-theme", resolvedMode);
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
 
-    <!-- Standalone NRKI Broadsheet CSS Library + Isolated Magazine Chrome Shell -->
+    <!-- Theme Personality Font Families (each theme sets its own CSS variable pairing;
+         offline system fallbacks remain defined inside nrki-broadsheet-library.css) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=Nunito:wght@400;600;700&family=Playfair+Display:wght@700;800&family=Space+Grotesk:wght@600;700&family=UnifrakturMaguntia&display=swap">
+
+    <!-- Standalone NRKI Broadsheet CSS Library + Newspaper Magazine Chrome Shell -->
     <link rel="stylesheet" href="./nrki-broadsheet-library.css">
     <link rel="stylesheet" href="./broadsheet-magazine-shell.css">
 
-    <!-- Specimen Catalogs & Workbench Viewer (Classic deferred scripts work on both file:// and HTTP) -->
+    <!-- Reusable Catalogs & Magazine Workbench Engine -->
+    <script defer src="./specimen-catalogs/broadsheet-layouts-catalog.js"></script>
     <script defer src="./specimen-catalogs/broadsheet-simple-elements-catalog.js"></script>
     <script defer src="./specimen-catalogs/broadsheet-complex-components-catalog.js"></script>
     <script defer src="./broadsheet-magazine-viewer.js"></script>
 </head>
 
 <body>
-    <a class="nrki-skip-link" href="#magazine-workbench-main">Skip to magazine content</a>
+    <a class="nrki-skip-link" href="#magazine-workbench-main">Skip to newspaper dispatch</a>
+
+    <!-- Mobile Pocket Newspaper Top Reading Progress Hairline -->
+    <div class="magazine-mobile-progress-track" aria-hidden="true">
+        <div class="magazine-mobile-progress-fill" data-mobile-reading-progress></div>
+    </div>
 
     <!-- ====================================================================
-         STICKY MAGAZINE ISSUE BAR, PAGE TABS & GLOBAL 5-MODE SWITCHER
+         NEWSPAPER FRONT-PAGE MASTHEAD, EARS & 5-SECTION RIBBON
          ==================================================================== -->
-    <header class="magazine-chrome-header">
-        <div class="magazine-chrome-inner">
-            <div class="magazine-brand-cluster">
-                <a class="magazine-back-pill" href="../../pages/magazines-index.html">← Magazines</a>
-                <p class="magazine-issue-title">Issue 01 <span>/</span> Newspaper Web Design</p>
+    <header class="magazine-broadsheet-masthead">
+        <div class="magazine-masthead-inner">
+            <div class="magazine-utility-strip">
+                <div class="magazine-back-cluster">
+                    <a class="magazine-back-pill" href="../../pages/magazines-index.html">← Magazines</a>
+                    <p class="magazine-meta-dateline">
+                        <time data-magazine-dateline-date>Nov 20, 2026</time>
+                        <span>·</span>
+                        <span>Issue 01 Monograph</span>
+                    </p>
+                </div>
+
+                <!-- Desktop/Tablet Global 4 Themes × Light/Dark Controls -->
+                <div class="magazine-theme-mode-bar" role="group" aria-label="Global broadsheet theme and polarity">
+                    <div class="magazine-control-group" aria-label="Theme personality">
+                        <span class="magazine-mode-caption">Theme:</span>
+                        <button type="button" class="magazine-theme-pill" data-global-theme-option="classic" aria-pressed="true">Classic</button>
+                        <button type="button" class="magazine-theme-pill" data-global-theme-option="ancient" aria-pressed="false">Ancient</button>
+                        <button type="button" class="magazine-theme-pill" data-global-theme-option="minimalistic" aria-pressed="false">Minimalistic</button>
+                        <button type="button" class="magazine-theme-pill" data-global-theme-option="uwu" aria-pressed="false">UwU</button>
+                    </div>
+                    <div class="magazine-control-group" aria-label="Color polarity">
+                        <button type="button" class="magazine-mode-pill" data-global-mode-option="light" aria-pressed="true">☀ Light</button>
+                        <button type="button" class="magazine-mode-pill" data-global-mode-option="dark" aria-pressed="false">☾ Dark</button>
+                    </div>
+                </div>
             </div>
 
-            <nav class="magazine-page-nav" aria-label="Issue 01 sections">
-                <a class="magazine-page-tab is-current-page" href="#intro" data-magazine-nav-target="intro">
-                    01 · Intro &amp; Index
-                </a>
-                <a class="magazine-page-tab" href="#elements" data-magazine-nav-target="elements">
-                    02 · Simple Elements
-                </a>
-                <a class="magazine-page-tab" href="#components" data-magazine-nav-target="components">
-                    03 · Complex Components
-                </a>
-                <a class="magazine-page-tab" href="#colophon" data-magazine-nav-target="colophon">
-                    04 · Stylesheet &amp; Credits
-                </a>
+            <!-- Classic 3-Part Newspaper Header (Left Ear · Flag · Right Ear) -->
+            <div class="magazine-flag-row">
+                <aside class="magazine-ear-box" aria-label="Edition details">
+                    <strong>CSS Cascade Engine</strong>
+                    <span>Zero !important · 6 @layers</span>
+                </aside>
+
+                <div class="magazine-flag-center">
+                    <h1 class="magazine-flag-title">THE NRKI BROADSHEET</h1>
+                    <p class="magazine-flag-subtitle">Issue 01 — An Independent Monograph on Newspaper Web Design &amp; Reusable CSS</p>
+                </div>
+
+                <aside class="magazine-ear-box" aria-label="Running page stamp">
+                    <strong data-magazine-page-indicator>Page 01 of 05</strong>
+                    <span data-magazine-edition-stamp>CLASSIC · LIGHT EDITION</span>
+                </aside>
+            </div>
+
+            <!-- Double-Ruled Desktop/Tablet 5-Page Navigation Ribbon -->
+            <nav class="magazine-section-ribbon" aria-label="Issue 01 newspaper sections">
+                <a class="magazine-page-tab is-current-page" href="#intro" data-magazine-nav-target="intro">01 · Front Page</a>
+                <a class="magazine-page-tab" href="#layouts" data-magazine-nav-target="layouts">02 · Layouts (6)</a>
+                <a class="magazine-page-tab" href="#elements" data-magazine-nav-target="elements">03 · Simple Elements (11)</a>
+                <a class="magazine-page-tab" href="#components" data-magazine-nav-target="components">04 · Complex Components (9)</a>
+                <a class="magazine-page-tab" href="#colophon" data-magazine-nav-target="colophon">05 · Colophon &amp; GitHub</a>
             </nav>
-
-            <div class="magazine-global-mode-bar" role="group" aria-label="Global 5-mode theme switcher">
-                <span class="magazine-mode-caption">Mode:</span>
-                <button type="button" class="specimen-mode-button" data-global-theme-option="light" aria-pressed="true">Light</button>
-                <button type="button" class="specimen-mode-button" data-global-theme-option="dark" aria-pressed="false">Dark</button>
-                <button type="button" class="specimen-mode-button" data-global-theme-option="accent" aria-pressed="false">Accent</button>
-                <button type="button" class="specimen-mode-button" data-global-theme-option="faded" aria-pressed="false">Faded</button>
-                <button type="button" class="specimen-mode-button" data-global-theme-option="uwu" aria-pressed="false">UwU</button>
-            </div>
         </div>
     </header>
 
     <main id="magazine-workbench-main" class="magazine-workbench">
         <!-- ================================================================
-             PAGE 01: INTRO MANIFESTO, TOKEN ARCHITECTURE & INTERACTIVE INDEX
+             PAGE 01: FRONT PAGE (3-Column Newspaper Lead + Edition Directory)
              ================================================================ -->
-        <section class="magazine-view-section" id="intro" data-magazine-view="intro" aria-labelledby="intro-cover-heading">
-            <header class="magazine-cover-masthead">
-                <p class="nrki-eyebrow">NRKI Design Monograph · Vol. II, Issue 01</p>
-                <h1 id="intro-cover-heading">The Newspaper Web Design Magazine.</h1>
-                <p class="nrki-lead-summary">
-                    Living documentation for <code>nrki-broadsheet-library.css</code>—a standalone, zero-dependency,
-                    <code>!important</code>-free editorial CSS library built on 6 Cascade Layers and 5 container-scoped
-                    visual modes.
+        <section class="magazine-view-section" id="intro" data-magazine-view="intro" aria-labelledby="frontpage-lead-headline">
+            <header class="magazine-frontpage-banner">
+                <p class="nrki-eyebrow">Editorial Manifesto · 4 Themes × Light &amp; Dark Modes</p>
+                <h2 id="frontpage-lead-headline">Four Voices of Paper, One Reusable Architecture.</h2>
+                <p class="nrki-lead-summary" style="margin-bottom: 0;">
+                    Inside this issue: <code>nrki-broadsheet-library.css</code>—a standalone editorial CSS library with
+                    distinct typographic personalities and border grammars across <strong>Classic</strong>,
+                    <strong>Ancient</strong>, <strong>Minimalistic</strong>, and <strong>UwU</strong>, each engineered in
+                    both Light and Dark ink modes.
                 </p>
             </header>
 
-            <div class="magazine-intro-grid">
-                <div class="nrki-stack-md">
-                    <div>
-                        <p class="nrki-eyebrow">Design Philosophy</p>
-                        <h2>Why Build NRKI v2 Around a Standalone CSS Library?</h2>
-                        <p class="nrki-drop-cap">
-                            Modern personal websites swing between sterile corporate SaaS templates and heavy JS
-                            frameworks. Printed broadsheets solved high-density hierarchy centuries ago using
-                            deliberate typography, crisp 1px hairlines, 3px double rules, and disciplined ink contrast.
-                            Rather than hardcoding styles page-by-page, Issue 01 isolates and tests every token,
-                            element, and component inside one reusable stylesheet.
-                        </p>
-                    </div>
+            <div class="nrki-layout-frontpage">
+                <!-- Column 1: Feature Lead Prose -->
+                <article>
+                    <p class="nrki-eyebrow">Dispatch 01 / Philosophy</p>
+                    <h3>Broadsheet Hierarchy Without Bloat</h3>
+                    <p class="nrki-drop-cap">
+                        Newspapers command attention through proportion, ink density, and disciplined border craft rather
+                        than JavaScript weight. By separating <em>theme personality</em> (<code>data-theme</code>) from
+                        <em>color polarity</em> (<code>data-mode</code>), one stylesheet transforms instantaneously
+                        from royal medieval parchment into serene Swiss minimalism or crisp botanical newsprint.
+                    </p>
+                    <div class="nrki-ornate-divider" aria-hidden="true"></div>
+                    <p style="margin-bottom: 0;">
+                        Use this magazine as a living storybook: flip pages cleanly in Broadsheet Spread mode on
+                        desktop, or glide through the Pocket Newspaper stream on mobile.
+                    </p>
+                </article>
 
-                    <div class="nrki-callout nrki-callout-info" style="margin: 0;">
-                        <div class="nrki-callout-title">Architectural Guarantees</div>
-                        <ul class="nrki-editorial-list" style="margin-bottom: 0;">
-                            <li><strong>Zero <code>!important</code>:</strong> Ordered cleanly via <code>@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;</code>.</li>
-                            <li><strong>5 Scoped Modes:</strong> Switch any individual specimen or section between <code>light</code>, <code>dark</code>, <code>accent</code>, <code>faded</code>, and <code>uwu</code>.</li>
-                            <li><strong>Zero Build Step:</strong> Works via plain <code>&lt;link rel="stylesheet"&gt;</code> in static HTML sites or React SPAs.</li>
-                        </ul>
-                    </div>
-                </div>
+                <!-- Column 2: 4 Theme Personalities Matrix -->
+                <article>
+                    <p class="nrki-eyebrow">Dispatch 02 / 4 Themes</p>
+                    <h3>Typography &amp; Border Grammars</h3>
+                    <dl class="nrki-definition-list">
+                        <dt>Classic (Playfair + Newsreader)</dt>
+                        <dd>Crisp 1px column hairlines, 3px double masthead rules, and razor 0px corners.</dd>
+                        <dt>Ancient (Unifraktur + Cinzel + IM Fell)</dt>
+                        <dd>Double-framed parchment boxes, inset antique gold trim, and SVG scrollwork dividers.</dd>
+                        <dt>Minimalistic (Space Grotesk + Inter)</dt>
+                        <dd>Barely any borders—tonal elevation and pure whitespace establish structure.</dd>
+                        <dt>UwU (Fredoka + Nunito)</dt>
+                        <dd>Pastel 2px dashed/solid frames, pill corners, offset candy shadows, and floral ornaments.</dd>
+                    </dl>
+                </article>
 
-                <!-- Interactive Issue Table of Contents -->
-                <aside class="magazine-index-card" aria-label="Issue 01 Table of Contents">
-                    <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Issue Contents</p>
-                    <h2>Magazine Index</h2>
+                <!-- Column 3: Interactive Edition Directory -->
+                <aside class="magazine-index-card" aria-label="Newspaper Edition Index">
+                    <p class="nrki-eyebrow" style="margin-bottom: 0.25rem;">Edition Directory</p>
+                    <h3 style="margin-bottom: 0.45rem;">Turn to Page…</h3>
                     <ol class="magazine-index-list">
                         <li>
                             <a class="magazine-index-link" href="#intro">
-                                <strong>01. Design Manifesto &amp; Token System</strong>
+                                <strong>01. Front Page &amp; Tokens</strong>
                                 <span>Cover</span>
                             </a>
                         </li>
                         <li>
+                            <a class="magazine-index-link" href="#layouts">
+                                <strong>02. Broadsheet Layouts</strong>
+                                <span>6 Grids →</span>
+                            </a>
+                        </li>
+                        <li>
                             <a class="magazine-index-link" href="#elements">
-                                <strong>02. Simple Elements (11 Specimens)</strong>
-                                <span>Buttons, Forms, Tables →</span>
+                                <strong>03. Simple Elements</strong>
+                                <span>11 Items →</span>
                             </a>
                         </li>
                         <li>
                             <a class="magazine-index-link" href="#components">
-                                <strong>03. Complex Components (9 Specimens)</strong>
-                                <span>Mastheads, Modals, Print →</span>
+                                <strong>04. Complex Components</strong>
+                                <span>9 Widgets →</span>
                             </a>
                         </li>
                         <li>
                             <a class="magazine-index-link" href="#colophon">
-                                <strong>04. Stylesheet Source, Credits &amp; Inspirations</strong>
-                                <span>GitHub &amp; Colophon →</span>
+                                <strong>05. Colophon &amp; GitHub</strong>
+                                <span>Source →</span>
                             </a>
                         </li>
                     </ol>
                 </aside>
             </div>
 
-            <!-- Live 5-Mode Token Palette Inspector -->
+            <!-- Live 8-Token Palette Inspector -->
             <section class="magazine-tokens-panel" aria-labelledby="token-inspector-title">
-                <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Live Token Inspector</p>
-                <h2 id="token-inspector-title" style="margin-bottom: 0.35rem;">Semantic Color Tokens for Active Global Mode</h2>
+                <p class="nrki-eyebrow" style="margin-bottom: 0.3rem;">Live Token Ledger</p>
+                <h3 id="token-inspector-title" style="margin-bottom: 0.25rem;">Active Edition Custom Properties</h3>
                 <p class="nrki-section-heading-note">
-                    Use the Mode buttons in the top bar (Light, Dark, Accent, Faded, UwU) to see every surface, ink,
-                    accent, and border token resolve dynamically in real time.
+                    Toggle Theme or Light/Dark in the masthead (or bottom drawer on mobile) to inspect computed tokens live.
                 </p>
                 <div class="magazine-token-swatch-grid" id="magazine-token-swatch-grid"></div>
             </section>
 
             <div class="magazine-pagination-bar">
-                <a class="nrki-back-link" href="../../pages/magazines-index.html">← Back to Magazines Index</a>
-                <a class="nrki-button nrki-button-primary" href="#elements">Next: Simple Elements (11) →</a>
+                <span class="magazine-running-folio" data-magazine-page-indicator>Page 01 of 05</span>
+                <a class="nrki-button nrki-button-primary" href="#layouts">Turn to Page 02: Layouts (6) →</a>
             </div>
         </section>
 
         <!-- ================================================================
-             PAGE 02: SIMPLE ELEMENTS CATALOG
+             PAGE 02: BROADSHEET LAYOUTS CATALOG (6 Specimens)
+             ================================================================ -->
+        <section class="magazine-view-section" id="layouts" data-magazine-view="layouts" hidden aria-labelledby="layouts-page-heading">
+            <header class="specimen-catalog-header">
+                <div>
+                    <p class="nrki-eyebrow">Page 02 / Page Geometries &amp; Grids</p>
+                    <h2 id="layouts-page-heading">Broadsheet Layouts Catalog</h2>
+                    <p class="nrki-section-heading-note">
+                        Six drop-in newspaper layout grids—reusable cleanly across desktop broadsheets and scrollable mobile sites.
+                    </p>
+                </div>
+                <span class="nrki-badge nrki-badge-accent">6 Reusable Layouts</span>
+            </header>
+
+            <div id="broadsheet-layouts-workbench-mount">
+                <p class="nrki-quiet-note">Typesetting layouts workbench…</p>
+            </div>
+
+            <div class="magazine-pagination-bar">
+                <a class="nrki-button" href="#intro">← Page 01: Front Page</a>
+                <span class="magazine-running-folio" data-magazine-page-indicator>Page 02 of 05</span>
+                <a class="nrki-button nrki-button-primary" href="#elements">Page 03: Simple Elements →</a>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PAGE 03: SIMPLE ELEMENTS CATALOG (11 Specimens)
              ================================================================ -->
         <section class="magazine-view-section" id="elements" data-magazine-view="elements" hidden aria-labelledby="elements-page-heading">
             <header class="specimen-catalog-header">
                 <div>
-                    <p class="nrki-eyebrow">Section 02 / Atomic Primitives</p>
+                    <p class="nrki-eyebrow">Page 03 / Atomic Primitives</p>
                     <h2 id="elements-page-heading">Simple Elements Catalog</h2>
                     <p class="nrki-section-heading-note">
-                        Toggle each specimen independently between Light, Dark, Accent, Faded, and UwU, inspect HTML/CSS/JS,
-                        and copy the active code snippet.
+                        Toggle any element independently across Classic, Ancient, Minimalistic, and UwU (Light &amp; Dark), inspect
+                        HTML/CSS/JS, and copy the active snippet.
                     </p>
                 </div>
                 <span class="nrki-badge nrki-badge-accent">11 Element Specimens</span>
             </header>
 
-            <div class="specimen-catalog-stack" id="broadsheet-simple-elements-mount">
-                <p class="nrki-quiet-note">Loading Simple Elements specimens…</p>
+            <div id="broadsheet-simple-elements-workbench-mount">
+                <p class="nrki-quiet-note">Typesetting simple elements workbench…</p>
             </div>
 
             <div class="magazine-pagination-bar">
-                <a class="nrki-button" href="#intro">← Prev: Intro &amp; Index</a>
-                <a class="nrki-button nrki-button-primary" href="#components">Next: Complex Components (9) →</a>
+                <a class="nrki-button" href="#layouts">← Page 02: Layouts</a>
+                <span class="magazine-running-folio" data-magazine-page-indicator>Page 03 of 05</span>
+                <a class="nrki-button nrki-button-primary" href="#components">Page 04: Complex Components →</a>
             </div>
         </section>
 
         <!-- ================================================================
-             PAGE 03: COMPLEX COMPONENTS CATALOG
+             PAGE 04: COMPLEX COMPONENTS CATALOG (9 Specimens)
              ================================================================ -->
         <section class="magazine-view-section" id="components" data-magazine-view="components" hidden aria-labelledby="components-page-heading">
             <header class="specimen-catalog-header">
                 <div>
-                    <p class="nrki-eyebrow">Section 03 / Composed Interfaces</p>
+                    <p class="nrki-eyebrow">Page 04 / Composed Modules</p>
                     <h2 id="components-page-heading">Complex Components Catalog</h2>
                     <p class="nrki-section-heading-note">
-                        Multi-part layouts and stateful widgets—every specimen supports live previewing across all 5 theme
-                        modes and context-aware source copying.
+                        Stateful widgets and multi-part editorial blocks supporting all 8 Theme × Mode editions with zero <code>!important</code>.
                     </p>
                 </div>
                 <span class="nrki-badge nrki-badge-highlight">9 Component Specimens</span>
             </header>
 
-            <div class="specimen-catalog-stack" id="broadsheet-complex-components-mount">
-                <p class="nrki-quiet-note">Loading Complex Components specimens…</p>
+            <div id="broadsheet-complex-components-workbench-mount">
+                <p class="nrki-quiet-note">Typesetting complex components workbench…</p>
             </div>
 
             <div class="magazine-pagination-bar">
-                <a class="nrki-button" href="#elements">← Prev: Simple Elements</a>
-                <a class="nrki-button nrki-button-primary" href="#colophon">Next: Stylesheet &amp; Credits →</a>
+                <a class="nrki-button" href="#elements">← Page 03: Simple Elements</a>
+                <span class="magazine-running-folio" data-magazine-page-indicator>Page 04 of 05</span>
+                <a class="nrki-button nrki-button-primary" href="#colophon">Page 05: Colophon &amp; Credits →</a>
             </div>
         </section>
 
         <!-- ================================================================
-             PAGE 04: COLOPHON — GITHUB STYLESHEET, CREDITS & INSPIRATIONS
+             PAGE 05: COLOPHON — GITHUB STYLESHEET, REUSE & CREDITS
              ================================================================ -->
         <section class="magazine-view-section" id="colophon" data-magazine-view="colophon" hidden aria-labelledby="colophon-page-heading">
             <header class="specimen-catalog-header">
                 <div>
-                    <p class="nrki-eyebrow">Section 04 / Colophon &amp; Attribution</p>
-                    <h2 id="colophon-page-heading">Stylesheet Source, Credits &amp; Inspirations</h2>
+                    <p class="nrki-eyebrow">Page 05 / Colophon &amp; Attribution</p>
+                    <h2 id="colophon-page-heading">Stylesheet Source, Reuse &amp; Credits</h2>
                     <p class="nrki-section-heading-note">
-                        Direct links to the standalone library stylesheet, extension pattern, and the open-source &amp; print
-                        traditions behind NRKI.
+                        Download or link the standalone library, extend layers without <code>!important</code>, and inspect the lineages behind NRKI.
                     </p>
                 </div>
-                <span class="nrki-badge nrki-badge-success">MIT / Open Source Ready</span>
+                <span class="nrki-badge nrki-badge-success">Reusable Standalone CSS</span>
             </header>
 
             <div class="magazine-colophon-grid">
                 <article class="nrki-card">
                     <div>
                         <div class="nrki-card-meta">
-                            <span>Source Code</span>
-                            <span class="nrki-badge nrki-badge-accent">GitHub</span>
+                            <span>Library File</span>
+                            <span class="nrki-badge nrki-badge-accent">GitHub (dev)</span>
                         </div>
-                        <h3>Standalone Stylesheet on GitHub</h3>
+                        <h3>Drop-In Standalone Stylesheet</h3>
                         <p>
-                            Inspect or download <code>nrki-broadsheet-library.css</code> directly from the NRKI
-                            development branch, or fork it as the foundation for external editorial sites and SPAs.
+                            Drop <code>nrki-broadsheet-library.css</code> into any external blog, documentation site, or
+                            SPA and toggle themes &amp; light/dark modes with just two HTML attributes.
                         </p>
-                        <pre style="margin-bottom: 1rem;"><code>&lt;link rel="stylesheet" href="nrki-broadsheet-library.css"&gt;</code></pre>
+                        <pre style="margin-bottom: 1rem;"><code>&lt;html data-theme="ancient" data-mode="light"&gt;
+&lt;link rel="stylesheet" href="nrki-broadsheet-library.css"&gt;</code></pre>
                     </div>
                     <div class="nrki-button-group">
                         <a class="nrki-button nrki-button-primary"
@@ -261,63 +345,85 @@
                 <article class="nrki-card">
                     <div>
                         <div class="nrki-card-meta">
-                            <span>Library Extensions</span>
+                            <span>Extensibility</span>
                             <span class="nrki-badge">@layer API</span>
                         </div>
                         <h3>Extending Without <code>!important</code></h3>
                         <p>
-                            Import <code>nrki-broadsheet-library.css</code> and declare your own custom layer after
-                            <code>nrki.utilities</code>, or redefine <code>--nrki-*</code> custom properties on
-                            <code>:root</code> or any nested <code>[data-theme]</code> container.
+                            Add a custom override layer after <code>nrki.utilities</code> or introduce your own
+                            <code>[data-theme="custom"]</code> personality palette effortlessly.
                         </p>
                         <pre style="margin-bottom: 0;"><code>@layer nrki.tokens, nrki.reset, nrki.elements,
        nrki.components, nrki.utilities, site.overrides;
 
 @layer site.overrides {
-  :root { --nrki-accent-primary: #1b4332; }
+  [data-theme="custom"] { --nrki-accent-primary: #2d4f36; }
 }</code></pre>
                     </div>
                 </article>
             </div>
 
             <section class="magazine-tokens-panel" aria-labelledby="inspirations-heading">
-                <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Lineage &amp; References</p>
-                <h3 id="inspirations-heading" style="margin-bottom: 0.75rem;">Credits &amp; Online Inspirations</h3>
+                <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Lineage &amp; Inspirations</p>
+                <h3 id="inspirations-heading" style="margin-bottom: 0.65rem;">Credits &amp; Open-Source References</h3>
                 <dl class="nrki-definition-list" style="margin-bottom: 0;">
-                    <dt>Tufte CSS — Edward Tufte Book Typography</dt>
-                    <dd>
-                        Inspired NRKI's constrained reading measure (<code>43rem</code>), subtle hairline contrasts,
-                        and <code>.nrki-sidenote</code> marginalia containers beside prose.
-                    </dd>
-                    <dt>Pico CSS &amp; Matcha CSS — Minimalist Semantic Baselines</dt>
-                    <dd>
-                        Informed the zero-build drop-in philosophy and clean form/table defaults that style standard HTML
-                        without framework bloat.
-                    </dd>
-                    <dt>PaperCSS — Tactile Print Personality</dt>
-                    <dd>
-                        Guided the deliberate physical craft touches—such as double masthead rules, clipped status stamps,
-                        and pinned brass accents on <code>.nrki-pin-card</code>.
-                    </dd>
+                    <dt>Tufte CSS — Book Typography &amp; Marginalia</dt>
+                    <dd>Inspired constrained prose measure (<code>43rem</code>) and desktop <code>.nrki-sidenote</code> side notes.</dd>
+                    <dt>Pico CSS &amp; Matcha CSS — Zero-Build Minimalist Primitives</dt>
+                    <dd>Guided crisp, accessible defaults for buttons, forms, ledgers, and native <code>&lt;details&gt;</code> disclosures.</dd>
+                    <dt>PaperCSS — Tactile Physical Paper Personality</dt>
+                    <dd>Inspired deliberate borders, double rules, brass-pinned cards, and print-like tactile character.</dd>
                     <dt>Open Props — Multi-Tier Tokens &amp; Cascade Layers</dt>
-                    <dd>
-                        Inspired using <code>@layer</code> buckets paired with semantic <code>--nrki-*</code> custom
-                        properties for 5 independent container themes with zero <code>!important</code> overrides.
-                    </dd>
-                    <dt>Robert Bringhurst &amp; 19th-Century Botanical Herbariums</dt>
-                    <dd>
-                        Classical serif/monospace pairing from <em>The Elements of Typographic Style</em> combined with
-                        warm dried-sage paper and pine soot ink palettes.
-                    </dd>
+                    <dd>Informed separating <code>data-theme</code> personality tokens from <code>data-mode</code> brightness with zero <code>!important</code>.</dd>
                 </dl>
             </section>
 
             <div class="magazine-pagination-bar">
-                <a class="nrki-button" href="#components">← Prev: Complex Components</a>
-                <a class="nrki-button nrki-button-primary" href="#intro">Return to Cover &amp; Index ↑</a>
+                <a class="nrki-button" href="#components">← Page 04: Complex Components</a>
+                <span class="magazine-running-folio" data-magazine-page-indicator>Page 05 of 05</span>
+                <a class="nrki-button nrki-button-primary" href="#intro">Return to Front Page ↑</a>
             </div>
         </section>
     </main>
+
+    <!-- ====================================================================
+         MOBILE POCKET NEWSPAPER STICKY BOTTOM FOLIO BAR & 1-TAP THEME DRAWER
+         ==================================================================== -->
+    <div class="magazine-mobile-theme-sheet" hidden role="dialog" aria-label="Mobile theme and mode switcher" data-mobile-theme-sheet>
+        <div class="nrki-modal-topbar" style="margin-bottom: 0.75rem; padding-bottom: 0.5rem;">
+            <span class="nrki-eyebrow" style="margin: 0;">Pocket Newspaper Edition</span>
+            <button type="button" class="nrki-button nrki-button-small" data-mobile-theme-sheet-close>Done ×</button>
+        </div>
+        <div class="nrki-stack-sm">
+            <div>
+                <p class="nrki-aside-label" style="margin-bottom: 0.35rem;">Theme Personality</p>
+                <div class="magazine-control-group">
+                    <button type="button" class="magazine-theme-pill" data-global-theme-option="classic" aria-pressed="true">Classic</button>
+                    <button type="button" class="magazine-theme-pill" data-global-theme-option="ancient" aria-pressed="false">Ancient</button>
+                    <button type="button" class="magazine-theme-pill" data-global-theme-option="minimalistic" aria-pressed="false">Minimalistic</button>
+                    <button type="button" class="magazine-theme-pill" data-global-theme-option="uwu" aria-pressed="false">UwU</button>
+                </div>
+            </div>
+            <div>
+                <p class="nrki-aside-label" style="margin-bottom: 0.35rem;">Color Polarity</p>
+                <div class="magazine-control-group">
+                    <button type="button" class="magazine-mode-pill" data-global-mode-option="light" aria-pressed="true">☀ Light</button>
+                    <button type="button" class="magazine-mode-pill" data-global-mode-option="dark" aria-pressed="false">☾ Dark</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="magazine-mobile-bottom-bar" aria-label="Pocket newspaper navigation">
+        <a class="magazine-mobile-nav-link" href="#intro" data-magazine-nav-target="intro" aria-current="page">Front</a>
+        <a class="magazine-mobile-nav-link" href="#layouts" data-magazine-nav-target="layouts">Layouts</a>
+        <a class="magazine-mobile-nav-link" href="#elements" data-magazine-nav-target="elements">Elem</a>
+        <a class="magazine-mobile-nav-link" href="#components" data-magazine-nav-target="components">Comp</a>
+        <a class="magazine-mobile-nav-link" href="#colophon" data-magazine-nav-target="colophon">Info</a>
+        <button type="button" class="magazine-mobile-theme-trigger" data-mobile-theme-drawer-toggle aria-expanded="false">
+            classic ☀
+        </button>
+    </nav>
 </body>
 
 </html>

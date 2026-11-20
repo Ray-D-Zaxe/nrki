@@ -1,58 +1,64 @@
 /**
  * ============================================================================
- * ISSUE 01 — BROADSHEET MAGAZINE VIEWER & SPECIMEN WORKBENCH CONTROLLER
+ * ISSUE 01 — BROADSHEET MAGAZINE VIEWER & REUSABLE SPECIMEN WORKBENCH
  * (`magazines/issue-01-newspaper-web-design/broadsheet-magazine-viewer.js`)
  * ----------------------------------------------------------------------------
- * Architectural Overview & Rationale:
- *   1. Hash-Routed 4-Page SPA (`#intro`, `#elements`, `#components`, `#colophon`):
- *      Hash routing works identically on both `file://` and Cloudflare Pages
- *      without requiring server-side URL rewrites, while supporting browser
- *      Back/Forward history.
- *   2. Per-Specimen & Global 5-Mode Switching (`light`, `dark`, `accent`,
- *      `faded`, `uwu`): Every Specimen Container updates `data-theme` on its
- *      own `.specimen-preview-stage` independently, proving the library's tokens
- *      are genuinely container-scoped rather than locked to `:root`.
- *   3. Context-Aware Code Drawer & Clipboard Fallback: Toggles between HTML,
- *      CSS, and (only when present) JS snippets, and copies ONLY the currently
- *      displayed code tab with an off-screen textarea fallback for `file://`.
+ * Architectural Rationale:
+ *   1. Reusable Section Workbench Engine (`mountBroadsheetSectionWorkbench`):
+ *      Builds the Desktop/Tablet Broadsheet Spread (left numbered directory
+ *      + single active specimen stage + optional `Full Sheet` mode) AND the
+ *      Mobile Pocket Newspaper stream (scroll-snap jump strip + folio dividers)
+ *      from a single catalog descriptor so additional magazine issues can reuse
+ *      this file directly.
+ *   2. Orthogonal 2-Axis Theme Controller (`data-theme` × `data-mode`):
+ *      Separates personality (`classic`, `ancient`, `minimalistic`, `uwu`)
+ *      from Light/Dark polarity (`light`, `dark`) on both `<html>` and every
+ *      independent Specimen Container preview stage.
+ *   3. Classic Zero-Bundler Browser Script: Runs cleanly over both `file://`
+ *      and HTTP/Cloudflare Pages with clipboard fallback.
  * ============================================================================
  */
 
-(function initializeBroadsheetMagazine(browserWindow, browserDocument) {
+(function initializeBroadsheetNewspaperMagazine(browserWindow, browserDocument) {
   "use strict";
 
-  const STORAGE_KEY_MAGAZINE_THEME = "nrki-broadsheet-magazine-theme";
-  const VALID_SECTION_IDS = ["intro", "elements", "components", "colophon"];
+  const STORAGE_KEY_THEME = "nrki-broadsheet-theme";
+  const STORAGE_KEY_MODE = "nrki-broadsheet-mode";
 
-  const BROADSHEET_THEME_MODES = [
-    { themeKey: "light", displayLabel: "Light" },
-    { themeKey: "dark", displayLabel: "Dark" },
-    { themeKey: "accent", displayLabel: "Accent" },
-    { themeKey: "faded", displayLabel: "Faded" },
+  const ORDERED_SECTION_IDS = [
+    "intro",
+    "layouts",
+    "elements",
+    "components",
+    "colophon",
+  ];
+
+  const BROADSHEET_THEME_DEFINITIONS = [
+    { themeKey: "classic", displayLabel: "Classic" },
+    { themeKey: "ancient", displayLabel: "Ancient" },
+    { themeKey: "minimalistic", displayLabel: "Minimalistic" },
     { themeKey: "uwu", displayLabel: "UwU" },
   ];
 
+  const BROADSHEET_MODE_DEFINITIONS = [
+    { modeKey: "light", displayLabel: "Light", iconPrefix: "☀" },
+    { modeKey: "dark", displayLabel: "Dark", iconPrefix: "☾" },
+  ];
+
   const TOKEN_SWATCH_DEFINITIONS = [
-    { tokenName: "--nrki-surface-canvas", tokenRole: "Canvas Backing" },
-    { tokenName: "--nrki-surface-panel", tokenRole: "Secondary Panel" },
-    { tokenName: "--nrki-surface-elevated", tokenRole: "Card / Sheet" },
-    { tokenName: "--nrki-ink-heading", tokenRole: "Heading Ink" },
-    { tokenName: "--nrki-ink-body", tokenRole: "Reading Ink" },
-    { tokenName: "--nrki-accent-primary", tokenRole: "Primary Accent" },
-    { tokenName: "--nrki-accent-highlight", tokenRole: "Highlight Accent" },
-    { tokenName: "--nrki-border-strong", tokenRole: "Strong Rule" },
+    { tokenName: "--nrki-surface-canvas", tokenRole: "Paper Backing" },
+    { tokenName: "--nrki-surface-panel", tokenRole: "Column Shade" },
+    { tokenName: "--nrki-surface-elevated", tokenRole: "Card Sheet" },
+    { tokenName: "--nrki-ink-heading", tokenRole: "Display Ink" },
+    { tokenName: "--nrki-ink-body", tokenRole: "Prose Ink" },
+    { tokenName: "--nrki-accent-primary", tokenRole: "Primary Ink" },
+    { tokenName: "--nrki-border-ornament", tokenRole: "Border / Trim" },
+    { tokenName: "--nrki-border-strong", tokenRole: "Heavy Rule" },
   ];
 
   /* ========================================================================
-     1. CLIPBOARD UTILITY WITH `file://` FALLBACK
+     1. CLIPBOARD HELPER WITH `file://` FALLBACK
      ======================================================================== */
-  /**
-   * Copies raw source code to the system clipboard and resolves cleanly on
-   * both HTTPS (`navigator.clipboard`) and local `file://` contexts.
-   *
-   * @param {string} sourceSnippetText
-   * @returns {Promise<void>}
-   */
   async function copyCodeSnippetToClipboard(sourceSnippetText) {
     if (
       browserWindow.navigator &&
@@ -62,77 +68,87 @@
       try {
         await browserWindow.navigator.clipboard.writeText(sourceSnippetText);
         return;
-      } catch (_clipboardApiBlockedError) {
-        // Fall through to off-screen textarea copy for insecure `file://` contexts
+      } catch (_clipboardApiBlocked) {
+        // Fall back to hidden textarea selection when running under `file://`
       }
     }
 
-    const hiddenCopyField = browserDocument.createElement("textarea");
-    hiddenCopyField.value = sourceSnippetText;
-    hiddenCopyField.setAttribute("readonly", "");
-    hiddenCopyField.className = "nrki-sr-only";
-    browserDocument.body.appendChild(hiddenCopyField);
-    hiddenCopyField.select();
+    const scratchCopyField = browserDocument.createElement("textarea");
+    scratchCopyField.value = sourceSnippetText;
+    scratchCopyField.setAttribute("readonly", "");
+    scratchCopyField.className = "nrki-sr-only";
+    browserDocument.body.appendChild(scratchCopyField);
+    scratchCopyField.select();
     browserDocument.execCommand("copy");
-    browserDocument.body.removeChild(hiddenCopyField);
+    browserDocument.body.removeChild(scratchCopyField);
   }
 
   /* ========================================================================
-     2. HASH-ROUTED 4-PAGE VIEW SWITCHER
+     2. HASH-ROUTED 5-PAGE NEWSPAPER SECTION CONTROLLER
      ======================================================================== */
-  function resolveActiveMagazineSectionId() {
-    const rawHashFragment = (browserWindow.location.hash || "")
+  function resolveHashSectionId() {
+    const cleanedHash = (browserWindow.location.hash || "")
       .replace(/^#/, "")
       .trim();
-    return VALID_SECTION_IDS.includes(rawHashFragment)
-      ? rawHashFragment
-      : null;
+    return ORDERED_SECTION_IDS.includes(cleanedHash) ? cleanedHash : null;
   }
 
-  function activateMagazineSection(targetSectionId) {
-    const resolvedSectionId = VALID_SECTION_IDS.includes(targetSectionId)
+  function updateSectionFolioStamp(sectionId) {
+    const pageIndex = Math.max(1, ORDERED_SECTION_IDS.indexOf(sectionId) + 1);
+    const paddedPageNumber = String(pageIndex).padStart(2, "0");
+    browserDocument
+      .querySelectorAll("[data-magazine-page-indicator]")
+      .forEach((indicatorNode) => {
+        indicatorNode.textContent = `Page ${paddedPageNumber} of 05`;
+      });
+  }
+
+  function activateNewspaperSection(targetSectionId) {
+    const resolvedSectionId = ORDERED_SECTION_IDS.includes(targetSectionId)
       ? targetSectionId
       : "intro";
 
     browserDocument
       .querySelectorAll("[data-magazine-view]")
-      .forEach((sectionElement) => {
-        const isRequestedView =
-          sectionElement.getAttribute("data-magazine-view") ===
-          resolvedSectionId;
-        sectionElement.hidden = !isRequestedView;
+      .forEach((sectionNode) => {
+        const shouldDisplaySection =
+          sectionNode.getAttribute("data-magazine-view") === resolvedSectionId;
+        sectionNode.hidden = !shouldDisplaySection;
       });
 
     browserDocument
       .querySelectorAll("[data-magazine-nav-target]")
-      .forEach((navLinkElement) => {
-        const isCurrentTab =
-          navLinkElement.getAttribute("data-magazine-nav-target") ===
+      .forEach((navElement) => {
+        const isCurrentSection =
+          navElement.getAttribute("data-magazine-nav-target") ===
           resolvedSectionId;
-        navLinkElement.classList.toggle("is-current-page", isCurrentTab);
-        if (isCurrentTab) {
-          navLinkElement.setAttribute("aria-current", "page");
+        navElement.classList.toggle("is-current-page", isCurrentSection);
+        if (isCurrentSection) {
+          navElement.setAttribute("aria-current", "page");
         } else {
-          navLinkElement.removeAttribute("aria-current");
+          navElement.removeAttribute("aria-current");
         }
       });
+
+    updateSectionFolioStamp(resolvedSectionId);
+    updateMobileReadingProgress();
   }
 
-  function bindMagazineSectionRouting() {
-    const initialSectionId = resolveActiveMagazineSectionId() || "intro";
-    activateMagazineSection(initialSectionId);
+  function bindNewspaperSectionRouting() {
+    const initialSectionId = resolveHashSectionId() || "intro";
+    activateNewspaperSection(initialSectionId);
 
     browserWindow.addEventListener("hashchange", () => {
-      const requestedSectionId = resolveActiveMagazineSectionId();
+      const requestedSectionId = resolveHashSectionId();
       if (requestedSectionId) {
-        activateMagazineSection(requestedSectionId);
+        activateNewspaperSection(requestedSectionId);
         browserWindow.scrollTo({ top: 0, behavior: "smooth" });
       }
     });
   }
 
   /* ========================================================================
-     3. GLOBAL 5-MODE THEME CONTROLLER & TOKEN SWATCH SYNCHRONIZER
+     3. GLOBAL DUAL THEME + MODE SWITCHER & LIVE TOKEN SWATCHES
      ======================================================================== */
   function refreshIntroTokenSwatches() {
     const swatchGridContainer = browserDocument.getElementById(
@@ -145,63 +161,90 @@
     );
     swatchGridContainer.innerHTML = "";
 
-    TOKEN_SWATCH_DEFINITIONS.forEach((tokenDefinition) => {
-      const resolvedHexValue = computedRootStyles
-        .getPropertyValue(tokenDefinition.tokenName)
+    TOKEN_SWATCH_DEFINITIONS.forEach((tokenDescriptor) => {
+      const resolvedValue = computedRootStyles
+        .getPropertyValue(tokenDescriptor.tokenName)
         .trim();
 
       const swatchCard = browserDocument.createElement("div");
       swatchCard.className = "magazine-token-swatch";
 
-      const colorChip = browserDocument.createElement("div");
-      colorChip.className = "magazine-token-chip";
-      colorChip.style.backgroundColor = resolvedHexValue;
+      const colorBox = browserDocument.createElement("div");
+      colorBox.className = "magazine-token-chip";
+      colorBox.style.backgroundColor = resolvedValue;
 
-      const metadataColumn = browserDocument.createElement("div");
-      metadataColumn.className = "magazine-token-meta";
+      const labelColumn = browserDocument.createElement("div");
+      labelColumn.className = "magazine-token-meta";
 
-      const tokenCodeLabel = browserDocument.createElement("code");
-      tokenCodeLabel.textContent = tokenDefinition.tokenName;
+      const codeName = browserDocument.createElement("code");
+      codeName.textContent = tokenDescriptor.tokenName;
 
-      const tokenRoleNote = browserDocument.createElement("span");
-      tokenRoleNote.textContent = `${tokenDefinition.tokenRole} (${resolvedHexValue})`;
+      const roleDescription = browserDocument.createElement("span");
+      roleDescription.textContent = `${tokenDescriptor.tokenRole} · ${resolvedValue}`;
 
-      metadataColumn.appendChild(tokenCodeLabel);
-      metadataColumn.appendChild(tokenRoleNote);
-      swatchCard.appendChild(colorChip);
-      swatchCard.appendChild(metadataColumn);
+      labelColumn.appendChild(codeName);
+      labelColumn.appendChild(roleDescription);
+      swatchCard.appendChild(colorBox);
+      swatchCard.appendChild(labelColumn);
       swatchGridContainer.appendChild(swatchCard);
     });
   }
 
-  function applyGlobalMagazineThemeMode(selectedThemeKey, shouldSyncStages) {
-    browserDocument.documentElement.setAttribute(
-      "data-theme",
-      selectedThemeKey
+  function synchronizeMobileThemeTriggerLabel(themeKey, modeKey) {
+    const mobileTrigger = browserDocument.querySelector(
+      "[data-mobile-theme-drawer-toggle]"
     );
+    const earEditionLabel = browserDocument.querySelector(
+      "[data-magazine-edition-stamp]"
+    );
+    const modeIcon = modeKey === "dark" ? "☾" : "☀";
+
+    if (mobileTrigger) {
+      mobileTrigger.textContent = `${themeKey} ${modeIcon}`;
+    }
+    if (earEditionLabel) {
+      earEditionLabel.textContent = `${themeKey.toUpperCase()} · ${modeKey.toUpperCase()} EDITION`;
+    }
+  }
+
+  function applyGlobalThemeAndMode(nextThemeKey, nextModeKey, syncStages) {
+    const resolvedTheme =
+      nextThemeKey ||
+      browserDocument.documentElement.getAttribute("data-theme") ||
+      "classic";
+    const resolvedMode =
+      nextModeKey ||
+      browserDocument.documentElement.getAttribute("data-mode") ||
+      "light";
+
+    browserDocument.documentElement.setAttribute("data-theme", resolvedTheme);
+    browserDocument.documentElement.setAttribute("data-mode", resolvedMode);
 
     try {
-      browserWindow.localStorage.setItem(
-        STORAGE_KEY_MAGAZINE_THEME,
-        selectedThemeKey
-      );
-    } catch (_storageUnavailableError) {
-      // Safe fallback when storage is restricted in strict private browsing
+      browserWindow.localStorage.setItem(STORAGE_KEY_THEME, resolvedTheme);
+      browserWindow.localStorage.setItem(STORAGE_KEY_MODE, resolvedMode);
+    } catch (_storageRestrictedError) {
+      // Safe fallback when private mode blocks localStorage
     }
 
     browserDocument
       .querySelectorAll("[data-global-theme-option]")
-      .forEach((globalModeButton) => {
-        const isCurrentGlobalMode =
-          globalModeButton.getAttribute("data-global-theme-option") ===
-          selectedThemeKey;
-        globalModeButton.setAttribute(
-          "aria-pressed",
-          String(isCurrentGlobalMode)
-        );
+      .forEach((themeButton) => {
+        const isSelected =
+          themeButton.getAttribute("data-global-theme-option") ===
+          resolvedTheme;
+        themeButton.setAttribute("aria-pressed", String(isSelected));
       });
 
-    if (shouldSyncStages) {
+    browserDocument
+      .querySelectorAll("[data-global-mode-option]")
+      .forEach((modeButton) => {
+        const isSelected =
+          modeButton.getAttribute("data-global-mode-option") === resolvedMode;
+        modeButton.setAttribute("aria-pressed", String(isSelected));
+      });
+
+    if (syncStages) {
       browserDocument
         .querySelectorAll(".specimen-container")
         .forEach((specimenContainer) => {
@@ -209,63 +252,88 @@
             "[data-specimen-stage]"
           );
           if (previewStage) {
-            previewStage.setAttribute("data-theme", selectedThemeKey);
+            previewStage.setAttribute("data-theme", resolvedTheme);
+            previewStage.setAttribute("data-mode", resolvedMode);
           }
+
+          specimenContainer
+            .querySelectorAll("[data-specimen-theme-option]")
+            .forEach((stageThemeButton) => {
+              stageThemeButton.setAttribute(
+                "aria-pressed",
+                String(
+                  stageThemeButton.getAttribute(
+                    "data-specimen-theme-option"
+                  ) === resolvedTheme
+                )
+              );
+            });
+
           specimenContainer
             .querySelectorAll("[data-specimen-mode-option]")
             .forEach((stageModeButton) => {
-              const isSelectedMode =
-                stageModeButton.getAttribute("data-specimen-mode-option") ===
-                selectedThemeKey;
               stageModeButton.setAttribute(
                 "aria-pressed",
-                String(isSelectedMode)
+                String(
+                  stageModeButton.getAttribute("data-specimen-mode-option") ===
+                    resolvedMode
+                )
               );
             });
         });
     }
 
+    synchronizeMobileThemeTriggerLabel(resolvedTheme, resolvedMode);
     refreshIntroTokenSwatches();
   }
 
-  function bindGlobalThemeSwitcher() {
-    const initialThemeKey =
-      browserDocument.documentElement.getAttribute("data-theme") || "light";
+  function bindGlobalThemeAndModeControls() {
+    const initialTheme =
+      browserDocument.documentElement.getAttribute("data-theme") || "classic";
+    const initialMode =
+      browserDocument.documentElement.getAttribute("data-mode") || "light";
 
     browserDocument
       .querySelectorAll("[data-global-theme-option]")
-      .forEach((globalModeButton) => {
-        globalModeButton.addEventListener("click", () => {
-          const nextThemeKey = globalModeButton.getAttribute(
+      .forEach((themeButton) => {
+        themeButton.addEventListener("click", () => {
+          const chosenTheme = themeButton.getAttribute(
             "data-global-theme-option"
           );
-          applyGlobalMagazineThemeMode(nextThemeKey, true);
+          const currentMode =
+            browserDocument.documentElement.getAttribute("data-mode") ||
+            "light";
+          applyGlobalThemeAndMode(chosenTheme, currentMode, true);
         });
       });
 
-    applyGlobalMagazineThemeMode(initialThemeKey, true);
+    browserDocument
+      .querySelectorAll("[data-global-mode-option]")
+      .forEach((modeButton) => {
+        modeButton.addEventListener("click", () => {
+          const currentTheme =
+            browserDocument.documentElement.getAttribute("data-theme") ||
+            "classic";
+          const chosenMode = modeButton.getAttribute("data-global-mode-option");
+          applyGlobalThemeAndMode(currentTheme, chosenMode, true);
+        });
+      });
+
+    applyGlobalThemeAndMode(initialTheme, initialMode, true);
   }
 
   /* ========================================================================
-     4. SPECIMEN CONTAINER BUILDER (5-MODE TOGGLE + CODE TABS + ACTIVE COPY)
+     4. SPECIMEN CONTAINER BUILDER (PER-STAGE THEME+MODE + CODE DRAWER + COPY)
      ======================================================================== */
-  /**
-   * Builds one interactive Specimen Container with:
-   *   - Header: title, category stamp, usage note, and 5-mode toggle buttons
-   *   - Stage: live rendered element/component inside an isolated `[data-theme]`
-   *   - Code Toolbar: `HTML`, `CSS`, conditional `JS`, and context-aware `Copy`
-   *   - Code Drawer: collapsible `<pre><code>` displaying the active tab
-   *
-   * @param {Object} specimenEntry
-   * @param {string} defaultThemeMode
-   * @returns {HTMLElement}
-   */
-  function renderBroadsheetSpecimenCard(specimenEntry, defaultThemeMode) {
+  function buildBroadsheetSpecimenContainer(
+    specimenEntry,
+    initialThemeKey,
+    initialModeKey
+  ) {
     const containerElement = browserDocument.createElement("article");
     containerElement.className = "specimen-container";
     containerElement.id = specimenEntry.specimenId;
 
-    // --- A. Header Bar (Title, Category, Rationale & 5-Mode Toggle) ---
     const headerBar = browserDocument.createElement("header");
     headerBar.className = "specimen-container-header";
 
@@ -292,54 +360,89 @@
     headerDetails.appendChild(titleRow);
     headerDetails.appendChild(rationaleParagraph);
 
-    const modeSwitcherBar = browserDocument.createElement("div");
-    modeSwitcherBar.className = "specimen-mode-bar";
-    modeSwitcherBar.setAttribute("role", "group");
-    modeSwitcherBar.setAttribute(
+    // Dual Theme + Light/Dark Mode Bar scoped exclusively to this Specimen Stage
+    const stageControlsBar = browserDocument.createElement("div");
+    stageControlsBar.className = "specimen-mode-bar";
+    stageControlsBar.setAttribute("role", "group");
+    stageControlsBar.setAttribute(
       "aria-label",
-      `Preview theme mode for ${specimenEntry.specimenTitle}`
+      `Independent theme and light/dark controls for ${specimenEntry.specimenTitle}`
     );
 
-    // --- B. Isolated Preview Stage (`[data-theme="<mode>"]`) ---
     const previewStage = browserDocument.createElement("div");
     previewStage.className = "specimen-preview-stage";
     previewStage.setAttribute("data-specimen-stage", "");
-    previewStage.setAttribute("data-theme", defaultThemeMode);
+    previewStage.setAttribute("data-theme", initialThemeKey);
+    previewStage.setAttribute("data-mode", initialModeKey);
     previewStage.innerHTML = specimenEntry.previewHtml;
 
-    BROADSHEET_THEME_MODES.forEach((themeOption) => {
-      const modeToggleButton = browserDocument.createElement("button");
-      modeToggleButton.type = "button";
-      modeToggleButton.className = "specimen-mode-button";
-      modeToggleButton.textContent = themeOption.displayLabel;
-      modeToggleButton.setAttribute(
-        "data-specimen-mode-option",
-        themeOption.themeKey
+    BROADSHEET_THEME_DEFINITIONS.forEach((themeDefinition) => {
+      const themeOptionButton = browserDocument.createElement("button");
+      themeOptionButton.type = "button";
+      themeOptionButton.className = "specimen-mode-button";
+      themeOptionButton.textContent = themeDefinition.displayLabel;
+      themeOptionButton.setAttribute(
+        "data-specimen-theme-option",
+        themeDefinition.themeKey
       );
-      modeToggleButton.setAttribute(
+      themeOptionButton.setAttribute(
         "aria-pressed",
-        String(themeOption.themeKey === defaultThemeMode)
+        String(themeDefinition.themeKey === initialThemeKey)
       );
 
-      modeToggleButton.addEventListener("click", () => {
-        previewStage.setAttribute("data-theme", themeOption.themeKey);
-        modeSwitcherBar
-          .querySelectorAll("[data-specimen-mode-option]")
-          .forEach((peerModeButton) => {
-            peerModeButton.setAttribute(
+      themeOptionButton.addEventListener("click", () => {
+        previewStage.setAttribute("data-theme", themeDefinition.themeKey);
+        stageControlsBar
+          .querySelectorAll("[data-specimen-theme-option]")
+          .forEach((peerButton) => {
+            peerButton.setAttribute(
               "aria-pressed",
-              String(peerModeButton === modeToggleButton)
+              String(peerButton === themeOptionButton)
             );
           });
       });
 
-      modeSwitcherBar.appendChild(modeToggleButton);
+      stageControlsBar.appendChild(themeOptionButton);
+    });
+
+    const polarityDivider = browserDocument.createElement("span");
+    polarityDivider.className = "specimen-polarity-separator";
+    polarityDivider.setAttribute("aria-hidden", "true");
+    stageControlsBar.appendChild(polarityDivider);
+
+    BROADSHEET_MODE_DEFINITIONS.forEach((modeDefinition) => {
+      const modeOptionButton = browserDocument.createElement("button");
+      modeOptionButton.type = "button";
+      modeOptionButton.className = "specimen-mode-button";
+      modeOptionButton.textContent = `${modeDefinition.iconPrefix} ${modeDefinition.displayLabel}`;
+      modeOptionButton.setAttribute(
+        "data-specimen-mode-option",
+        modeDefinition.modeKey
+      );
+      modeOptionButton.setAttribute(
+        "aria-pressed",
+        String(modeDefinition.modeKey === initialModeKey)
+      );
+
+      modeOptionButton.addEventListener("click", () => {
+        previewStage.setAttribute("data-mode", modeDefinition.modeKey);
+        stageControlsBar
+          .querySelectorAll("[data-specimen-mode-option]")
+          .forEach((peerButton) => {
+            peerButton.setAttribute(
+              "aria-pressed",
+              String(peerButton === modeOptionButton)
+            );
+          });
+      });
+
+      stageControlsBar.appendChild(modeOptionButton);
     });
 
     headerBar.appendChild(headerDetails);
-    headerBar.appendChild(modeSwitcherBar);
+    headerBar.appendChild(stageControlsBar);
 
-    // --- C. Code Inspection Toolbar & Collapsible Source Drawer ---
+    // Source Code Toolbar (`HTML`, `CSS`, conditional `JS` + active `Copy`)
     const codeToolbar = browserDocument.createElement("div");
     codeToolbar.className = "specimen-code-toolbar";
 
@@ -361,10 +464,17 @@
     preElement.appendChild(codeElement);
     codeDrawer.appendChild(preElement);
 
-    // Map ONLY available snippets (`js` button appears strictly when `jsSnippet` exists)
     const availableCodeSnippets = [
-      { languageKey: "html", languageLabel: "HTML", sourceText: specimenEntry.htmlSnippet },
-      { languageKey: "css", languageLabel: "CSS", sourceText: specimenEntry.cssSnippet },
+      {
+        languageKey: "html",
+        languageLabel: "HTML",
+        sourceText: specimenEntry.htmlSnippet,
+      },
+      {
+        languageKey: "css",
+        languageLabel: "CSS",
+        sourceText: specimenEntry.cssSnippet,
+      },
     ];
     if (
       typeof specimenEntry.jsSnippet === "string" &&
@@ -378,7 +488,7 @@
     }
 
     let activeLanguageKey = null;
-    let copyFeedbackResetTimer = null;
+    let copyResetTimeoutId = null;
 
     availableCodeSnippets.forEach((snippetDefinition) => {
       const codeTabButton = browserDocument.createElement("button");
@@ -392,10 +502,10 @@
       codeTabButton.setAttribute("aria-expanded", "false");
 
       codeTabButton.addEventListener("click", () => {
-        const isCollapsingActiveTab =
+        const shouldCollapseDrawer =
           activeLanguageKey === snippetDefinition.languageKey;
 
-        if (isCollapsingActiveTab) {
+        if (shouldCollapseDrawer) {
           activeLanguageKey = null;
           codeDrawer.hidden = true;
           codeTabButton.setAttribute("aria-expanded", "false");
@@ -428,24 +538,24 @@
 
     copyButton.addEventListener("click", async () => {
       if (!activeLanguageKey) return;
-      const matchingSnippet = availableCodeSnippets.find(
-        (candidateSnippet) => candidateSnippet.languageKey === activeLanguageKey
+      const targetSnippet = availableCodeSnippets.find(
+        (candidate) => candidate.languageKey === activeLanguageKey
       );
-      if (!matchingSnippet) return;
+      if (!targetSnippet) return;
 
-      await copyCodeSnippetToClipboard(matchingSnippet.sourceText);
+      await copyCodeSnippetToClipboard(targetSnippet.sourceText);
 
-      if (copyFeedbackResetTimer) {
-        browserWindow.clearTimeout(copyFeedbackResetTimer);
+      if (copyResetTimeoutId) {
+        browserWindow.clearTimeout(copyResetTimeoutId);
       }
 
       copyButton.classList.add("is-copied");
-      copyButton.textContent = `Copied ${matchingSnippet.languageLabel} ✓`;
+      copyButton.textContent = `Copied ${targetSnippet.languageLabel} ✓`;
 
-      copyFeedbackResetTimer = browserWindow.setTimeout(() => {
+      copyResetTimeoutId = browserWindow.setTimeout(() => {
         copyButton.classList.remove("is-copied");
         copyButton.textContent = activeLanguageKey
-          ? `Copy ${matchingSnippet.languageLabel}`
+          ? `Copy ${targetSnippet.languageLabel}`
           : "Select Tab to Copy";
       }, 1600);
     });
@@ -465,46 +575,343 @@
     return containerElement;
   }
 
-  function mountSpecimenCatalogList(
-    mountContainerId,
+  /* ========================================================================
+     5. REUSABLE SECTION WORKBENCH (DESKTOP SPREAD VS. MOBILE STREAM)
+     ======================================================================== */
+  function mountBroadsheetSectionWorkbench(
+    workbenchMountId,
     specimenEntries,
-    initialThemeMode
+    initialThemeKey,
+    initialModeKey
   ) {
-    const targetMountContainer =
-      browserDocument.getElementById(mountContainerId);
-    if (!targetMountContainer || !Array.isArray(specimenEntries)) return;
+    const mountElement = browserDocument.getElementById(workbenchMountId);
+    if (
+      !mountElement ||
+      !Array.isArray(specimenEntries) ||
+      specimenEntries.length === 0
+    ) {
+      return;
+    }
 
-    targetMountContainer.innerHTML = "";
-    specimenEntries.forEach((specimenEntry) => {
-      const renderedCard = renderBroadsheetSpecimenCard(
+    mountElement.innerHTML = "";
+    let activeSpecimenIndex = 0;
+    let isFullSheetExpanded = false;
+
+    // --- A. Mobile Quick-Jump Horizontal Strip (Hidden on Desktop >= 768px) ---
+    const mobileJumpStrip = browserDocument.createElement("nav");
+    mobileJumpStrip.className = "magazine-mobile-jump-strip";
+    mobileJumpStrip.setAttribute("aria-label", "Quick jump to specimen");
+
+    specimenEntries.forEach((specimenEntry, entryIndex) => {
+      const jumpAnchor = browserDocument.createElement("a");
+      jumpAnchor.className = "magazine-mobile-jump-chip";
+      jumpAnchor.href = `#${specimenEntry.specimenId}`;
+      jumpAnchor.textContent = specimenEntry.specimenTitle;
+      jumpAnchor.addEventListener("click", (clickEvent) => {
+        clickEvent.preventDefault();
+        const targetCard = browserDocument.getElementById(
+          specimenEntry.specimenId
+        );
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+      mobileJumpStrip.appendChild(jumpAnchor);
+    });
+
+    // --- B. Broadsheet Spread Grid (Left Directory Column + Right Stage) ---
+    const spreadWorkbench = browserDocument.createElement("div");
+    spreadWorkbench.className = "magazine-spread-workbench";
+
+    const directoryColumn = browserDocument.createElement("aside");
+    directoryColumn.className = "magazine-directory-column";
+    directoryColumn.setAttribute("aria-label", "Section index");
+
+    const directoryHead = browserDocument.createElement("div");
+    directoryHead.className = "magazine-directory-head";
+
+    const directoryCountLabel = browserDocument.createElement("span");
+    directoryCountLabel.className = "nrki-eyebrow";
+    directoryCountLabel.style.margin = "0";
+    directoryCountLabel.textContent = `Index (${specimenEntries.length})`;
+
+    const viewModeToggleButton = browserDocument.createElement("button");
+    viewModeToggleButton.type = "button";
+    viewModeToggleButton.className = "nrki-button nrki-button-small";
+    viewModeToggleButton.textContent = "Full Sheet";
+    viewModeToggleButton.setAttribute("aria-pressed", "false");
+
+    directoryHead.appendChild(directoryCountLabel);
+    directoryHead.appendChild(viewModeToggleButton);
+
+    const directoryList = browserDocument.createElement("ol");
+    directoryList.className = "magazine-directory-list";
+
+    const directoryPager = browserDocument.createElement("div");
+    directoryPager.className = "magazine-directory-pager";
+
+    const prevSpecimenButton = browserDocument.createElement("button");
+    prevSpecimenButton.type = "button";
+    prevSpecimenButton.className = "nrki-button nrki-button-small";
+    prevSpecimenButton.textContent = "← Prev";
+
+    const spreadPageCounter = browserDocument.createElement("span");
+    spreadPageCounter.className = "magazine-running-folio";
+
+    const nextSpecimenButton = browserDocument.createElement("button");
+    nextSpecimenButton.type = "button";
+    nextSpecimenButton.className = "nrki-button nrki-button-small nrki-button-primary";
+    nextSpecimenButton.textContent = "Next →";
+
+    directoryPager.appendChild(prevSpecimenButton);
+    directoryPager.appendChild(spreadPageCounter);
+    directoryPager.appendChild(nextSpecimenButton);
+
+    directoryColumn.appendChild(directoryHead);
+    directoryColumn.appendChild(directoryList);
+    directoryColumn.appendChild(directoryPager);
+
+    const stageColumn = browserDocument.createElement("div");
+    stageColumn.className = "specimen-catalog-stack";
+
+    const directoryButtonElements = [];
+    const specimenCardElements = [];
+
+    specimenEntries.forEach((specimenEntry, entryIndex) => {
+      // Directory Row
+      const listRow = browserDocument.createElement("li");
+      listRow.className = "magazine-directory-entry";
+
+      const rowButton = browserDocument.createElement("button");
+      rowButton.type = "button";
+      rowButton.className = "magazine-directory-button";
+
+      const rowTitle = browserDocument.createElement("span");
+      rowTitle.textContent = specimenEntry.specimenTitle;
+      rowButton.appendChild(rowTitle);
+
+      if (
+        typeof specimenEntry.jsSnippet === "string" &&
+        specimenEntry.jsSnippet.trim().length > 0
+      ) {
+        const jsStamp = browserDocument.createElement("span");
+        jsStamp.className = "nrki-badge nrki-badge-accent";
+        jsStamp.textContent = "JS";
+        rowButton.appendChild(jsStamp);
+      }
+
+      rowButton.addEventListener("click", () => {
+        activeSpecimenIndex = entryIndex;
+        synchronizeSpreadState();
+        if (isFullSheetExpanded) {
+          specimenCardElements[entryIndex].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      });
+
+      listRow.appendChild(rowButton);
+      directoryList.appendChild(listRow);
+      directoryButtonElements.push(rowButton);
+
+      // Mobile Folio Divider between stacked mobile cards
+      if (entryIndex > 0) {
+        const mobileDivider = browserDocument.createElement("div");
+        mobileDivider.className = "magazine-mobile-folio-divider";
+        mobileDivider.textContent = `SPECIMEN ${String(
+          entryIndex + 1
+        ).padStart(2, "0")} OF ${String(specimenEntries.length).padStart(
+          2,
+          "0"
+        )} · ✦`;
+        stageColumn.appendChild(mobileDivider);
+      }
+
+      const renderedSpecimenCard = buildBroadsheetSpecimenContainer(
         specimenEntry,
-        initialThemeMode
+        initialThemeKey,
+        initialModeKey
       );
-      targetMountContainer.appendChild(renderedCard);
+      stageColumn.appendChild(renderedSpecimenCard);
+      specimenCardElements.push(renderedSpecimenCard);
+    });
+
+    function synchronizeSpreadState() {
+      const totalCount = specimenEntries.length;
+      spreadWorkbench.classList.toggle("is-full-sheet", isFullSheetExpanded);
+      viewModeToggleButton.setAttribute(
+        "aria-pressed",
+        String(isFullSheetExpanded)
+      );
+      viewModeToggleButton.textContent = isFullSheetExpanded
+        ? "Spread View"
+        : "Full Sheet";
+
+      spreadPageCounter.textContent = `${String(
+        activeSpecimenIndex + 1
+      ).padStart(2, "0")} / ${String(totalCount).padStart(2, "0")}`;
+
+      prevSpecimenButton.disabled = activeSpecimenIndex === 0;
+      nextSpecimenButton.disabled = activeSpecimenIndex === totalCount - 1;
+
+      directoryButtonElements.forEach((rowButton, idx) => {
+        rowButton.classList.toggle(
+          "is-current-specimen",
+          idx === activeSpecimenIndex
+        );
+      });
+
+      specimenCardElements.forEach((cardElement, idx) => {
+        cardElement.classList.toggle(
+          "magazine-spread-inactive",
+          !isFullSheetExpanded && idx !== activeSpecimenIndex
+        );
+      });
+    }
+
+    prevSpecimenButton.addEventListener("click", () => {
+      if (activeSpecimenIndex > 0) {
+        activeSpecimenIndex -= 1;
+        synchronizeSpreadState();
+      }
+    });
+
+    nextSpecimenButton.addEventListener("click", () => {
+      if (activeSpecimenIndex < specimenEntries.length - 1) {
+        activeSpecimenIndex += 1;
+        synchronizeSpreadState();
+      }
+    });
+
+    viewModeToggleButton.addEventListener("click", () => {
+      isFullSheetExpanded = !isFullSheetExpanded;
+      synchronizeSpreadState();
+    });
+
+    spreadWorkbench.appendChild(directoryColumn);
+    spreadWorkbench.appendChild(stageColumn);
+
+    mountElement.appendChild(mobileJumpStrip);
+    mountElement.appendChild(spreadWorkbench);
+
+    synchronizeSpreadState();
+  }
+
+  /* ========================================================================
+     6. MOBILE POCKET NEWSPAPER READING PROGRESS & 1-TAP THEME DRAWER
+     ======================================================================== */
+  function updateMobileReadingProgress() {
+    const progressFill = browserDocument.querySelector(
+      "[data-mobile-reading-progress]"
+    );
+    if (!progressFill) return;
+
+    const scrollableHeight =
+      browserDocument.documentElement.scrollHeight - browserWindow.innerHeight;
+    if (scrollableHeight <= 0) {
+      progressFill.style.transform = "scaleX(0)";
+      return;
+    }
+
+    const ratio = Math.min(
+      1,
+      Math.max(0, browserWindow.scrollY / scrollableHeight)
+    );
+    progressFill.style.transform = `scaleX(${ratio.toFixed(3)})`;
+  }
+
+  function bindMobilePocketNewspaperControls() {
+    browserWindow.addEventListener("scroll", updateMobileReadingProgress, {
+      passive: true,
+    });
+    browserWindow.addEventListener("resize", updateMobileReadingProgress, {
+      passive: true,
+    });
+
+    const drawerToggle = browserDocument.querySelector(
+      "[data-mobile-theme-drawer-toggle]"
+    );
+    const themeSheet = browserDocument.querySelector(
+      "[data-mobile-theme-sheet]"
+    );
+    const sheetClose = browserDocument.querySelector(
+      "[data-mobile-theme-sheet-close]"
+    );
+    if (!drawerToggle || !themeSheet) return;
+
+    function setDrawerOpen(shouldOpen) {
+      themeSheet.hidden = !shouldOpen;
+      drawerToggle.setAttribute("aria-expanded", String(shouldOpen));
+    }
+
+    drawerToggle.addEventListener("click", () => {
+      setDrawerOpen(themeSheet.hidden);
+    });
+
+    if (sheetClose) {
+      sheetClose.addEventListener("click", () => setDrawerOpen(false));
+    }
+
+    browserDocument.addEventListener("keydown", (keyboardEvent) => {
+      if (keyboardEvent.key === "Escape" && !themeSheet.hidden) {
+        setDrawerOpen(false);
+        drawerToggle.focus();
+      }
     });
   }
 
   /* ========================================================================
-     5. INITIALIZATION ENTRYPOINT
+     7. LIVE HEADER DATELINE INITIALIZER & ENTRYPOINT
      ======================================================================== */
+  function populateMagazineEditionDate() {
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+    browserDocument
+      .querySelectorAll("[data-magazine-dateline-date]")
+      .forEach((dateElement) => {
+        dateElement.textContent = formattedDate;
+      });
+  }
+
   browserDocument.addEventListener("DOMContentLoaded", () => {
-    const magazineNamespace = browserWindow.NRKIBroadsheetMagazine || {};
-    const initialThemeMode =
-      browserDocument.documentElement.getAttribute("data-theme") || "light";
+    const catalogRegistry = browserWindow.NRKIBroadsheetMagazine || {};
+    const initialThemeKey =
+      browserDocument.documentElement.getAttribute("data-theme") || "classic";
+    const initialModeKey =
+      browserDocument.documentElement.getAttribute("data-mode") || "light";
 
-    mountSpecimenCatalogList(
-      "broadsheet-simple-elements-mount",
-      magazineNamespace.simpleElementSpecimens,
-      initialThemeMode
+    populateMagazineEditionDate();
+
+    mountBroadsheetSectionWorkbench(
+      "broadsheet-layouts-workbench-mount",
+      catalogRegistry.layoutSpecimens,
+      initialThemeKey,
+      initialModeKey
     );
 
-    mountSpecimenCatalogList(
-      "broadsheet-complex-components-mount",
-      magazineNamespace.complexComponentSpecimens,
-      initialThemeMode
+    mountBroadsheetSectionWorkbench(
+      "broadsheet-simple-elements-workbench-mount",
+      catalogRegistry.simpleElementSpecimens,
+      initialThemeKey,
+      initialModeKey
     );
 
-    bindMagazineSectionRouting();
-    bindGlobalThemeSwitcher();
+    mountBroadsheetSectionWorkbench(
+      "broadsheet-complex-components-workbench-mount",
+      catalogRegistry.complexComponentSpecimens,
+      initialThemeKey,
+      initialModeKey
+    );
+
+    bindNewspaperSectionRouting();
+    bindGlobalThemeAndModeControls();
+    bindMobilePocketNewspaperControls();
+    updateMobileReadingProgress();
   });
 })(window, document);
