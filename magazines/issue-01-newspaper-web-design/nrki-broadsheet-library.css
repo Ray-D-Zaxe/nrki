@@ -2445,9 +2445,10 @@
     text-underline-offset: 0.35rem;
   }
 
-  /* --- Mobile & Tablet Sticky Bottom Navigation Bar & Theme/Mode Sheet --- */
+  /* --- Mobile & Tablet Sticky Bottom Bar, Nav Menu & Theme/Mode Sheets --- */
   .nrki-mobile-bottom-bar,
-  .nrki-mobile-theme-sheet {
+  .nrki-mobile-theme-sheet,
+  .nrki-mobile-nav-sheet {
     display: none;
   }
 
@@ -2455,17 +2456,18 @@
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.45rem;
   }
 
   .nrki-mobile-theme-pill {
-    padding: 0.32rem 0.62rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.8rem;
     border: 1px solid var(--nrki-border-subtle);
     border-radius: var(--nrki-radius-pill);
     background-color: var(--nrki-surface-panel);
     color: var(--nrki-ink-muted);
     font-family: var(--nrki-font-ui);
-    font-size: 0.68rem;
+    font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -3844,10 +3846,10 @@
 
   /* Tablet & Mobile (`max-width: 1024px`):
      Replaces the top `.nrki-site-nav` ribbon and header theme/mode selectors
-     with a fixed Pocket Bottom Navigation Bar + 1-Tap Theme & Mode Drawer. */
+     with a prominent, swappable 3-control bottom bar (Theme Sheet | Swap | Hamburger Menu). */
   @media screen and (max-width: 1024px) {
     body.nrki-has-mobile-bar {
-      padding-bottom: 4.75rem;
+      padding-bottom: 6.25rem;
     }
 
     .nrki-site-header .nrki-site-nav,
@@ -3868,77 +3870,195 @@
       left: 0;
       right: 0;
       z-index: 110;
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
-      justify-content: space-between;
-      gap: 0.15rem;
-      padding: 0.42rem 0.45rem;
-      border-top: 2px solid var(--nrki-border-strong);
+      gap: 0.75rem;
+      min-height: 4.35rem;
+      padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+      border-top: 3px solid var(--nrki-accent-primary);
       background-color: var(--nrki-surface-elevated);
-      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.14);
+      box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.22);
     }
 
-    .nrki-mobile-nav-link {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.32rem 0.22rem;
-      border-radius: var(--nrki-radius-control);
-      color: var(--nrki-ink-muted);
-      font-family: var(--nrki-font-ui);
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-      text-decoration: none;
-      text-align: center;
-      white-space: nowrap;
+    .nrki-mobile-bottom-bar > :first-child {
+      justify-self: start;
     }
 
-    .nrki-mobile-nav-link:hover {
-      color: var(--nrki-ink-heading);
+    .nrki-mobile-bottom-bar > .nrki-mobile-swap-button {
+      justify-self: center;
     }
 
-    .nrki-mobile-nav-link[aria-current="page"] {
-      background-color: var(--nrki-accent-primary);
-      color: var(--nrki-ink-on-accent);
+    .nrki-mobile-bottom-bar > :last-child {
+      justify-self: end;
     }
 
     .nrki-mobile-theme-trigger {
-      flex: 0 0 auto;
-      padding: 0.36rem 0.52rem;
-      border: 1px solid var(--nrki-border-strong);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      min-height: 2.85rem;
+      min-width: 6.75rem;
+      padding: 0.5rem 0.9rem;
+      border: 2px solid var(--nrki-border-strong);
       border-radius: var(--nrki-radius-pill);
       background-color: var(--nrki-surface-panel);
       color: var(--nrki-ink-heading);
       font-family: var(--nrki-font-mono);
-      font-size: 0.6rem;
+      font-size: 0.74rem;
       font-weight: 700;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       cursor: pointer;
       white-space: nowrap;
+      transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
     }
 
-    .nrki-mobile-theme-sheet {
+    .nrki-mobile-theme-trigger:hover,
+    .nrki-mobile-theme-trigger[aria-expanded="true"] {
+      background-color: var(--nrki-accent-primary);
+      border-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+    }
+
+    .nrki-mobile-swap-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.85rem;
+      height: 2.85rem;
+      padding: 0;
+      border: 1.5px solid var(--nrki-border-strong);
+      border-radius: var(--nrki-radius-pill);
+      background-color: var(--nrki-surface-canvas);
+      color: var(--nrki-ink-heading);
+      cursor: pointer;
+      transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), transform var(--nrki-transition-fast);
+    }
+
+    .nrki-mobile-swap-button svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      transition: transform var(--nrki-transition-fast);
+    }
+
+    .nrki-mobile-bottom-bar.is-swapped .nrki-mobile-swap-button svg {
+      transform: rotate(180deg);
+    }
+
+    .nrki-mobile-swap-button:hover {
+      border-color: var(--nrki-accent-primary);
+      background-color: var(--nrki-accent-primary-tint);
+      color: var(--nrki-accent-primary);
+    }
+
+    .nrki-mobile-menu-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 2.85rem;
+      min-width: 6.25rem;
+      padding: 0.5rem 0.95rem;
+      border: 2px solid var(--nrki-accent-primary);
+      border-radius: var(--nrki-radius-pill);
+      background-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+      font-family: var(--nrki-font-ui);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+    }
+
+    .nrki-mobile-menu-trigger svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .nrki-mobile-menu-trigger:hover {
+      background-color: var(--nrki-accent-primary-hover);
+      border-color: var(--nrki-accent-primary-hover);
+      color: var(--nrki-ink-on-accent);
+    }
+
+    .nrki-mobile-menu-trigger[aria-expanded="true"] {
+      background-color: var(--nrki-ink-heading);
+      border-color: var(--nrki-ink-heading);
+      color: var(--nrki-surface-canvas);
+    }
+
+    .nrki-mobile-theme-sheet,
+    .nrki-mobile-nav-sheet {
       position: fixed;
-      bottom: 3.45rem;
-      left: 0.65rem;
-      right: 0.65rem;
+      bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+      left: 0.75rem;
+      right: 0.75rem;
       max-width: 28rem;
       margin-inline: auto;
       z-index: 115;
       display: block;
-      padding: 1rem;
-      border: var(--nrki-card-border);
+      padding: 1.1rem;
+      border: 2px solid var(--nrki-border-strong);
       border-radius: var(--nrki-radius-surface);
       background-color: var(--nrki-surface-elevated);
       box-shadow: var(--nrki-shadow-overlay);
     }
 
-    .nrki-mobile-theme-sheet[hidden] {
+    .nrki-mobile-theme-sheet[hidden],
+    .nrki-mobile-nav-sheet[hidden] {
       display: none;
+    }
+
+    .nrki-mobile-nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .nrki-mobile-nav-menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-height: 2.85rem;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid var(--nrki-border-subtle);
+      border-radius: var(--nrki-radius-control);
+      background-color: var(--nrki-surface-panel);
+      color: var(--nrki-ink-heading);
+      font-family: var(--nrki-font-ui);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+    }
+
+    .nrki-mobile-nav-menu-link:hover {
+      border-color: var(--nrki-accent-primary);
+      color: var(--nrki-accent-primary);
+    }
+
+    .nrki-mobile-nav-menu-link[aria-current="page"] {
+      background-color: var(--nrki-accent-primary);
+      border-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    .nrki-mobile-nav-list {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -4226,7 +4346,8 @@
     .nrki-skip-link,
     .nrki-toast-stack,
     .nrki-mobile-bottom-bar,
-    .nrki-mobile-theme-sheet {
+    .nrki-mobile-theme-sheet,
+    .nrki-mobile-nav-sheet {
       display: none;
     }
 
