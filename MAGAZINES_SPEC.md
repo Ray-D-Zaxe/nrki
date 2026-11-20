@@ -143,7 +143,7 @@ NRKI AG/
 
 ## 6. Simplified Workflow Going Forward
 
-1. **Build on `dev` only** (`main` stays live at `nrki.in` with your resumes and clean front page untouched).
+1. **Build on `dev` only** (`main` stays live at `nrki.in` with your resumes, clean front page, and Under Construction placeholders—including `pages/magazines-index.html` replacing `pages/gallery.html`—while Issue 01 & the full library stay on `dev`).
 2. **Build Order:**
    - **Step 1:** Write `magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css` (5-mode token system + `@layer` architecture + zero `!important` + all elements & components).
    - **Step 2:** Create the barebones `pages/magazines-index.html` (replacing `pages/gallery.html`) and the Issue 01 viewer (`newspaper-design-magazine.html`, `broadsheet-magazine-shell.css`, `broadsheet-magazine-viewer.js`) with the 5-mode Specimen Container.
