@@ -772,29 +772,7 @@
     let activeSpecimenIndex = 0;
     let isFullSheetExpanded = false;
 
-    // --- A. Mobile Quick-Jump Horizontal Strip (Hidden on Desktop >= 768px) ---
-    const mobileJumpStrip = browserDocument.createElement("nav");
-    mobileJumpStrip.className = "magazine-mobile-jump-strip";
-    mobileJumpStrip.setAttribute("aria-label", "Quick jump to specimen");
-
-    specimenEntries.forEach((specimenEntry, entryIndex) => {
-      const jumpAnchor = browserDocument.createElement("a");
-      jumpAnchor.className = "magazine-mobile-jump-chip";
-      jumpAnchor.href = `#${specimenEntry.specimenId}`;
-      jumpAnchor.textContent = specimenEntry.specimenTitle;
-      jumpAnchor.addEventListener("click", (clickEvent) => {
-        clickEvent.preventDefault();
-        const targetCard = browserDocument.getElementById(
-          specimenEntry.specimenId
-        );
-        if (targetCard) {
-          targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
-      mobileJumpStrip.appendChild(jumpAnchor);
-    });
-
-    // --- B. Broadsheet Spread Grid (Left Directory Column + Right Stage) ---
+    // --- Broadsheet Spread Grid (Left Directory Column + Right Stage) ---
     const spreadWorkbench = browserDocument.createElement("div");
     spreadWorkbench.className = "magazine-spread-workbench";
 
@@ -967,7 +945,6 @@
     spreadWorkbench.appendChild(directoryColumn);
     spreadWorkbench.appendChild(stageColumn);
 
-    mountElement.appendChild(mobileJumpStrip);
     mountElement.appendChild(spreadWorkbench);
 
     synchronizeSpreadState();

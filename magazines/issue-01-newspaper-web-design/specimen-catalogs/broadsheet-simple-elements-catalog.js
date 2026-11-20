@@ -359,11 +359,25 @@
   list-style-type: "❖  ";
 }
 
+.nrki-ordered-list li {
+  counter-increment: nrki-ordered-counter;
+  position: relative;
+  padding-left: 2.25rem;
+}
+
 .nrki-ordered-list li::before {
   content: counter(nrki-ordered-counter, decimal-leading-zero) ".";
+  position: absolute;
+  left: 0;
+  top: 0.14rem;
   font-family: var(--nrki-font-mono);
   font-weight: 700;
   color: var(--nrki-accent-primary);
+}
+
+.nrki-checklist-entry {
+  position: relative;
+  padding-left: 1.55rem;
 }`,
     },
 

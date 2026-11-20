@@ -8,9 +8,9 @@
  *      Spread: a ruled directory column beside ONE active specimen card at
  *      a time (with an optional `Full Sheet` toggle), avoiding endless scrolling.
  *   2. Mobile (`<= 767px`) switches seamlessly to a Pocket Newspaper stream:
- *      edge-to-edge scrolling, top reading-progress hairline, horizontal scroll
- *      quick-jump strip, tactile specimen dividers, and a sticky bottom folio
- *      bar with a 1-tap Theme & Mode bottom sheet.
+ *      edge-to-edge scrolling, top reading-progress hairline, tactile specimen
+ *      dividers, and a sticky bottom folio bar with a 1-tap Theme & Mode
+ *      bottom sheet.
  *   3. Strictly zero `!important` — isolated cleanly in `@layer magazine.shell`.
  * ============================================================================
  */
@@ -523,7 +523,6 @@
 
     /* Hide mobile-only controls cleanly on desktop & tablet */
     .magazine-mobile-progress-track,
-    .magazine-mobile-jump-strip,
     .magazine-mobile-folio-divider,
     .magazine-mobile-bottom-bar,
     .magazine-mobile-theme-sheet {
@@ -786,8 +785,8 @@
      Why mobile breaks away from the desktop Broadsheet Spread:
      Vertical scrolling feels native on handheld screens, so mobile hides
      the sidebar directory & top nav duplication, stretches specimens cleanly
-     across full width, shows a horizontal scroll-snap Quick-Jump strip,
-     and pins a 1-thumb Sticky Bottom Folio Bar + Theme/Mode Sheet.
+     across full width, and pins a 1-thumb Sticky Bottom Folio Bar +
+     Theme/Mode Sheet.
      ======================================================================== */
   @media screen and (max-width: 767px) {
     .magazine-masthead-inner,
@@ -818,28 +817,43 @@
       grid-template-columns: 1fr;
     }
 
-    /* Horizontal scroll-snap chip rail for rapid jumping on narrow screens */
-    .magazine-mobile-jump-strip {
-      display: flex;
-      gap: 0.45rem;
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      padding-block: 0.45rem 0.65rem;
-      margin-bottom: 0.75rem;
-      border-bottom: 1px solid var(--nrki-border-faint);
+    .magazine-spread-workbench > * {
+      min-width: 0;
     }
 
-    .magazine-mobile-jump-chip {
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      padding: 0.28rem 0.62rem;
-      border: 1px solid var(--nrki-border-subtle);
-      border-radius: var(--nrki-radius-pill);
-      background-color: var(--nrki-surface-elevated);
-      color: var(--nrki-ink-heading);
-      font-family: var(--nrki-font-mono);
-      font-size: 0.68rem;
-      text-decoration: none;
+    .specimen-catalog-stack > * {
+      min-width: 0;
+    }
+
+    .magazine-colophon-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-token-swatch-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-token-swatch {
+      min-width: 0;
+    }
+
+    .magazine-token-meta {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .magazine-index-link {
+      flex-wrap: wrap;
+    }
+
+    .magazine-pagination-bar {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+
+    .magazine-pagination-bar .nrki-button {
+      width: 100%;
     }
 
     .magazine-mobile-folio-divider {
@@ -854,9 +868,28 @@
       color: var(--nrki-ink-muted);
     }
 
+    .specimen-container {
+      min-width: 0;
+      max-width: 100%;
+    }
+
     .specimen-container-header,
     .specimen-preview-stage {
       padding: 0.9rem;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .specimen-code-drawer-bar {
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.4rem 0.9rem;
+    }
+
+    .specimen-code-drawer pre {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.76rem;
     }
 
     /* Sticky Bottom Pocket Newspaper Folio Bar */

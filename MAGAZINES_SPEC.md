@@ -117,9 +117,9 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 
 ### Mobile (`max-width: 767px`) — Pocket Newspaper Edition
 - On mobile, natural vertical scrolling **is** ergonomic—so Issue 01 shifts into a dedicated mobile newspaper layout:
-  1. **Edge-to-Edge Scrollable Stream:** All specimens in the active section stack cleanly with minimal side gutters (`0.75rem`) and tactile print dividers (`ARTICLE 02 OF 11 · ✦`) so zero horizontal space is wasted.
+  1. **Edge-to-Edge Scrollable Stream:** All specimens in the active section stack cleanly with minimal side gutters (`0.75rem`) and tactile print dividers (`SPECIMEN 02 OF 13 · ✦`) so zero horizontal space is wasted and no redundant mobile quick-jump strip clutters the top of the section.
   2. **Top Reading Progress Ink Rule:** 3px fixed top indicator bar tracking scroll progress through the section.
-  3. **Horizontal Scroll-Snap Quick-Jump Strip:** Swipeable pill index at the top of each catalog section (`01`, `02`, `03`…).
+  3. **Mobile Flow & Inline-Child Safeguards:** Ordered list items (`.nrki-ordered-list li`), checklist entries (`.nrki-checklist-entry`), and accordion summaries (`.nrki-accordion-summary`) keep normal block text flow (`position: relative` with absolutely positioned `::before`/`::after` markers) rather than applying `display: grid` or `display: flex` to text containers, ensuring inline `<code>`, `<strong>`, `<em>`, and `<a>` elements flow naturally inline inside sentences on narrow viewports. Multi-column grids (`.nrki-card-grid`, `.nrki-shelf-grid`, `.nrki-about-columns`, `.nrki-skills-grid`, `.magazine-colophon-grid`, `.magazine-token-swatch-grid`) collapse cleanly to `1fr` with `min-width: 0` on mobile (`max-width: 767px`).
   4. **Sticky Bottom Pocket Folio Bar + 1-Tap Theme Drawer:** Fixed bottom navigation (`Front`, `Layouts`, `Elem`, `Comp`, `Info`) paired with a compact theme trigger (`Classic ☀`) that opens an accessible bottom sheet to switch Themes (`Classic / Ancient / Minimalistic / UwU`) & Modes (`Light / Dark`) seamlessly one-handed.
 
 ---
