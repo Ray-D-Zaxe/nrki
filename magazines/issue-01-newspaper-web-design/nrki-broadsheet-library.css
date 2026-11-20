@@ -1,0 +1,2169 @@
+/**
+ * ============================================================================
+ * NRKI BROADSHEET — STANDALONE EDITORIAL & NEWSPAPER CSS LIBRARY
+ * ----------------------------------------------------------------------------
+ * Version: 2.0.0 (Magazine Issue 01 Baseline)
+ *
+ * Design Philosophy & Inspirations:
+ *   - Print Broadsheets: 1px hairlines, 3px double rules, disciplined grids.
+ *   - Tufte CSS: Readable line measure (43rem), marginal `.nrki-sidenote` notes.
+ *   - Pico CSS & Matcha CSS: Clean styling for raw semantic HTML + explicit
+ *     `.nrki-*` classes so the stylesheet works both classless and componentized.
+ *   - Open Props: Multi-tier `--nrki-*` custom properties paired with native
+ *     CSS `@layer` cascade ordering.
+ *
+ * Cascade Architecture (ZERO `!important` anywhere in this stylesheet):
+ *   Declaration order establishes strict precedence without raising selector
+ *   specificity or resorting to `!important`. Later layers always beat earlier
+ *   layers; external consumers can import this file inside their own lower
+ *   layer or add an override layer after `nrki.utilities`.
+ * ============================================================================
+ */
+
+@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS & CONTAINER-SCOPED THEME MODES (`@layer nrki.tokens`)
+   --------------------------------------------------------------------------
+   Why `[data-theme]` is scoped to both `:root` AND individual containers:
+   Attaching custom properties to attribute selectors lets an entire page set
+   `<html data-theme="dark">` while any isolated specimen card, callout, or
+   article section renders independently in `light`, `dark`, `accent`,
+   `faded`, or `uwu`. Notice `light` is defined on `:root, [data-theme="light"]`
+   so an explicit `[data-theme="light"]` box inside a dark page still resets
+   to daylight botanical newsprint.
+   ========================================================================== */
+@layer nrki.tokens {
+  :root {
+    /* Typography Stacks */
+    --nrki-font-serif: Georgia, "Times New Roman", Baskerville, serif;
+    --nrki-font-sans: Arial, Helvetica, system-ui, -apple-system, sans-serif;
+    --nrki-font-mono: "Courier New", Courier, monospace;
+
+    /* Fluid Layout Constraints */
+    --nrki-shell-max-width: 72rem;
+    --nrki-reading-max-width: 43rem;
+
+    /* Rhythmic Spacing Scale */
+    --nrki-space-1: 0.25rem;
+    --nrki-space-2: 0.5rem;
+    --nrki-space-3: 0.85rem;
+    --nrki-space-4: 1.25rem;
+    --nrki-space-5: 2rem;
+    --nrki-space-6: 3.25rem;
+
+    /* Default Broadsheet Geometry (Sharp newsprint edges; overridden by `uwu`) */
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+    --nrki-transition-fast: 140ms ease;
+    --nrki-shadow-surface: 0 6px 18px rgba(0, 0, 0, 0.06);
+    --nrki-shadow-overlay: 0 20px 50px rgba(0, 0, 0, 0.35);
+  }
+
+  /* ------------------------------------------------------------------------
+     Mode 01: LIGHT / DAY (Default Botanical Newsprint)
+     ------------------------------------------------------------------------ */
+  :root,
+  [data-theme="light"] {
+    color-scheme: light;
+
+    --nrki-font-display: var(--nrki-font-serif);
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+
+    /* Surfaces */
+    --nrki-surface-canvas: #f2efe7;
+    --nrki-surface-panel: #e8e6dc;
+    --nrki-surface-inset: #dcdecf;
+    --nrki-surface-elevated: #f8f7f2;
+
+    /* Inks */
+    --nrki-ink-heading: #171b16;
+    --nrki-ink-body: #31362f;
+    --nrki-ink-muted: #5d6359;
+    --nrki-ink-faint: #848b7e;
+    --nrki-ink-on-accent: #f8f7f2;
+
+    /* Accents */
+    --nrki-accent-primary: #2d4f36;
+    --nrki-accent-primary-hover: #1f3725;
+    --nrki-accent-primary-tint: #deebe0;
+
+    --nrki-accent-secondary: #475e4e;
+    --nrki-accent-secondary-hover: #324337;
+    --nrki-accent-secondary-tint: #e4ebe5;
+
+    --nrki-accent-highlight: #6d673b;
+    --nrki-accent-highlight-hover: #524d29;
+    --nrki-accent-highlight-tint: #edeacf;
+
+    /* Borders & Rules */
+    --nrki-border-strong: #171b16;
+    --nrki-border-subtle: #848c7e;
+    --nrki-border-faint: #c9cebe;
+
+    /* Status Feedback */
+    --nrki-status-info-ink: #264336;
+    --nrki-status-info-surface: #e2ede7;
+    --nrki-status-info-border: #4d7a65;
+
+    --nrki-status-success-ink: #1f4228;
+    --nrki-status-success-surface: #ddeede;
+    --nrki-status-success-border: #417551;
+
+    --nrki-status-warning-ink: #665005;
+    --nrki-status-warning-surface: #f5eed3;
+    --nrki-status-warning-border: #997c1a;
+
+    --nrki-status-danger-ink: #6f221b;
+    --nrki-status-danger-surface: #f4dedd;
+    --nrki-status-danger-border: #943932;
+
+    /* Interactive & Code */
+    --nrki-link-ink: var(--nrki-accent-primary);
+    --nrki-link-hover-ink: var(--nrki-accent-highlight);
+    --nrki-focus-ring: #2d4f36;
+    --nrki-selection-surface: #c9d6c3;
+    --nrki-selection-ink: #171b16;
+    --nrki-code-surface: #e3e6dd;
+    --nrki-code-ink: #283329;
+  }
+
+  /* ------------------------------------------------------------------------
+     Mode 02: DARK / NIGHT (Reversed Pine-Charcoal Broadsheet)
+     ------------------------------------------------------------------------ */
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    --nrki-font-display: var(--nrki-font-serif);
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+
+    /* Surfaces */
+    --nrki-surface-canvas: #121613;
+    --nrki-surface-panel: #181d19;
+    --nrki-surface-inset: #222923;
+    --nrki-surface-elevated: #1b211c;
+
+    /* Inks */
+    --nrki-ink-heading: #e6e8df;
+    --nrki-ink-body: #c2c7ba;
+    --nrki-ink-muted: #8b9484;
+    --nrki-ink-faint: #565f50;
+    --nrki-ink-on-accent: #121613;
+
+    /* Accents */
+    --nrki-accent-primary: #7ea383;
+    --nrki-accent-primary-hover: #98bfa0;
+    --nrki-accent-primary-tint: #1e2e22;
+
+    --nrki-accent-secondary: #90a58a;
+    --nrki-accent-secondary-hover: #adc2a6;
+    --nrki-accent-secondary-tint: #242f24;
+
+    --nrki-accent-highlight: #c4b574;
+    --nrki-accent-highlight-hover: #dbcc88;
+    --nrki-accent-highlight-tint: #332f1c;
+
+    /* Borders & Rules */
+    --nrki-border-strong: #8b9484;
+    --nrki-border-subtle: #3a4438;
+    --nrki-border-faint: #262f25;
+
+    /* Status Feedback */
+    --nrki-status-info-ink: #a0cebc;
+    --nrki-status-info-surface: #162721;
+    --nrki-status-info-border: #3b6354;
+
+    --nrki-status-success-ink: #9ed4a9;
+    --nrki-status-success-surface: #15291b;
+    --nrki-status-success-border: #35633e;
+
+    --nrki-status-warning-ink: #eed382;
+    --nrki-status-warning-surface: #2b2513;
+    --nrki-status-warning-border: #755f24;
+
+    --nrki-status-danger-ink: #f09f99;
+    --nrki-status-danger-surface: #301a19;
+    --nrki-status-danger-border: #7d332f;
+
+    /* Interactive & Code */
+    --nrki-link-ink: #8bb892;
+    --nrki-link-hover-ink: #c4b574;
+    --nrki-focus-ring: #98bfa0;
+    --nrki-selection-surface: #334836;
+    --nrki-selection-ink: #f0f4ee;
+    --nrki-code-surface: #1a221b;
+    --nrki-code-ink: #dbe3d6;
+  }
+
+  /* ------------------------------------------------------------------------
+     Mode 03: ACCENT / HIGHLIGHTED (Deep Botanical Forest Feature Surface)
+     Designed for high-emphasis editorial bands, banners, and pull-out boxes.
+     ------------------------------------------------------------------------ */
+  [data-theme="accent"] {
+    color-scheme: dark;
+
+    --nrki-font-display: var(--nrki-font-serif);
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+
+    /* Surfaces */
+    --nrki-surface-canvas: #1d3524;
+    --nrki-surface-panel: #24412d;
+    --nrki-surface-inset: #2b4d36;
+    --nrki-surface-elevated: #172b1d;
+
+    /* Inks */
+    --nrki-ink-heading: #f8f7f2;
+    --nrki-ink-body: #e1e7df;
+    --nrki-ink-muted: #b7c8bb;
+    --nrki-ink-faint: #7d9683;
+    --nrki-ink-on-accent: #152419;
+
+    /* Accents (Oxidized Gold stands out cleanly against Deep Forest) */
+    --nrki-accent-primary: #d8ca7c;
+    --nrki-accent-primary-hover: #eadc8f;
+    --nrki-accent-primary-tint: #324426;
+
+    --nrki-accent-secondary: #a8d4b2;
+    --nrki-accent-secondary-hover: #c3e6cb;
+    --nrki-accent-secondary-tint: #264831;
+
+    --nrki-accent-highlight: #f0cf7b;
+    --nrki-accent-highlight-hover: #fae09b;
+    --nrki-accent-highlight-tint: #3b4022;
+
+    /* Borders & Rules */
+    --nrki-border-strong: #d8ca7c;
+    --nrki-border-subtle: #4d7357;
+    --nrki-border-faint: #33543c;
+
+    /* Status Feedback */
+    --nrki-status-info-ink: #c6ebe0;
+    --nrki-status-info-surface: #1c3d35;
+    --nrki-status-info-border: #559684;
+
+    --nrki-status-success-ink: #b9ecc3;
+    --nrki-status-success-surface: #163b22;
+    --nrki-status-success-border: #4e9964;
+
+    --nrki-status-warning-ink: #f7de8d;
+    --nrki-status-warning-surface: #3b3516;
+    --nrki-status-warning-border: #b39836;
+
+    --nrki-status-danger-ink: #fbbcb7;
+    --nrki-status-danger-surface: #40201f;
+    --nrki-status-danger-border: #b3554f;
+
+    /* Interactive & Code */
+    --nrki-link-ink: #d8ca7c;
+    --nrki-link-hover-ink: #f8f7f2;
+    --nrki-focus-ring: #d8ca7c;
+    --nrki-selection-surface: #365c41;
+    --nrki-selection-ink: #f8f7f2;
+    --nrki-code-surface: #14261a;
+    --nrki-code-ink: #e9efe7;
+  }
+
+  /* ------------------------------------------------------------------------
+     Mode 04: FADED / LOW-CONTRAST (Sun-Bleached Archival Microfilm)
+     Softened contrast for calm, glare-free footnotes, drafts, & archives.
+     ------------------------------------------------------------------------ */
+  [data-theme="faded"] {
+    color-scheme: light;
+
+    --nrki-font-display: var(--nrki-font-serif);
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+
+    /* Surfaces */
+    --nrki-surface-canvas: #e8e5dc;
+    --nrki-surface-panel: #e0ddd3;
+    --nrki-surface-inset: #d6d2c7;
+    --nrki-surface-elevated: #eeece4;
+
+    /* Inks */
+    --nrki-ink-heading: #42473f;
+    --nrki-ink-body: #555b52;
+    --nrki-ink-muted: #70766c;
+    --nrki-ink-faint: #969b91;
+    --nrki-ink-on-accent: #f4f3ee;
+
+    /* Accents */
+    --nrki-accent-primary: #586e5c;
+    --nrki-accent-primary-hover: #455848;
+    --nrki-accent-primary-tint: #dce3dc;
+
+    --nrki-accent-secondary: #68756a;
+    --nrki-accent-secondary-hover: #535f55;
+    --nrki-accent-secondary-tint: #e0e4df;
+
+    --nrki-accent-highlight: #7b7759;
+    --nrki-accent-highlight-hover: #625f45;
+    --nrki-accent-highlight-tint: #e6e4d5;
+
+    /* Borders & Rules */
+    --nrki-border-strong: #6c7268;
+    --nrki-border-subtle: #a7aca1;
+    --nrki-border-faint: #ccc9be;
+
+    /* Status Feedback */
+    --nrki-status-info-ink: #476056;
+    --nrki-status-info-surface: #dde4e0;
+    --nrki-status-info-border: #7d968c;
+
+    --nrki-status-success-ink: #435e48;
+    --nrki-status-success-surface: #dce5dc;
+    --nrki-status-success-border: #76947c;
+
+    --nrki-status-warning-ink: #6a5f3b;
+    --nrki-status-warning-surface: #eae6d5;
+    --nrki-status-warning-border: #a39567;
+
+    --nrki-status-danger-ink: #724a46;
+    --nrki-status-danger-surface: #eadedd;
+    --nrki-status-danger-border: #a67a75;
+
+    /* Interactive & Code */
+    --nrki-link-ink: #506654;
+    --nrki-link-hover-ink: #7b7759;
+    --nrki-focus-ring: #586e5c;
+    --nrki-selection-surface: #d1d5cb;
+    --nrki-selection-ink: #3d423a;
+    --nrki-code-surface: #dcd9cf;
+    --nrki-code-ink: #4a5047;
+  }
+
+  /* ------------------------------------------------------------------------
+     Mode 05: UwU / OwO (Playful Sakura-Cream & Berry-Plum Zine Edition)
+     Shows how tokens reshape both color palette AND corner geometry (`6px–999px`)
+     without modifying a single component layout selector.
+     ------------------------------------------------------------------------ */
+  [data-theme="uwu"] {
+    color-scheme: light;
+
+    --nrki-font-display: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+    --nrki-radius-control: 8px;
+    --nrki-radius-surface: 12px;
+    --nrki-radius-pill: 999px;
+
+    /* Surfaces */
+    --nrki-surface-canvas: #fff4f8;
+    --nrki-surface-panel: #fce8f0;
+    --nrki-surface-inset: #f5dcf0;
+    --nrki-surface-elevated: #ffffff;
+
+    /* Inks */
+    --nrki-ink-heading: #3d1f36;
+    --nrki-ink-body: #522f4a;
+    --nrki-ink-muted: #7d5673;
+    --nrki-ink-faint: #b38ea9;
+    --nrki-ink-on-accent: #ffffff;
+
+    /* Accents */
+    --nrki-accent-primary: #c93b7e;
+    --nrki-accent-primary-hover: #a62964;
+    --nrki-accent-primary-tint: #fde2ef;
+
+    --nrki-accent-secondary: #7a52b3;
+    --nrki-accent-secondary-hover: #603b94;
+    --nrki-accent-secondary-tint: #ede2fc;
+
+    --nrki-accent-highlight: #d97706;
+    --nrki-accent-highlight-hover: #b45309;
+    --nrki-accent-highlight-tint: #fef0d6;
+
+    /* Borders & Rules */
+    --nrki-border-strong: #873c73;
+    --nrki-border-subtle: #d69dc6;
+    --nrki-border-faint: #f0cde6;
+
+    /* Status Feedback */
+    --nrki-status-info-ink: #5a3891;
+    --nrki-status-info-surface: #eee5fc;
+    --nrki-status-info-border: #9f7be0;
+
+    --nrki-status-success-ink: #1e6b48;
+    --nrki-status-success-surface: #ddf7ea;
+    --nrki-status-success-border: #4ea87f;
+
+    --nrki-status-warning-ink: #924c07;
+    --nrki-status-warning-surface: #fef0d6;
+    --nrki-status-warning-border: #d9913b;
+
+    --nrki-status-danger-ink: #991b3a;
+    --nrki-status-danger-surface: #fde2e8;
+    --nrki-status-danger-border: #d65c78;
+
+    /* Interactive & Code */
+    --nrki-link-ink: #c93b7e;
+    --nrki-link-hover-ink: #7a52b3;
+    --nrki-focus-ring: #c93b7e;
+    --nrki-selection-surface: #f7c6df;
+    --nrki-selection-ink: #3d1f36;
+    --nrki-code-surface: #f9e6f4;
+    --nrki-code-ink: #4a2342;
+  }
+}
+
+
+/* ==========================================================================
+   2. RESET & BASE TYPOGRAPHIC DEFAULTS (`@layer nrki.reset`)
+   ========================================================================== */
+@layer nrki.reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-body);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-serif);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  /* Transition tokens only when actively toggling full-page themes so navigation
+     between HTML pages never produces a white flash */
+  html.nrki-theme-animating,
+  html.nrki-theme-animating body {
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  ::selection {
+    background-color: var(--nrki-selection-surface);
+    color: var(--nrki-selection-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--nrki-border-subtle);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color var(--nrki-transition-fast), text-decoration-color var(--nrki-transition-fast);
+  }
+
+  a:hover {
+    color: var(--nrki-link-hover-ink);
+    text-decoration-color: currentColor;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--nrki-focus-ring);
+    outline-offset: 3px;
+  }
+}
+
+
+/* ==========================================================================
+   3. ATOMIC ELEMENTS & PRIMITIVES (`@layer nrki.elements`)
+   --------------------------------------------------------------------------
+   Covers headings, rules, Tufte marginalia sidenotes, all button variants,
+   links, breadcrumbs, badges, tags, lists, quotes, forms, tables, callouts,
+   and media figures.
+   ========================================================================== */
+@layer nrki.elements {
+  /* --- Headings & Editorial Typography --- */
+  .nrki-eyebrow,
+  .nrki-edition-line,
+  .nrki-masthead-note,
+  .nrki-folio,
+  .nrki-meta-label {
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-eyebrow {
+    margin-bottom: 0.6rem;
+    color: var(--nrki-accent-primary);
+    font-weight: 700;
+  }
+
+  .nrki-lead-summary {
+    max-width: 42rem;
+    color: var(--nrki-ink-muted);
+    font-size: clamp(1.04rem, 1.9vw, 1.24rem);
+    line-height: 1.55;
+  }
+
+  .nrki-quiet-note {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    color: var(--nrki-ink-muted);
+    font-size: 0.92rem;
+    font-style: italic;
+  }
+
+  .nrki-drop-cap::first-letter {
+    float: left;
+    margin-right: 0.35rem;
+    margin-top: 0.12rem;
+    padding: 0.14rem 0.42rem;
+    border: 1px solid var(--nrki-border-strong);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 0.92;
+  }
+
+  mark {
+    padding: 0.05rem 0.25rem;
+    background-color: var(--nrki-accent-highlight-tint);
+    color: var(--nrki-ink-heading);
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-bottom-width: 2px;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78em;
+    font-weight: 700;
+  }
+
+  abbr[title] {
+    text-decoration: underline dotted var(--nrki-border-subtle);
+    cursor: help;
+  }
+
+  code,
+  pre {
+    font-family: var(--nrki-font-mono);
+    background-color: var(--nrki-code-surface);
+    color: var(--nrki-code-ink);
+    border-radius: var(--nrki-radius-control);
+  }
+
+  code {
+    padding: 0.12rem 0.35rem;
+    font-size: 0.88em;
+  }
+
+  pre {
+    margin: 1rem 0;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    border-left: 3px solid var(--nrki-accent-primary);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  pre code {
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+  }
+
+  /* --- Section Headers, Structural Rules & Tufte-Inspired Sidenotes --- */
+  .nrki-page-hero {
+    padding-block: clamp(2.25rem, 5vw, 4rem);
+    border-bottom: 3px double var(--nrki-border-strong);
+  }
+
+  .nrki-page-hero h1 {
+    max-width: 16ch;
+    margin-bottom: 0.9rem;
+    font-size: clamp(2.2rem, 5.5vw, 4.1rem);
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+
+  .nrki-section-heading h2 {
+    margin-bottom: 0.4rem;
+    font-size: clamp(1.65rem, 3.2vw, 2.45rem);
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+  }
+
+  .nrki-section-heading-note {
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  hr,
+  .nrki-rule-single {
+    border: 0;
+    border-top: 1px solid var(--nrki-border-subtle);
+    margin-block: 1.5rem;
+  }
+
+  .nrki-rule-double {
+    border: 0;
+    border-top: 3px double var(--nrki-border-strong);
+    margin-block: 1.75rem;
+  }
+
+  .nrki-rule-dashed {
+    border: 0;
+    border-top: 1px dashed var(--nrki-border-subtle);
+    margin-block: 1.5rem;
+  }
+
+  /* Tufte-inspired marginalia note positioned beside editorial copy */
+  .nrki-sidenote-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .nrki-sidenote {
+    padding: 0.6rem 0.85rem;
+    border-left: 2px solid var(--nrki-accent-primary);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    border-radius: var(--nrki-radius-control);
+  }
+
+  /* --- Buttons (All Variants, Sizes & States) --- */
+  .nrki-button,
+  .nrki-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.48rem 0.9rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: transparent;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .nrki-button:hover:not(:disabled),
+  .nrki-theme-toggle:hover:not(:disabled) {
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    border-color: var(--nrki-ink-heading);
+    text-decoration: none;
+  }
+
+  .nrki-button-primary {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-button-primary:hover:not(:disabled) {
+    background-color: var(--nrki-accent-primary-hover);
+    border-color: var(--nrki-accent-primary-hover);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-button-secondary {
+    background-color: var(--nrki-surface-panel);
+    border-color: var(--nrki-border-subtle);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-secondary:hover:not(:disabled) {
+    background-color: var(--nrki-surface-inset);
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-ghost {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-button-ghost:hover:not(:disabled) {
+    border-color: var(--nrki-border-subtle);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-danger {
+    background-color: var(--nrki-status-danger-surface);
+    border-color: var(--nrki-status-danger-border);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-button-danger:hover:not(:disabled) {
+    background-color: var(--nrki-status-danger-ink);
+    border-color: var(--nrki-status-danger-ink);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-button-small {
+    padding: 0.28rem 0.62rem;
+    font-size: 0.66rem;
+  }
+
+  .nrki-button-large {
+    padding: 0.72rem 1.35rem;
+    font-size: 0.82rem;
+  }
+
+  .nrki-button:disabled {
+    opacity: 0.48;
+    cursor: not-allowed;
+  }
+
+  .nrki-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  /* --- Links & Breadcrumbs --- */
+  .nrki-text-link,
+  .nrki-back-link {
+    display: inline-block;
+    color: var(--nrki-link-ink);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration-thickness: 1px;
+  }
+
+  .nrki-text-link:hover,
+  .nrki-back-link:hover {
+    color: var(--nrki-link-hover-ink);
+  }
+
+  .nrki-skip-link {
+    position: absolute;
+    top: 1rem;
+    left: -9999px;
+    z-index: 100;
+    padding: 0.5rem 0.85rem;
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+
+  .nrki-skip-link:focus {
+    left: 1rem;
+  }
+
+  .nrki-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-breadcrumb li + li::before {
+    content: "/";
+    margin-right: 0.45rem;
+    color: var(--nrki-ink-faint);
+  }
+
+  /* --- Badges, Stamps & Tag Pills --- */
+  .nrki-badge {
+    display: inline-block;
+    padding: 0.16rem 0.5rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .nrki-badge-accent {
+    background-color: var(--nrki-accent-primary-tint);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-badge-highlight {
+    background-color: var(--nrki-accent-highlight-tint);
+    border-color: var(--nrki-accent-highlight);
+    color: var(--nrki-accent-highlight);
+  }
+
+  .nrki-badge-success {
+    background-color: var(--nrki-status-success-surface);
+    border-color: var(--nrki-status-success-border);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-badge-warning {
+    background-color: var(--nrki-status-warning-surface);
+    border-color: var(--nrki-status-warning-border);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-badge-danger {
+    background-color: var(--nrki-status-danger-surface);
+    border-color: var(--nrki-status-danger-border);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-rating-stamp {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 0.22rem 0.55rem;
+    border: 1px solid var(--nrki-accent-highlight);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-accent-highlight-tint);
+    color: var(--nrki-accent-highlight);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .nrki-tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0.35rem 0 0.75rem;
+    padding: 0;
+  }
+
+  .nrki-tag-pill {
+    display: inline-block;
+    padding: 0.14rem 0.48rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    line-height: 1.3;
+  }
+
+  .nrki-connected-chip {
+    display: inline-block;
+    padding: 0.14rem 0.48rem;
+    border: 1px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-connected-chip:hover {
+    background-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  /* --- Lists & Metadata --- */
+  .nrki-editorial-list {
+    margin: 0.75rem 0 1.25rem;
+    padding-left: 1.35rem;
+  }
+
+  .nrki-editorial-list li {
+    margin-bottom: 0.35rem;
+  }
+
+  .nrki-editorial-list li::marker {
+    color: var(--nrki-accent-primary);
+    font-weight: 700;
+  }
+
+  .nrki-inline-meta-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nrki-inline-meta-list li {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-inline-meta-list li:not(:last-child)::after {
+    content: "·";
+    margin-left: 0.35rem;
+  }
+
+  .nrki-definition-list {
+    margin: 0.75rem 0;
+    border-top: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-definition-list dt {
+    padding-top: 0.65rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-definition-list dd {
+    margin: 0.2rem 0 0;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    color: var(--nrki-ink-body);
+    font-size: 0.94rem;
+  }
+
+  /* --- Editorial Blockquotes --- */
+  blockquote,
+  .nrki-quote {
+    margin: 1.25rem 0;
+    padding: 0.85rem 1.25rem;
+    border-left: 3px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-style: italic;
+  }
+
+  blockquote cite,
+  .nrki-quote-cite {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    font-style: normal;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* --- Forms, Inputs & Validation States --- */
+  .nrki-form-stack {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .nrki-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .nrki-label {
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-input,
+  .nrki-textarea,
+  .nrki-select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    transition: border-color var(--nrki-transition-fast), background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-input::placeholder,
+  .nrki-textarea::placeholder {
+    color: var(--nrki-ink-faint);
+  }
+
+  .nrki-input:hover,
+  .nrki-textarea:hover,
+  .nrki-select:hover {
+    border-color: var(--nrki-border-strong);
+  }
+
+  .nrki-input-invalid {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+  }
+
+  .nrki-field-help {
+    margin: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.78rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-field-error {
+    margin: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-checkbox-row,
+  .nrki-radio-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.88rem;
+    color: var(--nrki-ink-body);
+    cursor: pointer;
+  }
+
+  .nrki-checkbox-row input,
+  .nrki-radio-row input {
+    accent-color: var(--nrki-accent-primary);
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* --- Tables & Data Ledgers --- */
+  .nrki-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+  }
+
+  .nrki-table th,
+  .nrki-table td {
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-table th {
+    border-bottom: 2px solid var(--nrki-border-strong);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-table-compact th,
+  .nrki-table-compact td {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.85rem;
+  }
+
+  .nrki-table-striped tbody tr:nth-child(even) {
+    background-color: var(--nrki-surface-canvas);
+  }
+
+  .nrki-cell-numeric {
+    text-align: right;
+    font-family: var(--nrki-font-mono);
+  }
+
+  /* --- Callouts & Editorial Notices --- */
+  .nrki-callout {
+    padding: 0.9rem 1.15rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-left-width: 4px;
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    margin-block: 1rem;
+  }
+
+  .nrki-callout-title {
+    margin-bottom: 0.25rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .nrki-callout-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-callout-info .nrki-callout-title {
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-callout-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-callout-success .nrki-callout-title {
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-callout-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-callout-warning .nrki-callout-title {
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-callout-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-callout-danger .nrki-callout-title {
+    color: var(--nrki-status-danger-ink);
+  }
+
+  /* --- Embedded Media Figures --- */
+  .nrki-media-figure {
+    margin: 1.15rem 0;
+    padding: 0.85rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-media-header {
+    margin-bottom: 0.55rem;
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-media-figure img,
+  .nrki-media-figure video,
+  .nrki-media-figure svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-media-figure audio {
+    display: block;
+    width: 100%;
+  }
+
+  .nrki-media-caption {
+    margin-top: 0.5rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.74rem;
+  }
+}
+
+
+/* ==========================================================================
+   4. COMPLEX LAYOUT & INTERACTIVE COMPONENTS (`@layer nrki.components`)
+   ========================================================================== */
+@layer nrki.components {
+  /* --- Shell & Multi-Column Grids --- */
+  .nrki-page-shell {
+    width: min(100% - 3rem, var(--nrki-shell-max-width));
+    margin-inline: auto;
+  }
+
+  .nrki-lead-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(14rem, 0.85fr);
+    gap: clamp(1.5rem, 5vw, 4.5rem);
+    align-items: center;
+    padding-block: clamp(2rem, 5vw, 3.75rem);
+    border-bottom: 3px double var(--nrki-border-strong);
+  }
+
+  .nrki-lead-story h1 {
+    max-width: 15ch;
+    margin-bottom: 1rem;
+    font-size: clamp(2.2rem, 5.2vw, 4.2rem);
+    letter-spacing: -0.05em;
+    line-height: 1.03;
+  }
+
+  .nrki-lead-aside {
+    border-left: 1px solid var(--nrki-border-subtle);
+    padding-left: clamp(1.15rem, 2.5vw, 1.85rem);
+  }
+
+  .nrki-aside-label {
+    margin-bottom: 0.7rem;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-lead-aside ol {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .nrki-lead-aside li {
+    margin-block: 0.55rem;
+  }
+
+  .nrki-section-block {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.75fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    padding-block: clamp(2rem, 4.5vw, 3.5rem);
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .nrki-shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 1.35rem;
+  }
+
+  .nrki-columns-prose {
+    columns: 2 17rem;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--nrki-border-faint);
+  }
+
+  /* --- Newspaper Masthead, Wordmark & Primary Navigation --- */
+  .nrki-site-header {
+    padding-top: 1rem;
+    text-align: center;
+  }
+
+  .nrki-masthead-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1.25rem;
+    padding-block: 0.55rem;
+    border-top: 2px solid var(--nrki-border-strong);
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-edition-line {
+    margin: 0;
+    color: var(--nrki-ink-body);
+    font-weight: 700;
+  }
+
+  .nrki-masthead-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 0.85rem;
+  }
+
+  .nrki-masthead-dateline {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nrki-dateline-edition {
+    padding: 0.12rem 0.45rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .nrki-wordmark {
+    display: inline-block;
+    margin-block: 0.35rem 0.1rem;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-size: clamp(3.4rem, 10vw, 6.2rem);
+    font-weight: 700;
+    letter-spacing: -0.09em;
+    line-height: 1.02;
+    text-decoration: none;
+  }
+
+  .nrki-wordmark-compact {
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    letter-spacing: -0.06em;
+  }
+
+  .nrki-masthead-tagline {
+    margin-bottom: 1rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  .nrki-site-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem 2.25rem;
+    border-top: 3px double var(--nrki-border-strong);
+    border-bottom: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    padding: 0.65rem 0.85rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-site-nav a {
+    text-decoration: none;
+    color: var(--nrki-ink-body);
+    padding-block: 0.1rem;
+  }
+
+  .nrki-site-nav a:hover,
+  .nrki-site-nav a[aria-current="page"] {
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-site-nav a[aria-current="page"] {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35rem;
+  }
+
+  /* --- Cards: Editorial Card, Link Card, Pinboard Card, Media Ledger Card --- */
+  .nrki-card,
+  .nrki-pin-card,
+  .nrki-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), box-shadow var(--nrki-transition-fast);
+  }
+
+  .nrki-card-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .nrki-card-link:hover,
+  .nrki-pin-card:hover {
+    transform: translateY(-2px);
+    background-color: var(--nrki-surface-panel);
+    border-color: var(--nrki-border-strong);
+    box-shadow: var(--nrki-shadow-surface);
+    color: inherit;
+  }
+
+  .nrki-card-link:hover h3,
+  .nrki-pin-card:hover h3 {
+    color: var(--nrki-accent-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .nrki-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-card h3,
+  .nrki-pin-card h3,
+  .nrki-media-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  .nrki-card p,
+  .nrki-pin-card p,
+  .nrki-media-card-notes {
+    margin-bottom: 0.9rem;
+    color: var(--nrki-ink-body);
+    font-size: 0.93rem;
+  }
+
+  .nrki-card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--nrki-border-faint);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.73rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  /* Brass pin accent at top edge of Pinboard cards (PaperCSS-inspired tactile detail) */
+  .nrki-pin-card::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.75rem;
+    height: 9px;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-accent-highlight-tint);
+    border: 1px solid var(--nrki-accent-highlight);
+  }
+
+  .nrki-card-media {
+    position: relative;
+    margin: 0 0 0.9rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nrki-card-media svg,
+  .nrki-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nrki-motif-row {
+    margin-bottom: 0.85rem;
+    padding: 0.45rem 0.65rem;
+    border-left: 2px solid var(--nrki-accent-highlight);
+    background-color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-motif-row strong {
+    color: var(--nrki-ink-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.66rem;
+    margin-right: 0.35rem;
+  }
+
+  .nrki-connected-row {
+    margin-bottom: 0.85rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-connected-row strong {
+    display: block;
+    margin-bottom: 0.28rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-connected-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .nrki-media-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .nrki-media-card-creator {
+    margin-bottom: 0.65rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* --- Full-Width Shelf, Filter Controls & Status Bar --- */
+  .nrki-shelf-section {
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-shelf-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    background-color: var(--nrki-surface-panel);
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-surface);
+  }
+
+  .nrki-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-filter-button {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--nrki-transition-fast);
+  }
+
+  .nrki-filter-button:hover {
+    border-color: var(--nrki-ink-heading);
+    color: var(--nrki-ink-heading);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-filter-button.is-active,
+  .nrki-filter-button[aria-pressed="true"] {
+    background-color: var(--nrki-ink-heading);
+    border-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    font-weight: 700;
+  }
+
+  .nrki-shelf-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  /* --- Works Newspaper Index Ledger & Resume Dossier Rows --- */
+  .nrki-works-ledger,
+  .nrki-resume-list {
+    border-top: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-work-row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.05rem 0.5rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    text-decoration: none;
+    transition: background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-work-row:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-work-category {
+    font-family: var(--nrki-font-sans);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-work-main strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--nrki-ink-heading);
+    font-size: 1.1rem;
+  }
+
+  .nrki-work-main span {
+    display: block;
+    color: var(--nrki-ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .nrki-work-date {
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+    white-space: nowrap;
+  }
+
+  .nrki-resume-row {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.15rem 0.5rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+    transition: background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-resume-row:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  /* --- Accessible Overlay Modal --- */
+  .nrki-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background-color: rgba(18, 22, 19, 0.72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 4vw, 2.5rem);
+    overflow-y: auto;
+  }
+
+  .nrki-modal-dialog {
+    width: min(100%, 48rem);
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    border: 2px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    box-shadow: var(--nrki-shadow-overlay);
+  }
+
+  .nrki-modal-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.85rem;
+    margin-bottom: 1.15rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-modal-motifs-box {
+    margin-top: 1.5rem;
+    padding: 1.15rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  /* --- Tabs & Expandable Accordions (`<details>`) --- */
+  .nrki-tab-list {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    gap: 0.35rem;
+  }
+
+  .nrki-tab-trigger {
+    padding: 0.5rem 0.95rem;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: var(--nrki-radius-control) var(--nrki-radius-control) 0 0;
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .nrki-tab-trigger:hover {
+    color: var(--nrki-ink-heading);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-tab-trigger[aria-selected="true"] {
+    background-color: var(--nrki-surface-elevated);
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-tab-panel {
+    padding: 1.15rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-top: 0;
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-accordion {
+    border-top: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-accordion-item {
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-accordion-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 0.5rem;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--nrki-ink-heading);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .nrki-accordion-summary::after {
+    content: "+";
+    font-family: var(--nrki-font-mono);
+    font-size: 1rem;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-accordion-item[open] .nrki-accordion-summary::after {
+    content: "−";
+  }
+
+  .nrki-accordion-body {
+    padding: 0 0.5rem 1rem;
+    color: var(--nrki-ink-body);
+    font-size: 0.94rem;
+  }
+
+  /* --- Web Resume Sheet & Action Toolbar --- */
+  .nrki-resume-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .nrki-resume-sheet {
+    padding: clamp(1.35rem, 3.5vw, 2.5rem);
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-resume-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.25rem;
+    padding-bottom: 1.15rem;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    margin-bottom: 1.35rem;
+  }
+
+  .nrki-resume-role {
+    margin: 0;
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nrki-resume-contact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.8rem;
+    color: var(--nrki-ink-muted);
+    text-align: right;
+  }
+
+  .nrki-resume-section {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-resume-section:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .nrki-resume-section-title {
+    margin: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-resume-entry-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .nrki-resume-bullets {
+    margin: 0.4rem 0 0;
+    padding-left: 1.15rem;
+  }
+
+  .nrki-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1rem;
+  }
+
+  /* --- Site Footer --- */
+  .nrki-site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+    padding-block: 1.35rem;
+    border-top: 3px double var(--nrki-border-strong);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.75rem;
+  }
+
+  .nrki-footer-mark {
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.07em;
+    text-decoration: none;
+  }
+
+  /* Screen-only responsive stacking so print viewports never collapse prematurely */
+  @media screen and (max-width: 720px) {
+    .nrki-page-shell {
+      width: min(100% - 2rem, var(--nrki-shell-max-width));
+    }
+
+    .nrki-lead-story,
+    .nrki-section-block,
+    .nrki-resume-section,
+    .nrki-sidenote-layout,
+    .nrki-work-row,
+    .nrki-resume-row {
+      grid-template-columns: 1fr;
+    }
+
+    .nrki-lead-aside {
+      border-left: 0;
+      border-top: 1px solid var(--nrki-border-subtle);
+      padding: 1.15rem 0 0;
+    }
+
+    .nrki-resume-contact {
+      text-align: left;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   5. UTILITY CLASSES (`@layer nrki.utilities`)
+   --------------------------------------------------------------------------
+   Highest non-print layer so `.nrki-hidden` and `.nrki-theme-surface` work
+   reliably without ever needing `!important`.
+   ========================================================================== */
+@layer nrki.utilities {
+  [hidden],
+  .nrki-hidden {
+    display: none;
+  }
+
+  /* Applies an element's scoped `[data-theme]` background, body ink, and font
+     so nested preview cards render cleanly regardless of the outer document theme */
+  .nrki-theme-surface {
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-serif);
+    border-radius: var(--nrki-radius-surface);
+  }
+
+  .nrki-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .nrki-stack-sm {
+    display: grid;
+    gap: var(--nrki-space-2);
+  }
+
+  .nrki-stack-md {
+    display: grid;
+    gap: var(--nrki-space-4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms;
+      animation-duration: 0.01ms;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   6. CROSS-BROWSER PRINT / SAVE-AS-PDF STYLESHEET (`@page` + `@layer nrki.print`)
+   --------------------------------------------------------------------------
+   `@page` sits directly at root level because some browser engines ignore
+   `@page` descriptors nested inside `@layer`. Zeroing page margins strips
+   browser-injected URL/date headers across Firefox, Chrome, and Edge while
+   `.nrki-page-shell` supplies clean `12mm 14mm` inner margins.
+   ========================================================================== */
+@page {
+  size: auto;
+  margin: 0;
+}
+
+@layer nrki.print {
+  @media print {
+    :root,
+    [data-theme="dark"],
+    [data-theme="accent"],
+    [data-theme="faded"],
+    [data-theme="uwu"] {
+      --nrki-surface-canvas: #ffffff;
+      --nrki-surface-panel: #ffffff;
+      --nrki-surface-inset: #f4f4f4;
+      --nrki-surface-elevated: #ffffff;
+      --nrki-ink-heading: #000000;
+      --nrki-ink-body: #1a1a1a;
+      --nrki-ink-muted: #444444;
+      --nrki-border-strong: #000000;
+      --nrki-border-subtle: #888888;
+      --nrki-border-faint: #dddddd;
+      --nrki-accent-primary: #000000;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 9.8pt;
+      line-height: 1.4;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .nrki-print-hidden,
+    .nrki-site-header,
+    .nrki-site-footer,
+    .nrki-resume-toolbar,
+    .nrki-skip-link {
+      display: none;
+    }
+
+    .nrki-page-shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 12mm 14mm;
+    }
+
+    .nrki-resume-sheet {
+      padding: 0;
+      border: 0;
+      background-color: transparent;
+    }
+
+    .nrki-resume-section {
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.15rem;
+      padding-block: 0.65rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000000;
+    }
+  }
+}

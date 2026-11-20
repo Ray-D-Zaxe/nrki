@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="NRKI Magazine Issue 01 — The Newspaper Web Design Magazine showcasing the standalone 5-mode nrki-broadsheet-library.css design system.">
+    <title>Issue 01: Newspaper Web Design Magazine — NRKI</title>
+
+    <!-- ====================================================================
+         PRE-PAINT THEME RESTORE SCRIPT
+         Why this runs synchronously in <head>: Applying `data-theme` on <html>
+         before CSS stylesheets paint prevents any light-to-dark flash.
+         ==================================================================== -->
+    <script>
+        (function restoreBroadsheetMagazineTheme() {
+            var storedThemeMode = localStorage.getItem("nrki-broadsheet-magazine-theme");
+            var allowedModes = ["light", "dark", "accent", "faded", "uwu"];
+            var resolvedMode = allowedModes.indexOf(storedThemeMode) !== -1
+                ? storedThemeMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedMode);
+        })();
+    </script>
+
+    <!-- Standalone NRKI Broadsheet CSS Library + Isolated Magazine Chrome Shell -->
+    <link rel="stylesheet" href="./nrki-broadsheet-library.css">
+    <link rel="stylesheet" href="./broadsheet-magazine-shell.css">
+
+    <!-- Specimen Catalogs & Workbench Viewer (Classic deferred scripts work on both file:// and HTTP) -->
+    <script defer src="./specimen-catalogs/broadsheet-simple-elements-catalog.js"></script>
+    <script defer src="./specimen-catalogs/broadsheet-complex-components-catalog.js"></script>
+    <script defer src="./broadsheet-magazine-viewer.js"></script>
+</head>
+
+<body>
+    <a class="nrki-skip-link" href="#magazine-workbench-main">Skip to magazine content</a>
+
+    <!-- ====================================================================
+         STICKY MAGAZINE ISSUE BAR, PAGE TABS & GLOBAL 5-MODE SWITCHER
+         ==================================================================== -->
+    <header class="magazine-chrome-header">
+        <div class="magazine-chrome-inner">
+            <div class="magazine-brand-cluster">
+                <a class="magazine-back-pill" href="../../pages/magazines-index.html">← Magazines</a>
+                <p class="magazine-issue-title">Issue 01 <span>/</span> Newspaper Web Design</p>
+            </div>
+
+            <nav class="magazine-page-nav" aria-label="Issue 01 sections">
+                <a class="magazine-page-tab is-current-page" href="#intro" data-magazine-nav-target="intro">
+                    01 · Intro &amp; Index
+                </a>
+                <a class="magazine-page-tab" href="#elements" data-magazine-nav-target="elements">
+                    02 · Simple Elements
+                </a>
+                <a class="magazine-page-tab" href="#components" data-magazine-nav-target="components">
+                    03 · Complex Components
+                </a>
+                <a class="magazine-page-tab" href="#colophon" data-magazine-nav-target="colophon">
+                    04 · Stylesheet &amp; Credits
+                </a>
+            </nav>
+
+            <div class="magazine-global-mode-bar" role="group" aria-label="Global 5-mode theme switcher">
+                <span class="magazine-mode-caption">Mode:</span>
+                <button type="button" class="specimen-mode-button" data-global-theme-option="light" aria-pressed="true">Light</button>
+                <button type="button" class="specimen-mode-button" data-global-theme-option="dark" aria-pressed="false">Dark</button>
+                <button type="button" class="specimen-mode-button" data-global-theme-option="accent" aria-pressed="false">Accent</button>
+                <button type="button" class="specimen-mode-button" data-global-theme-option="faded" aria-pressed="false">Faded</button>
+                <button type="button" class="specimen-mode-button" data-global-theme-option="uwu" aria-pressed="false">UwU</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="magazine-workbench-main" class="magazine-workbench">
+        <!-- ================================================================
+             PAGE 01: INTRO MANIFESTO, TOKEN ARCHITECTURE & INTERACTIVE INDEX
+             ================================================================ -->
+        <section class="magazine-view-section" id="intro" data-magazine-view="intro" aria-labelledby="intro-cover-heading">
+            <header class="magazine-cover-masthead">
+                <p class="nrki-eyebrow">NRKI Design Monograph · Vol. II, Issue 01</p>
+                <h1 id="intro-cover-heading">The Newspaper Web Design Magazine.</h1>
+                <p class="nrki-lead-summary">
+                    Living documentation for <code>nrki-broadsheet-library.css</code>—a standalone, zero-dependency,
+                    <code>!important</code>-free editorial CSS library built on 6 Cascade Layers and 5 container-scoped
+                    visual modes.
+                </p>
+            </header>
+
+            <div class="magazine-intro-grid">
+                <div class="nrki-stack-md">
+                    <div>
+                        <p class="nrki-eyebrow">Design Philosophy</p>
+                        <h2>Why Build NRKI v2 Around a Standalone CSS Library?</h2>
+                        <p class="nrki-drop-cap">
+                            Modern personal websites swing between sterile corporate SaaS templates and heavy JS
+                            frameworks. Printed broadsheets solved high-density hierarchy centuries ago using
+                            deliberate typography, crisp 1px hairlines, 3px double rules, and disciplined ink contrast.
+                            Rather than hardcoding styles page-by-page, Issue 01 isolates and tests every token,
+                            element, and component inside one reusable stylesheet.
+                        </p>
+                    </div>
+
+                    <div class="nrki-callout nrki-callout-info" style="margin: 0;">
+                        <div class="nrki-callout-title">Architectural Guarantees</div>
+                        <ul class="nrki-editorial-list" style="margin-bottom: 0;">
+                            <li><strong>Zero <code>!important</code>:</strong> Ordered cleanly via <code>@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;</code>.</li>
+                            <li><strong>5 Scoped Modes:</strong> Switch any individual specimen or section between <code>light</code>, <code>dark</code>, <code>accent</code>, <code>faded</code>, and <code>uwu</code>.</li>
+                            <li><strong>Zero Build Step:</strong> Works via plain <code>&lt;link rel="stylesheet"&gt;</code> in static HTML sites or React SPAs.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Interactive Issue Table of Contents -->
+                <aside class="magazine-index-card" aria-label="Issue 01 Table of Contents">
+                    <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Issue Contents</p>
+                    <h2>Magazine Index</h2>
+                    <ol class="magazine-index-list">
+                        <li>
+                            <a class="magazine-index-link" href="#intro">
+                                <strong>01. Design Manifesto &amp; Token System</strong>
+                                <span>Cover</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="magazine-index-link" href="#elements">
+                                <strong>02. Simple Elements (11 Specimens)</strong>
+                                <span>Buttons, Forms, Tables →</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="magazine-index-link" href="#components">
+                                <strong>03. Complex Components (9 Specimens)</strong>
+                                <span>Mastheads, Modals, Print →</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="magazine-index-link" href="#colophon">
+                                <strong>04. Stylesheet Source, Credits &amp; Inspirations</strong>
+                                <span>GitHub &amp; Colophon →</span>
+                            </a>
+                        </li>
+                    </ol>
+                </aside>
+            </div>
+
+            <!-- Live 5-Mode Token Palette Inspector -->
+            <section class="magazine-tokens-panel" aria-labelledby="token-inspector-title">
+                <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Live Token Inspector</p>
+                <h2 id="token-inspector-title" style="margin-bottom: 0.35rem;">Semantic Color Tokens for Active Global Mode</h2>
+                <p class="nrki-section-heading-note">
+                    Use the Mode buttons in the top bar (Light, Dark, Accent, Faded, UwU) to see every surface, ink,
+                    accent, and border token resolve dynamically in real time.
+                </p>
+                <div class="magazine-token-swatch-grid" id="magazine-token-swatch-grid"></div>
+            </section>
+
+            <div class="magazine-pagination-bar">
+                <a class="nrki-back-link" href="../../pages/magazines-index.html">← Back to Magazines Index</a>
+                <a class="nrki-button nrki-button-primary" href="#elements">Next: Simple Elements (11) →</a>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PAGE 02: SIMPLE ELEMENTS CATALOG
+             ================================================================ -->
+        <section class="magazine-view-section" id="elements" data-magazine-view="elements" hidden aria-labelledby="elements-page-heading">
+            <header class="specimen-catalog-header">
+                <div>
+                    <p class="nrki-eyebrow">Section 02 / Atomic Primitives</p>
+                    <h2 id="elements-page-heading">Simple Elements Catalog</h2>
+                    <p class="nrki-section-heading-note">
+                        Toggle each specimen independently between Light, Dark, Accent, Faded, and UwU, inspect HTML/CSS/JS,
+                        and copy the active code snippet.
+                    </p>
+                </div>
+                <span class="nrki-badge nrki-badge-accent">11 Element Specimens</span>
+            </header>
+
+            <div class="specimen-catalog-stack" id="broadsheet-simple-elements-mount">
+                <p class="nrki-quiet-note">Loading Simple Elements specimens…</p>
+            </div>
+
+            <div class="magazine-pagination-bar">
+                <a class="nrki-button" href="#intro">← Prev: Intro &amp; Index</a>
+                <a class="nrki-button nrki-button-primary" href="#components">Next: Complex Components (9) →</a>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PAGE 03: COMPLEX COMPONENTS CATALOG
+             ================================================================ -->
+        <section class="magazine-view-section" id="components" data-magazine-view="components" hidden aria-labelledby="components-page-heading">
+            <header class="specimen-catalog-header">
+                <div>
+                    <p class="nrki-eyebrow">Section 03 / Composed Interfaces</p>
+                    <h2 id="components-page-heading">Complex Components Catalog</h2>
+                    <p class="nrki-section-heading-note">
+                        Multi-part layouts and stateful widgets—every specimen supports live previewing across all 5 theme
+                        modes and context-aware source copying.
+                    </p>
+                </div>
+                <span class="nrki-badge nrki-badge-highlight">9 Component Specimens</span>
+            </header>
+
+            <div class="specimen-catalog-stack" id="broadsheet-complex-components-mount">
+                <p class="nrki-quiet-note">Loading Complex Components specimens…</p>
+            </div>
+
+            <div class="magazine-pagination-bar">
+                <a class="nrki-button" href="#elements">← Prev: Simple Elements</a>
+                <a class="nrki-button nrki-button-primary" href="#colophon">Next: Stylesheet &amp; Credits →</a>
+            </div>
+        </section>
+
+        <!-- ================================================================
+             PAGE 04: COLOPHON — GITHUB STYLESHEET, CREDITS & INSPIRATIONS
+             ================================================================ -->
+        <section class="magazine-view-section" id="colophon" data-magazine-view="colophon" hidden aria-labelledby="colophon-page-heading">
+            <header class="specimen-catalog-header">
+                <div>
+                    <p class="nrki-eyebrow">Section 04 / Colophon &amp; Attribution</p>
+                    <h2 id="colophon-page-heading">Stylesheet Source, Credits &amp; Inspirations</h2>
+                    <p class="nrki-section-heading-note">
+                        Direct links to the standalone library stylesheet, extension pattern, and the open-source &amp; print
+                        traditions behind NRKI.
+                    </p>
+                </div>
+                <span class="nrki-badge nrki-badge-success">MIT / Open Source Ready</span>
+            </header>
+
+            <div class="magazine-colophon-grid">
+                <article class="nrki-card">
+                    <div>
+                        <div class="nrki-card-meta">
+                            <span>Source Code</span>
+                            <span class="nrki-badge nrki-badge-accent">GitHub</span>
+                        </div>
+                        <h3>Standalone Stylesheet on GitHub</h3>
+                        <p>
+                            Inspect or download <code>nrki-broadsheet-library.css</code> directly from the NRKI
+                            development branch, or fork it as the foundation for external editorial sites and SPAs.
+                        </p>
+                        <pre style="margin-bottom: 1rem;"><code>&lt;link rel="stylesheet" href="nrki-broadsheet-library.css"&gt;</code></pre>
+                    </div>
+                    <div class="nrki-button-group">
+                        <a class="nrki-button nrki-button-primary"
+                            href="https://github.com/Ray-D-Zaxe/nrki/blob/dev/magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css"
+                            target="_blank" rel="noopener noreferrer">
+                            View CSS on GitHub ↗
+                        </a>
+                        <a class="nrki-button"
+                            href="https://github.com/Ray-D-Zaxe/nrki/tree/dev/magazines/issue-01-newspaper-web-design"
+                            target="_blank" rel="noopener noreferrer">
+                            Browse Issue 01 Folder ↗
+                        </a>
+                    </div>
+                </article>
+
+                <article class="nrki-card">
+                    <div>
+                        <div class="nrki-card-meta">
+                            <span>Library Extensions</span>
+                            <span class="nrki-badge">@layer API</span>
+                        </div>
+                        <h3>Extending Without <code>!important</code></h3>
+                        <p>
+                            Import <code>nrki-broadsheet-library.css</code> and declare your own custom layer after
+                            <code>nrki.utilities</code>, or redefine <code>--nrki-*</code> custom properties on
+                            <code>:root</code> or any nested <code>[data-theme]</code> container.
+                        </p>
+                        <pre style="margin-bottom: 0;"><code>@layer nrki.tokens, nrki.reset, nrki.elements,
+       nrki.components, nrki.utilities, site.overrides;
+
+@layer site.overrides {
+  :root { --nrki-accent-primary: #1b4332; }
+}</code></pre>
+                    </div>
+                </article>
+            </div>
+
+            <section class="magazine-tokens-panel" aria-labelledby="inspirations-heading">
+                <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Lineage &amp; References</p>
+                <h3 id="inspirations-heading" style="margin-bottom: 0.75rem;">Credits &amp; Online Inspirations</h3>
+                <dl class="nrki-definition-list" style="margin-bottom: 0;">
+                    <dt>Tufte CSS — Edward Tufte Book Typography</dt>
+                    <dd>
+                        Inspired NRKI's constrained reading measure (<code>43rem</code>), subtle hairline contrasts,
+                        and <code>.nrki-sidenote</code> marginalia containers beside prose.
+                    </dd>
+                    <dt>Pico CSS &amp; Matcha CSS — Minimalist Semantic Baselines</dt>
+                    <dd>
+                        Informed the zero-build drop-in philosophy and clean form/table defaults that style standard HTML
+                        without framework bloat.
+                    </dd>
+                    <dt>PaperCSS — Tactile Print Personality</dt>
+                    <dd>
+                        Guided the deliberate physical craft touches—such as double masthead rules, clipped status stamps,
+                        and pinned brass accents on <code>.nrki-pin-card</code>.
+                    </dd>
+                    <dt>Open Props — Multi-Tier Tokens &amp; Cascade Layers</dt>
+                    <dd>
+                        Inspired using <code>@layer</code> buckets paired with semantic <code>--nrki-*</code> custom
+                        properties for 5 independent container themes with zero <code>!important</code> overrides.
+                    </dd>
+                    <dt>Robert Bringhurst &amp; 19th-Century Botanical Herbariums</dt>
+                    <dd>
+                        Classical serif/monospace pairing from <em>The Elements of Typographic Style</em> combined with
+                        warm dried-sage paper and pine soot ink palettes.
+                    </dd>
+                </dl>
+            </section>
+
+            <div class="magazine-pagination-bar">
+                <a class="nrki-button" href="#components">← Prev: Complex Components</a>
+                <a class="nrki-button nrki-button-primary" href="#intro">Return to Cover &amp; Index ↑</a>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NRKI Gallery - Art, story lore, and connected-idea pinboard (React SPA).">
-    <title>Gallery (Art, Story &amp; Idea Board) - NRKI</title>
+    <meta name="description"
+        content="NRKI Magazines — Self-contained design magazines and standalone UI/CSS system issues.">
+    <title>Magazines — NRKI</title>
     <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
     <script>
         (function () {
@@ -16,11 +17,6 @@
     </script>
     <link rel="stylesheet" href="../assets/styles/style.css">
     <script defer src="../assets/scripts/main.js"></script>
-    <script defer src="../assets/scripts/vendor/react-local.js"></script>
-    <script defer src="../assets/scripts/data/site-data.js"></script>
-    <script defer src="../assets/scripts/content-loader.js"></script>
-    <script defer src="../assets/scripts/components/Shelf.js"></script>
-    <script defer src="../assets/scripts/gallery-spa.js"></script>
 </head>
 
 <body>
@@ -32,7 +28,7 @@
              ================================================================ -->
         <header class="site-header">
             <div class="masthead-bar">
-                <p class="edition-line">Vol. I · Sec. 01 <span>-</span> Art, Story &amp; Motif Pinboard</p>
+                <p class="edition-line">Vol. I · Sec. 01 <span>-</span> Design Magazines &amp; Systems</p>
                 <div class="masthead-meta">
                     <p class="masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
@@ -51,12 +47,11 @@
             </div>
 
             <a class="wordmark accent" href="../index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">A pinboard of art studies, story fragments, motifs, and ideas that connect to other
-                ideas.</p>
+            <p class="masthead-note">Self-contained design magazines documenting NRKI's CSS architecture &amp; libraries.</p>
 
             <nav class="site-nav" aria-label="Main navigation">
                 <a href="../index.html">Home</a>
-                <a href="./gallery.html" aria-current="page">Gallery</a>
+                <a href="./magazines-index.html" aria-current="page">Magazines</a>
                 <a href="./projects.html">Projects</a>
                 <a href="./works.html">Works</a>
                 <a href="./media.html">Media</a>
@@ -66,38 +61,41 @@
 
         <main id="main">
             <!-- ============================================================
-                 PAGE HERO
+                 BAREBONES MAGAZINES HERO
                  ============================================================ -->
-            <section class="page-hero" aria-labelledby="gallery-page-title">
-                <p class="eyebrow">01 / Collect · Art, Story &amp; Inspiration Pinboard</p>
-                <h1 id="gallery-page-title">Things I find interesting, &amp; how they connect.</h1>
+            <section class="page-hero" aria-labelledby="magazines-page-heading">
+                <p class="eyebrow">01 / Editions</p>
+                <h1 id="magazines-page-heading">Magazines.</h1>
                 <p class="lead-summary">
-                    This board is my living wall for visual studies, story worldbuilding, character seeds, and sound
-                    motifs. Every pinned card shows its primary inspiration and the other cards it relates to-click
-                    any card to open its full note and motif links in an overlay.
+                    A barebones index of self-contained issues. Each magazine uses its own isolated stylesheet to explore
+                    interface architecture, design systems, and reusable code specimens.
                 </p>
             </section>
 
             <!-- ============================================================
-                 GALLERY REACT SPA MOUNT ROOT
-                 Hydrated by `assets/scripts/gallery-spa.js` using the shared
-                 full-width `<Shelf />` component (`assets/scripts/components/Shelf.js`)
-                 and `GALLERY_ITEMS` from `assets/scripts/data/site-data.js`.
+                 PUBLISHED ISSUES LIST (Issue 01 only for now)
                  ============================================================ -->
-            <div id="gallery-spa-root">
-                <section class="shelf-section">
-                    <div class="shelf-header">
-                        <div class="shelf-header__titles">
-                            <p class="eyebrow">01 / Collect · Art, Story &amp; Inspiration Wall</p>
-                            <h2>The Pinboard Shelf</h2>
-                        </div>
-                        <p class="shelf-header__note">
-                            Click any pinned card to open its short article and motif index. Follow the 'Connects To'
-                            chips to trace how one idea links to another.
-                        </p>
+            <section class="shelf-section" aria-labelledby="issues-list-heading">
+                <div class="shelf-header">
+                    <div class="shelf-header__titles">
+                        <p class="eyebrow">Catalog</p>
+                        <h2 id="issues-list-heading">Published Issues</h2>
                     </div>
-                </section>
-            </div>
+                </div>
+
+                <div class="works-ledger">
+                    <a class="work-row"
+                        href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html">
+                        <span class="work-category">Issue 01</span>
+                        <span class="work-main">
+                            <strong>The Newspaper Web Design Magazine</strong>
+                            <span>Interactive specimen book documenting NRKI's standalone 5-mode Broadsheet CSS library
+                                (Light, Dark, Accent, Faded, UwU) across 11 simple elements and 9 complex components.</span>
+                        </span>
+                        <span class="work-date">Open Issue →</span>
+                    </a>
+                </div>
+            </section>
         </main>
 
         <!-- ================================================================

@@ -1,0 +1,510 @@
+/**
+ * ============================================================================
+ * ISSUE 01 — BROADSHEET DESIGN MAGAZINE SHELL & SPECIMEN WORKBENCH CSS
+ * ----------------------------------------------------------------------------
+ * Architectural Separation of Concerns:
+ *   This file styles ONLY the Magazine Issue 01 reader chrome (sticky section
+ *   navigation, cover manifesto, token swatches, specimen container frame,
+ *   5-mode preview switcher, HTML/CSS/JS code drawer, and colophon layout).
+ *
+ *   Why it is separate from `nrki-broadsheet-library.css`:
+ *   Keeping magazine chrome classes (`.magazine-*`, `.specimen-*`) isolated in
+ *   their own `@layer magazine.shell` guarantees external sites importing only
+ *   `nrki-broadsheet-library.css` remain completely bloat-free, with zero `!important`.
+ * ============================================================================
+ */
+
+@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, magazine.shell, nrki.utilities, nrki.print;
+
+@layer magazine.shell {
+  /* ========================================================================
+     1. STICKY MAGAZINE ISSUE BAR & NAVIGATION
+     ======================================================================== */
+  .magazine-chrome-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .magazine-chrome-inner {
+    width: min(100% - 2.5rem, 78rem);
+    margin-inline: auto;
+    padding-block: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+  }
+
+  .magazine-brand-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem 1rem;
+  }
+
+  .magazine-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .magazine-back-pill:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .magazine-issue-title {
+    margin: 0;
+    font-family: var(--nrki-font-sans);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .magazine-issue-title span {
+    color: var(--nrki-accent-primary);
+  }
+
+  /* 4-Page Navigation Tabs (`Intro`, `Elements`, `Components`, `Colophon`) */
+  .magazine-page-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .magazine-page-tab {
+    padding: 0.34rem 0.75rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .magazine-page-tab:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .magazine-page-tab.is-current-page,
+  .magazine-page-tab[aria-current="page"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  /* Global Magazine Mode Bar */
+  .magazine-global-mode-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .magazine-mode-caption {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    color: var(--nrki-ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 0.15rem;
+  }
+
+
+  /* ========================================================================
+     2. MAIN MAGAZINE WORKBENCH CONTAINER & SECTION VIEWS
+     ======================================================================== */
+  .magazine-workbench {
+    width: min(100% - 2.5rem, 78rem);
+    margin-inline: auto;
+    padding-block: 2rem 4rem;
+  }
+
+  .magazine-view-section[hidden] {
+    display: none;
+  }
+
+  .magazine-cover-masthead {
+    padding-block: 2rem 2.25rem;
+    border-bottom: 3px double var(--nrki-border-strong);
+    margin-bottom: 2rem;
+  }
+
+  .magazine-cover-masthead h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+    letter-spacing: -0.045em;
+    line-height: 1.03;
+    max-width: 18ch;
+    margin-bottom: 0.9rem;
+  }
+
+  .magazine-intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(17rem, 0.9fr);
+    gap: 2.25rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Interactive Index Card */
+  .magazine-index-card {
+    padding: 1.35rem;
+    border: 2px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .magazine-index-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+  }
+
+  .magazine-index-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .magazine-index-list li {
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .magazine-index-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .magazine-index-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.75rem;
+    text-decoration: none;
+    color: var(--nrki-ink-heading);
+  }
+
+  .magazine-index-link strong {
+    font-size: 1rem;
+  }
+
+  .magazine-index-link span {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    color: var(--nrki-accent-primary);
+    flex-shrink: 0;
+  }
+
+  .magazine-index-link:hover strong {
+    color: var(--nrki-accent-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Architecture & Design Token Swatches Panel */
+  .magazine-tokens-panel {
+    margin-top: 2rem;
+    padding: 1.35rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .magazine-token-swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+    gap: 0.85rem;
+    margin-top: 1rem;
+  }
+
+  .magazine-token-swatch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .magazine-token-chip {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+  }
+
+  .magazine-token-meta code {
+    display: block;
+    font-size: 0.72rem;
+    padding: 0;
+    background: transparent;
+    color: var(--nrki-ink-heading);
+    font-weight: 700;
+  }
+
+  .magazine-token-meta span {
+    display: block;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    color: var(--nrki-ink-muted);
+  }
+
+
+  /* ========================================================================
+     3. SPECIMEN CONTAINER (LIVE STAGE + 5-MODE TOGGLE + CODE TABS + COPY)
+     ======================================================================== */
+  .specimen-catalog-header {
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+
+  .specimen-catalog-header h2 {
+    font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+    margin-bottom: 0.25rem;
+  }
+
+  .specimen-catalog-stack {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .specimen-container {
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    overflow: hidden;
+  }
+
+  .specimen-container-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border-bottom: 1px solid var(--nrki-border-subtle);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .specimen-header-details {
+    max-width: 44rem;
+  }
+
+  .specimen-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .specimen-title-row h3 {
+    margin: 0;
+    font-size: 1.28rem;
+  }
+
+  .specimen-usage-note {
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.84rem;
+    line-height: 1.45;
+  }
+
+  /* 5-Mode Per-Specimen Switcher (`Light`, `Dark`, `Accent`, `Faded`, `UwU`) */
+  .specimen-mode-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .specimen-mode-button {
+    padding: 0.28rem 0.6rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .specimen-mode-button:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .specimen-mode-button[aria-pressed="true"] {
+    background-color: var(--nrki-ink-heading);
+    border-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+  }
+
+  /* Isolated Live Preview Stage (Applies its own `[data-theme]` cleanly) */
+  .specimen-preview-stage {
+    padding: clamp(1.25rem, 3vw, 2rem);
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-serif);
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  /* Code Inspection Footer Toolbar (`HTML`, `CSS`, conditional `JS` + `Copy`) */
+  .specimen-code-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding: 0.6rem 1.1rem;
+    border-top: 1px solid var(--nrki-border-subtle);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .specimen-code-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .specimen-code-tab-button {
+    padding: 0.3rem 0.72rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .specimen-code-tab-button:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .specimen-code-tab-button[aria-expanded="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .specimen-copy-button {
+    padding: 0.3rem 0.78rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-sans);
+    font-size: 0.69rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .specimen-copy-button:hover:not(:disabled) {
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+  }
+
+  .specimen-copy-button.is-copied {
+    background-color: var(--nrki-status-success-surface);
+    border-color: var(--nrki-status-success-border);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .specimen-copy-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Collapsible Source Code Drawer */
+  .specimen-code-drawer {
+    border-top: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-code-surface);
+  }
+
+  .specimen-code-drawer pre {
+    margin: 0;
+    border-left: 0;
+    border-radius: 0;
+    padding: 1rem 1.25rem;
+    max-height: 24rem;
+    overflow: auto;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+
+
+  /* ========================================================================
+     4. COLOPHON & BOTTOM PAGE PAGINATION
+     ======================================================================== */
+  .magazine-colophon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .magazine-pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.35rem;
+    border-top: 3px double var(--nrki-border-strong);
+  }
+
+  @media screen and (max-width: 820px) {
+    .magazine-intro-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
