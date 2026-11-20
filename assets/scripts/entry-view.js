@@ -25,83 +25,85 @@
     const requestedId = params.get("id");
 
     loadTabCollection(tabName).then(({ items }) => {
-      const item =
+      const selectedEntry =
         items.find(
-          (it) =>
-            it.id === requestedId ||
-            it.id.replace(/^proj-/, "") === requestedId
+          (entryRecord) =>
+            entryRecord.id === requestedId ||
+            entryRecord.id.replace(/^proj-/, "") === requestedId
         ) || items[0];
 
-      if (!item) return;
+      if (!selectedEntry) return;
 
-      document.title = `${item.title} — NRKI`;
+      document.title = `${selectedEntry.title} — NRKI`;
 
-      const eyebrowEl = viewRoot.querySelector("[data-entry-eyebrow]");
-      const titleEl = viewRoot.querySelector("[data-entry-title]");
-      const bylineEl = viewRoot.querySelector("[data-entry-byline]");
-      const tagsEl = viewRoot.querySelector("[data-entry-tags]");
-      const linksEl = viewRoot.querySelector("[data-entry-links]");
-      const bodyEl = viewRoot.querySelector("[data-entry-body]");
+      const eyebrowElement = viewRoot.querySelector("[data-entry-eyebrow]");
+      const titleElement = viewRoot.querySelector("[data-entry-title]");
+      const bylineElement = viewRoot.querySelector("[data-entry-byline]");
+      const tagsElement = viewRoot.querySelector("[data-entry-tags]");
+      const linksElement = viewRoot.querySelector("[data-entry-links]");
+      const bodyElement = viewRoot.querySelector("[data-entry-body]");
 
-      if (eyebrowEl) {
-        eyebrowEl.textContent =
+      if (eyebrowElement) {
+        eyebrowElement.textContent =
           tabName === "projects"
-            ? `${item.projectNumber || "Project"} · ${
-                item.statusLabel || "Build"
+            ? `${selectedEntry.projectNumber || "Project"} · ${
+                selectedEntry.statusLabel || "Build"
               }`
-            : `${item.categoryLabel || "Work"} · ${item.date || ""}`;
+            : `${selectedEntry.categoryLabel || "Work"} · ${
+                selectedEntry.date || ""
+              }`;
       }
 
-      if (titleEl) {
-        titleEl.textContent = item.title;
+      if (titleElement) {
+        titleElement.textContent = selectedEntry.title;
       }
 
-      if (bylineEl && tabName === "works") {
-        bylineEl.innerHTML = `<span>By NRKI</span><span>·</span><span>${
-          item.date || ""
-        }</span><span>·</span><span>${item.readTime || ""}</span>`;
+      if (bylineElement && tabName === "works") {
+        bylineElement.innerHTML = `<span>By NRKI</span><span>·</span><span>${
+          selectedEntry.date || ""
+        }</span><span>·</span><span>${selectedEntry.readTime || ""}</span>`;
       }
 
-      if (tagsEl) {
-        tagsEl.innerHTML = "";
-        (item.tags || []).forEach((tag) => {
-          const li = document.createElement("li");
-          li.className = "tag-pill";
-          li.textContent = `#${tag}`;
-          tagsEl.appendChild(li);
+      if (tagsElement) {
+        tagsElement.innerHTML = "";
+        (selectedEntry.tags || []).forEach((tagLabel) => {
+          const tagListItem = document.createElement("li");
+          tagListItem.className = "nrki-tag-pill";
+          tagListItem.textContent = `#${tagLabel}`;
+          tagsElement.appendChild(tagListItem);
         });
       }
 
-      if (linksEl && tabName === "projects") {
-        linksEl.innerHTML = "";
-        const links = item.links || [
-          ...(item.githubUrl
+      if (linksElement && tabName === "projects") {
+        linksElement.innerHTML = "";
+        const entryLinks = selectedEntry.links || [
+          ...(selectedEntry.githubUrl
             ? [
                 {
                   label: "GitHub Repository ↗",
-                  url: item.githubUrl,
+                  url: selectedEntry.githubUrl,
                   primary: true,
                 },
               ]
             : []),
         ];
-        links.forEach((lnk) => {
-          const a = document.createElement("a");
-          a.className = `btn-editorial${
-            lnk.primary ? " btn-editorial--primary" : ""
+        entryLinks.forEach((entryLink) => {
+          const anchorElement = document.createElement("a");
+          anchorElement.className = `nrki-button${
+            entryLink.primary ? " nrki-button-primary" : ""
           }`;
-          a.href = lnk.url;
-          if (/^https?:\/\//.test(lnk.url)) {
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
+          anchorElement.href = entryLink.url;
+          if (/^https?:\/\//.test(entryLink.url)) {
+            anchorElement.target = "_blank";
+            anchorElement.rel = "noopener noreferrer";
           }
-          a.textContent = lnk.label;
-          linksEl.appendChild(a);
+          anchorElement.textContent = entryLink.label;
+          linksElement.appendChild(anchorElement);
         });
       }
 
-      if (bodyEl) {
-        renderBlocksToDOM(bodyEl, item);
+      if (bodyElement) {
+        renderBlocksToDOM(bodyElement, selectedEntry);
       }
     });
   });

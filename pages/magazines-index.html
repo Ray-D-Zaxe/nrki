@@ -1,52 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic" data-mode="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="NRKI Magazines - Self-contained design magazines and standalone UI/CSS system issues.">
-    <title>Magazines - NRKI</title>
-    <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
+        content="NRKI Magazines — Self-contained design magazines and standalone UI/CSS system issues.">
+    <title>Magazines — NRKI</title>
+    <!-- Synchronous theme + mode script: applies [data-theme] and [data-mode] before first paint to prevent flicker -->
     <script>
-        (function () {
-            var saved = localStorage.getItem("nrki-theme");
-            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
-    <link rel="stylesheet" href="../assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="../assets/styles/nrki-broadsheet-library.css">
     <script defer src="../assets/scripts/main.js"></script>
 </head>
 
 <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
 
-    <div class="page-shell">
-        <header class="site-header">
-            <div class="masthead-bar">
-                <p class="edition-line">Vol. I · Sec. 01 <span>-</span> Design Magazines &amp; Systems</p>
-                <div class="masthead-meta">
-                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+    <div class="nrki-page-shell">
+        <!-- ================================================================
+             SITE MASTHEAD & PRIMARY NAVIGATION
+             ================================================================ -->
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · Sec. 01 <span>-</span> Design Magazines &amp; Systems</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                         <span data-masthead-time>18:50</span>
                         <span data-masthead-tz>LOCAL</span>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
                     </p>
-                    <div class="masthead-badgegroup">
-                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
-                        <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
-                            Ink: Paper ☀
-                        </button>
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Evening Edition</span>
                     </div>
                 </div>
             </div>
 
-            <a class="wordmark accent" href="../index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Self-contained design magazines documenting web architecture &amp; visual systems.</p>
+            <a class="nrki-wordmark nrki-wordmark-compact" href="../index.html" aria-label="NRKI home">NRKI</a>
+            <div class="nrki-masthead-subbar">
+                <label class="nrki-theme-picker">
+                    <span class="nrki-sr-only">Select broadsheet theme</span>
+                    <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                        <option value="classic">Theme: Classic</option>
+                        <option value="ancient">Theme: Ancient</option>
+                        <option value="minimalistic">Theme: Minimalistic</option>
+                        <option value="uwu">Theme: UwU</option>
+                    </select>
+                </label>
+                <p class="nrki-masthead-tagline">Self-contained design magazines documenting NRKI's CSS architecture &amp; libraries.</p>
+                <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+                    Ink: Paper ☀
+                </button>
+            </div>
 
-            <nav class="site-nav" aria-label="Main navigation">
+            <nav class="nrki-site-nav" aria-label="Main navigation">
                 <a href="../index.html">Home</a>
                 <a href="./magazines-index.html" aria-current="page">Magazines</a>
                 <a href="./projects.html">Projects</a>
@@ -57,22 +80,49 @@
         </header>
 
         <main id="main">
-            <section class="page-hero" aria-labelledby="magazines-page-title">
-                <p class="eyebrow">01 / Editions · Status: Under Construction</p>
-                <h1 id="magazines-page-title">Magazines section is currently under construction.</h1>
-                <p class="lead-summary">
-                    Self-contained design magazines and standalone UI/CSS system issues are currently being prepared for
-                    publication. Check back soon for Issue 01.
+            <!-- ============================================================
+                 BAREBONES MAGAZINES HERO
+                 ============================================================ -->
+            <section class="nrki-page-hero" aria-labelledby="magazines-page-heading">
+                <p class="nrki-eyebrow">01 / Editions</p>
+                <h1 id="magazines-page-heading">Magazines.</h1>
+                <p class="nrki-lead-summary">
+                    A barebones index of self-contained issues. Each magazine uses its own isolated stylesheet to explore
+                    interface architecture, design systems, and reusable code specimens.
                 </p>
-                <div class="lead-actions">
-                    <a class="btn-editorial btn-editorial--primary" href="../index.html">← Back to Home</a>
-                    <a class="btn-editorial" href="./about.html#resumes">View About &amp; Resumes →</a>
+            </section>
+
+            <!-- ============================================================
+                 PUBLISHED ISSUES LIST (Issue 01)
+                 ============================================================ -->
+            <section class="nrki-shelf-section" aria-labelledby="issues-list-heading">
+                <div class="nrki-shelf-header">
+                    <div class="nrki-shelf-header-titles">
+                        <p class="nrki-eyebrow">Catalog</p>
+                        <h2 id="issues-list-heading">Published Issues</h2>
+                    </div>
+                </div>
+
+                <div class="nrki-works-ledger">
+                    <a class="nrki-work-row"
+                        href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html">
+                        <span class="nrki-work-category">Issue 01</span>
+                        <span class="nrki-work-main">
+                            <strong>The Newspaper Web Design Magazine</strong>
+                            <span>Interactive newspaper monograph documenting NRKI's reusable 4-theme × Light/Dark Broadsheet CSS
+                                library (Classic, Ancient, Minimalistic, UwU) across 6 layouts, 13 simple elements, and 13 complex components.</span>
+                        </span>
+                        <span class="nrki-work-date">Open Issue →</span>
+                    </a>
                 </div>
             </section>
         </main>
 
-        <footer class="site-footer">
-            <a class="footer-mark" href="../index.html">NRKI</a>
+        <!-- ================================================================
+             SITE FOOTER
+             ================================================================ -->
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="../index.html">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
             <a href="../index.html">Back to the front page <span aria-hidden="true">→</span></a>
         </footer>

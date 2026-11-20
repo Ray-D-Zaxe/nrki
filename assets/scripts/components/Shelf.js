@@ -9,8 +9,8 @@
  *   4. Media (`pages/media.html` — Reviews & Watchlist Ledger)
  *
  * Layout Note:
- * Uses `.shelf-section` and `.shelf-header` so the filter controls and card
- * grid extend all the way to the left edge of `.page-shell` with zero wasted
+ * Uses `.nrki-shelf-section` and `.nrki-shelf-header` so the filter controls
+ * and card grid extend all the way across `.nrki-page-shell` with zero wasted
  * horizontal space.
  * ============================================================================
  */
@@ -30,8 +30,8 @@
    *                                                    `[{ key: "category", label: "Format", options: [{ value, label }] }]`
    * @param {Array}  props.items                      - Array of data objects to filter and display
    * @param {boolean} [props.enableTagFilter=true]    - Automatically generates a Tag filter bar from `item.tags`
-   * @param {string} [props.gridClassName="media-grid"] - Grid container class (`"media-grid"` or `"board-grid"`)
-   * @param {Function} props.renderCard               - Function `(item, helpers) => ReactElement` that renders each card
+   * @param {string} [props.gridClassName="nrki-shelf-grid"] - Grid container class (`"nrki-shelf-grid"`)
+   * @param {Function} props.renderCard               - Function `(entryRecord, helpers) => ReactElement` that renders each card
    */
   function Shelf({
     eyebrow = "Index / Filter",
@@ -40,7 +40,7 @@
     filters = [],
     items = [],
     enableTagFilter = true,
-    gridClassName = "media-grid",
+    gridClassName = "nrki-shelf-grid",
     renderCard,
   }) {
     // 1. Initialize state for each primary filter group (defaults to "all")
@@ -104,37 +104,37 @@
 
     return h(
       "section",
-      { className: "shelf-section", "aria-labelledby": "shelf-heading" },
+      { className: "nrki-shelf-section", "aria-labelledby": "shelf-heading" },
       // Full-Width Shelf Header (Extends all the way from left to right)
       h(
         "div",
-        { className: "shelf-header" },
+        { className: "nrki-shelf-header" },
         h(
           "div",
-          { className: "shelf-header__titles" },
-          h("p", { className: "eyebrow" }, eyebrow),
+          { className: "nrki-shelf-header-titles" },
+          h("p", { className: "nrki-eyebrow" }, eyebrow),
           h("h2", { id: "shelf-heading" }, title)
         ),
-        note ? h("p", { className: "shelf-header__note" }, note) : null
+        note ? h("p", { className: "nrki-shelf-header-note" }, note) : null
       ),
 
       // Full-Width Filter Controls Bar
       h(
         "div",
-        { className: "media-controls" },
+        { className: "nrki-filter-controls" },
         filters.map((group) =>
           h(
             "div",
             {
               key: group.key,
-              className: "filter-bar",
+              className: "nrki-filter-bar",
               style: { marginBottom: 0 },
               role: "toolbar",
               "aria-label": `Filter by ${group.label}`,
             },
             h(
               "span",
-              { className: "meta-label", style: { marginRight: "0.35rem" } },
+              { className: "nrki-meta-label", style: { marginRight: "0.35rem" } },
               `${group.label}:`
             ),
             group.options.map((opt) => {
@@ -145,7 +145,7 @@
                 {
                   key: opt.value,
                   type: "button",
-                  className: `filter-btn${isActive ? " is-active" : ""}`,
+                  className: `nrki-filter-button${isActive ? " is-active" : ""}`,
                   "aria-pressed": String(isActive),
                   onClick: () => handleSelectFilter(group.key, opt.value),
                 },
@@ -160,21 +160,21 @@
           ? h(
               "div",
               {
-                className: "filter-bar",
+                className: "nrki-filter-bar",
                 style: { marginBottom: 0, width: "100%" },
                 role: "toolbar",
                 "aria-label": "Filter by tag",
               },
               h(
                 "span",
-                { className: "meta-label", style: { marginRight: "0.35rem" } },
+                { className: "nrki-meta-label", style: { marginRight: "0.35rem" } },
                 "Tag:"
               ),
               h(
                 "button",
                 {
                   type: "button",
-                  className: `filter-btn${
+                  className: `nrki-filter-button${
                     activeTag === "all" ? " is-active" : ""
                   }`,
                   "aria-pressed": String(activeTag === "all"),
@@ -189,7 +189,7 @@
                   {
                     key: tag,
                     type: "button",
-                    className: `filter-btn${isActive ? " is-active" : ""}`,
+                    className: `nrki-filter-button${isActive ? " is-active" : ""}`,
                     "aria-pressed": String(isActive),
                     onClick: () => setActiveTag(isActive ? "all" : tag),
                   },
@@ -203,7 +203,7 @@
       // Entry Counter & Filter Reset Bar
       h(
         "div",
-        { className: "shelf-status-bar" },
+        { className: "nrki-shelf-status-bar" },
         h(
           "span",
           null,
@@ -216,7 +216,7 @@
               "button",
               {
                 type: "button",
-                className: "filter-btn",
+                className: "nrki-filter-button",
                 onClick: handleResetAll,
               },
               "Reset Filters ✕"
@@ -229,8 +229,8 @@
         ? h(
             "div",
             { className: gridClassName },
-            visibleItems.map((item) =>
-              renderCard(item, {
+            visibleItems.map((entryRecord) =>
+              renderCard(entryRecord, {
                 activeTag,
                 onSelectTag: (tag) =>
                   setActiveTag((prev) => (prev === tag ? "all" : tag)),
@@ -239,7 +239,7 @@
           )
         : h(
             "p",
-            { className: "quiet-note" },
+            { className: "nrki-quiet-note" },
             "No entries match the selected filters."
           )
     );

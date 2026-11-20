@@ -1,0 +1,4353 @@
+/**
+ * ============================================================================
+ * NRKI BROADSHEET — STANDALONE 4-THEME × 2-MODE EDITORIAL CSS LIBRARY
+ * (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`)
+ * ----------------------------------------------------------------------------
+ * Version: 2.3.0
+ *
+ * Orthogonal 2-Axis Architecture:
+ *   1. `[data-theme="classic" | "ancient" | "minimalistic" | "uwu"]`
+ *      Defines each theme's contextual font palette (`display`, `heading`,
+ *      `body`, `quote`, `ui`, `mono`), border & corner geometry (including
+ *      Ancient outward-curved book corners), and syntax code palette.
+ *   2. `[data-mode="light" | "dark"]`
+ *      Flips ink & paper polarity within each theme—yielding 8 complete,
+ *      high-contrast editions without duplicating component rules.
+ *
+ * Why Cascade Layers (`@layer`) Replace Overrides:
+ *   All rules sit inside 6 ordered layers (`tokens → reset → elements →
+ *   components → utilities → print`). Zero `!important` declarations are
+ *   used anywhere; external projects can extend tokens or add an override
+ *   layer after `nrki.utilities` cleanly.
+ * ============================================================================
+ */
+
+@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS, THEME PERSONALITIES & LIGHT/DARK POLARITY (`@layer nrki.tokens`)
+   --------------------------------------------------------------------------
+   Why `[data-theme]` & `[data-mode]` are paired:
+   Attaching custom properties to containers lets an entire site set `<html
+   data-theme="classic" data-mode="light">` while nested `.nrki-theme-surface`
+   containers (such as Magazine specimen stages) run `ancient dark` or `uwu
+   light` side-by-side without leaking fonts, borders, or colors outward.
+   ========================================================================== */
+@layer nrki.tokens {
+  :root {
+    /* Shared Geometric & Structural Defaults */
+    --nrki-shell-max-width: 74rem;
+    --nrki-reading-max-width: 43rem;
+    --nrki-space-1: 0.25rem;
+    --nrki-space-2: 0.5rem;
+    --nrki-space-3: 0.85rem;
+    --nrki-space-4: 1.25rem;
+    --nrki-space-5: 2rem;
+    --nrki-space-6: 3.25rem;
+    --nrki-transition-fast: 140ms ease;
+    --nrki-shadow-overlay: 0 20px 50px rgba(0, 0, 0, 0.42);
+    --nrki-ancient-frame-svg: none;
+  }
+
+  /* ------------------------------------------------------------------------
+     THEME 01: CLASSIC (Metropolitan Botanical Broadsheet)
+     Context Typography: Playfair Display h1–h3 + Newsreader body + Playfair
+     italic quotes + Libre Franklin UI + JetBrains Mono code.
+     ------------------------------------------------------------------------ */
+  :root,
+  [data-theme="classic"],
+  [data-theme="classic"][data-mode="light"] {
+    color-scheme: light;
+
+    /* Contextual Typography Roles */
+    --nrki-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+    --nrki-font-heading: "Playfair Display", Georgia, serif;
+    --nrki-font-body: "Newsreader", Georgia, Baskerville, serif;
+    --nrki-font-quote: "Playfair Display", Georgia, serif;
+    --nrki-font-ui: "Libre Franklin", Arial, Helvetica, system-ui, sans-serif;
+    --nrki-font-mono: "JetBrains Mono", "Courier New", Courier, monospace;
+
+    /* Classic Border & Geometry Grammar (Sharp hairlines & 3px double rules) */
+    --nrki-radius-control: 0px;
+    --nrki-radius-surface: 0px;
+    --nrki-radius-pill: 0px;
+    --nrki-card-border: 1px solid var(--nrki-border-subtle);
+    --nrki-card-hover-border: var(--nrki-border-strong);
+    --nrki-card-frame-shadow: none;
+    --nrki-card-hover-shadow: 0 6px 16px rgba(23, 27, 22, 0.08);
+    --nrki-section-rule-major: 3px double var(--nrki-border-strong);
+    --nrki-section-rule-minor: 1px solid var(--nrki-border-subtle);
+    --nrki-panel-border: 1px solid var(--nrki-border-subtle);
+    --nrki-surface-texture: none;
+    --nrki-ornament-symbol: "— § —";
+
+    /* Classic Light Palette */
+    --nrki-surface-canvas: #f2efe7;
+    --nrki-surface-panel: #e8e6dc;
+    --nrki-surface-inset: #dcdecf;
+    --nrki-surface-elevated: #f8f7f2;
+
+    --nrki-ink-heading: #171b16;
+    --nrki-ink-body: #31362f;
+    --nrki-ink-muted: #5d6359;
+    --nrki-ink-faint: #848b7e;
+    --nrki-ink-on-accent: #f8f7f2;
+
+    --nrki-accent-primary: #2d4f36;
+    --nrki-accent-primary-hover: #1f3725;
+    --nrki-accent-primary-tint: #deebe0;
+    --nrki-accent-secondary: #475e4e;
+    --nrki-accent-secondary-hover: #324337;
+    --nrki-accent-secondary-tint: #e4ebe5;
+    --nrki-accent-highlight: #6d673b;
+    --nrki-accent-highlight-hover: #524d29;
+    --nrki-accent-highlight-tint: #edeacf;
+
+    --nrki-border-strong: #171b16;
+    --nrki-border-subtle: #848c7e;
+    --nrki-border-faint: #c9cebe;
+    --nrki-border-ornament: #2d4f36;
+
+    --nrki-status-info-ink: #264336;
+    --nrki-status-info-surface: #e2ede7;
+    --nrki-status-info-border: #4d7a65;
+    --nrki-status-success-ink: #1f4228;
+    --nrki-status-success-surface: #ddeede;
+    --nrki-status-success-border: #417551;
+    --nrki-status-warning-ink: #665005;
+    --nrki-status-warning-surface: #f5eed3;
+    --nrki-status-warning-border: #997c1a;
+    --nrki-status-danger-ink: #6f221b;
+    --nrki-status-danger-surface: #f4dedd;
+    --nrki-status-danger-border: #943932;
+
+    --nrki-link-ink: var(--nrki-accent-primary);
+    --nrki-link-hover-ink: var(--nrki-accent-highlight);
+    --nrki-focus-ring: #2d4f36;
+    --nrki-selection-surface: #c9d6c3;
+    --nrki-selection-ink: #171b16;
+    --nrki-code-surface: #e3e6dd;
+    --nrki-code-ink: #232b24;
+    --nrki-code-keyword: #1f4d35;
+    --nrki-code-string: #7c2d23;
+    --nrki-code-comment: #687062;
+    --nrki-code-prop: #5c5323;
+    --nrki-code-tag: #2d4f36;
+  }
+
+  :root[data-mode="dark"],
+  [data-theme="classic"][data-mode="dark"] {
+    color-scheme: dark;
+
+    --nrki-surface-canvas: #121613;
+    --nrki-surface-panel: #181d19;
+    --nrki-surface-inset: #222923;
+    --nrki-surface-elevated: #1b211c;
+
+    --nrki-ink-heading: #e6e8df;
+    --nrki-ink-body: #c2c7ba;
+    --nrki-ink-muted: #8b9484;
+    --nrki-ink-faint: #565f50;
+    --nrki-ink-on-accent: #121613;
+
+    --nrki-accent-primary: #7ea383;
+    --nrki-accent-primary-hover: #98bfa0;
+    --nrki-accent-primary-tint: #1e2e22;
+    --nrki-accent-secondary: #90a58a;
+    --nrki-accent-secondary-hover: #adc2a6;
+    --nrki-accent-secondary-tint: #242f24;
+    --nrki-accent-highlight: #c4b574;
+    --nrki-accent-highlight-hover: #dbcc88;
+    --nrki-accent-highlight-tint: #332f1c;
+
+    --nrki-border-strong: #8b9484;
+    --nrki-border-subtle: #3a4438;
+    --nrki-border-faint: #262f25;
+    --nrki-border-ornament: #7ea383;
+
+    --nrki-status-info-ink: #a0cebc;
+    --nrki-status-info-surface: #162721;
+    --nrki-status-info-border: #3b6354;
+    --nrki-status-success-ink: #9ed4a9;
+    --nrki-status-success-surface: #15291b;
+    --nrki-status-success-border: #35633e;
+    --nrki-status-warning-ink: #eed382;
+    --nrki-status-warning-surface: #2b2513;
+    --nrki-status-warning-border: #755f24;
+    --nrki-status-danger-ink: #f09f99;
+    --nrki-status-danger-surface: #301a19;
+    --nrki-status-danger-border: #7d332f;
+
+    --nrki-link-ink: #8bb892;
+    --nrki-link-hover-ink: #c4b574;
+    --nrki-focus-ring: #98bfa0;
+    --nrki-selection-surface: #334836;
+    --nrki-selection-ink: #f0f4ee;
+    --nrki-code-surface: #161d17;
+    --nrki-code-ink: #dbe3d6;
+    --nrki-code-keyword: #9bd1a3;
+    --nrki-code-string: #ebaa9b;
+    --nrki-code-comment: #768271;
+    --nrki-code-prop: #dbcc88;
+    --nrki-code-tag: #8bc7aa;
+    --nrki-card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* ------------------------------------------------------------------------
+     THEME 02: ANCIENT (Fantasy Kingdom Royal Chronicle)
+     Contextual Voice:
+       - `h1` & drop-caps: UnifrakturCook (True Old English Blackletter)
+       - Subheadings & UI chrome: Cinzel (Engraved Roman capitals)
+       - Body copy: Cormorant Garamond (High-contrast calligraphic book serif)
+       - Quotes, captions & epigraphs: IM Fell English (Italic antique type)
+       - Code spans & blocks: Courier Prime (Crisp traditional typewriter slab)
+     Borders: Outward-curved 9-slice SVG book-frame corners + double gold rails.
+     ------------------------------------------------------------------------ */
+  [data-theme="ancient"],
+  [data-theme="ancient"][data-mode="light"] {
+    color-scheme: light;
+
+    --nrki-font-display: "UnifrakturCook", "Old English Text MT", "Blackletter", Georgia, serif;
+    --nrki-font-heading: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --nrki-font-body: "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --nrki-font-quote: "IM Fell English", "Cormorant Garamond", Georgia, serif;
+    --nrki-font-ui: "Cinzel", "Palatino Linotype", "Book Antiqua", serif;
+    --nrki-font-mono: "Courier Prime", "Courier New", Courier, monospace;
+
+    /* Ornate Royal Border & Outward-Curved Book Corner Grammar */
+    --nrki-radius-control: 2px;
+    --nrki-radius-surface: 3px;
+    --nrki-radius-pill: 2px;
+    --nrki-card-border: 3px double var(--nrki-border-strong);
+    --nrki-card-hover-border: var(--nrki-accent-primary);
+    --nrki-card-frame-shadow: inset 0 0 0 4px var(--nrki-surface-elevated), inset 0 0 0 5px var(--nrki-border-ornament);
+    --nrki-card-hover-shadow: inset 0 0 0 4px var(--nrki-surface-panel), inset 0 0 0 5px var(--nrki-accent-primary), 0 8px 18px rgba(42, 28, 17, 0.14);
+    --nrki-section-rule-major: 4px double var(--nrki-border-ornament);
+    --nrki-section-rule-minor: 2px ridge var(--nrki-border-subtle);
+    --nrki-panel-border: 3px double var(--nrki-border-strong);
+    --nrki-surface-texture: radial-gradient(circle at 50% 20%, transparent 58%, rgba(120, 82, 34, 0.1) 100%);
+    --nrki-ornament-symbol: "❧ ⚜ ❧";
+    --nrki-ancient-frame-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='%238c6821' stroke-width='1' d='M17 17H73V73H17Z'/%3E%3Cpath stroke='%234a331d' stroke-width='1.6' d='M12 12H78V78H12Z'/%3E%3Cpath stroke='%234a331d' stroke-width='1.45' d='M12 12H4C1 12 1 3 6 3C9 3 9 7 6 8M12 12V4C12 1 3 1 3 6C3 9 7 9 8 6M78 12H86C89 12 89 3 84 3C81 3 81 7 84 8M78 12V4C78 1 87 1 87 6C87 9 83 9 82 6M12 78H4C1 78 1 87 6 87C9 87 9 83 6 82M12 78V86C12 89 3 89 3 84C3 81 7 81 8 84M78 78H86C89 78 89 87 84 87C81 87 81 83 84 82M78 78V86C78 89 87 89 87 84C87 81 83 81 82 84'/%3E%3Ccircle cx='17' cy='17' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='73' cy='17' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='17' cy='73' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='73' cy='73' r='1.8' fill='%238c6821'/%3E%3C/g%3E%3C/svg%3E");
+
+    /* Aged Royal Vellum Palette */
+    --nrki-surface-canvas: #efe3c6;
+    --nrki-surface-panel: #e4d3ae;
+    --nrki-surface-inset: #d8c398;
+    --nrki-surface-elevated: #f6ecd3;
+
+    --nrki-ink-heading: #2a1c11;
+    --nrki-ink-body: #3d2a1b;
+    --nrki-ink-muted: #6b5239;
+    --nrki-ink-faint: #967d5e;
+    --nrki-ink-on-accent: #f8eed9;
+
+    --nrki-accent-primary: #7d1f1a;
+    --nrki-accent-primary-hover: #5e1511;
+    --nrki-accent-primary-tint: #ecd2c9;
+    --nrki-accent-secondary: #3a523e;
+    --nrki-accent-secondary-hover: #273a2b;
+    --nrki-accent-secondary-tint: #dce3d5;
+    --nrki-accent-highlight: #8c6821;
+    --nrki-accent-highlight-hover: #694d16;
+    --nrki-accent-highlight-tint: #eee0ba;
+
+    --nrki-border-strong: #4a331d;
+    --nrki-border-subtle: #9a7d52;
+    --nrki-border-faint: #c9b28a;
+    --nrki-border-ornament: #8c6821;
+
+    --nrki-status-info-ink: #2c4352;
+    --nrki-status-info-surface: #dce5e8;
+    --nrki-status-info-border: #597685;
+    --nrki-status-success-ink: #2a4727;
+    --nrki-status-success-surface: #dde6d5;
+    --nrki-status-success-border: #58784e;
+    --nrki-status-warning-ink: #6e4e08;
+    --nrki-status-warning-surface: #f2e1b6;
+    --nrki-status-warning-border: #9e7521;
+    --nrki-status-danger-ink: #7d1f1a;
+    --nrki-status-danger-surface: #efd0cb;
+    --nrki-status-danger-border: #a63d37;
+
+    --nrki-link-ink: #7d1f1a;
+    --nrki-link-hover-ink: #8c6821;
+    --nrki-focus-ring: #7d1f1a;
+    --nrki-selection-surface: #dcc38f;
+    --nrki-selection-ink: #2a1c11;
+    --nrki-code-surface: #e3d2af;
+    --nrki-code-ink: #2f1f12;
+    --nrki-code-keyword: #7d1f1a;
+    --nrki-code-string: #2b4d2a;
+    --nrki-code-comment: #786043;
+    --nrki-code-prop: #734e11;
+    --nrki-code-tag: #5e1511;
+  }
+
+  [data-theme="ancient"][data-mode="dark"] {
+    color-scheme: dark;
+
+    --nrki-card-frame-shadow: inset 0 0 0 4px var(--nrki-surface-elevated), inset 0 0 0 5px var(--nrki-border-ornament);
+    --nrki-card-hover-shadow: inset 0 0 0 4px var(--nrki-surface-panel), inset 0 0 0 5px var(--nrki-accent-primary), 0 10px 24px rgba(0, 0, 0, 0.52);
+    --nrki-surface-texture: radial-gradient(circle at 50% 25%, rgba(214, 174, 85, 0.05) 0%, rgba(0, 0, 0, 0.35) 100%);
+    --nrki-ancient-frame-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='%239a7834' stroke-width='1' d='M17 17H73V73H17Z'/%3E%3Cpath stroke='%23d6ae55' stroke-width='1.6' d='M12 12H78V78H12Z'/%3E%3Cpath stroke='%23d6ae55' stroke-width='1.45' d='M12 12H4C1 12 1 3 6 3C9 3 9 7 6 8M12 12V4C12 1 3 1 3 6C3 9 7 9 8 6M78 12H86C89 12 89 3 84 3C81 3 81 7 84 8M78 12V4C78 1 87 1 87 6C87 9 83 9 82 6M12 78H4C1 78 1 87 6 87C9 87 9 83 6 82M12 78V86C12 89 3 89 3 84C3 81 7 81 8 84M78 78H86C89 78 89 87 84 87C81 87 81 83 84 82M78 78V86C78 89 87 89 87 84C87 81 83 81 82 84'/%3E%3Ccircle cx='17' cy='17' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='73' cy='17' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='17' cy='73' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='73' cy='73' r='1.8' fill='%23d6ae55'/%3E%3C/g%3E%3C/svg%3E");
+
+    /* Candlelit Obsidian & Gilded Parchment */
+    --nrki-surface-canvas: #16120d;
+    --nrki-surface-panel: #201a13;
+    --nrki-surface-inset: #292118;
+    --nrki-surface-elevated: #1b1610;
+
+    --nrki-ink-heading: #efe1c4;
+    --nrki-ink-body: #d7c7a8;
+    --nrki-ink-muted: #9e8b6a;
+    --nrki-ink-faint: #6b5b42;
+    --nrki-ink-on-accent: #18120c;
+
+    --nrki-accent-primary: #d6ae55;
+    --nrki-accent-primary-hover: #e8c474;
+    --nrki-accent-primary-tint: #2e2514;
+    --nrki-accent-secondary: #8fb38c;
+    --nrki-accent-secondary-hover: #abcca8;
+    --nrki-accent-secondary-tint: #1d291d;
+    --nrki-accent-highlight: #d45d54;
+    --nrki-accent-highlight-hover: #e67c74;
+    --nrki-accent-highlight-tint: #361b19;
+
+    --nrki-border-strong: #b8944a;
+    --nrki-border-subtle: #665233;
+    --nrki-border-faint: #3b2f1d;
+    --nrki-border-ornament: #d6ae55;
+
+    --nrki-status-info-ink: #a2cad4;
+    --nrki-status-info-surface: #17262b;
+    --nrki-status-info-border: #497582;
+    --nrki-status-success-ink: #a8d49c;
+    --nrki-status-success-surface: #182616;
+    --nrki-status-success-border: #4b7542;
+    --nrki-status-warning-ink: #ebd178;
+    --nrki-status-warning-surface: #2e2611;
+    --nrki-status-warning-border: #917324;
+    --nrki-status-danger-ink: #f0958d;
+    --nrki-status-danger-surface: #361917;
+    --nrki-status-danger-border: #913f39;
+
+    --nrki-link-ink: #d6ae55;
+    --nrki-link-hover-ink: #d45d54;
+    --nrki-focus-ring: #d6ae55;
+    --nrki-selection-surface: #473922;
+    --nrki-selection-ink: #efe1c4;
+    --nrki-code-surface: #211a12;
+    --nrki-code-ink: #ead9b7;
+    --nrki-code-keyword: #f08a7e;
+    --nrki-code-string: #9fd19b;
+    --nrki-code-comment: #8e7b5c;
+    --nrki-code-prop: #e8c474;
+    --nrki-code-tag: #e8b861;
+  }
+
+  /* ------------------------------------------------------------------------
+     THEME 03: MINIMALISTIC (Swiss Neo-Editorial Broadsheet)
+     Barely any borders: tonal elevation & whitespace define hierarchy; subtle
+     Newsreader serif quote contrast against Space Grotesk + Inter + IBM Plex Mono.
+     ------------------------------------------------------------------------ */
+  [data-theme="minimalistic"],
+  [data-theme="minimalistic"][data-mode="light"] {
+    color-scheme: light;
+
+    --nrki-font-display: "Space Grotesk", "Inter", "Helvetica Neue", system-ui, sans-serif;
+    --nrki-font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
+    --nrki-font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --nrki-font-quote: "Newsreader", Georgia, serif;
+    --nrki-font-ui: "Inter", system-ui, -apple-system, sans-serif;
+    --nrki-font-mono: "IBM Plex Mono", "JetBrains Mono", Consolas, monospace;
+
+    /* Minimalistic Border Grammar (Near-zero outlines; subtle gallery shadow) */
+    --nrki-radius-control: 2px;
+    --nrki-radius-surface: 2px;
+    --nrki-radius-pill: 2px;
+    --nrki-card-border: 0px solid transparent;
+    --nrki-card-hover-border: transparent;
+    --nrki-card-frame-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --nrki-card-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    --nrki-section-rule-major: 1px solid var(--nrki-border-faint);
+    --nrki-section-rule-minor: 1px solid var(--nrki-border-faint);
+    --nrki-panel-border: 0px solid transparent;
+    --nrki-surface-texture: none;
+    --nrki-ornament-symbol: "·";
+
+    /* Pure Gallery Alabaster & Carbon Slate */
+    --nrki-surface-canvas: #fafaf9;
+    --nrki-surface-panel: #f1f1ef;
+    --nrki-surface-inset: #e7e7e4;
+    --nrki-surface-elevated: #ffffff;
+
+    --nrki-ink-heading: #111213;
+    --nrki-ink-body: #2c2f33;
+    --nrki-ink-muted: #666b73;
+    --nrki-ink-faint: #a1a6ae;
+    --nrki-ink-on-accent: #ffffff;
+
+    --nrki-accent-primary: #1f2937;
+    --nrki-accent-primary-hover: #0f172a;
+    --nrki-accent-primary-tint: #eaecef;
+    --nrki-accent-secondary: #4b5563;
+    --nrki-accent-secondary-hover: #374151;
+    --nrki-accent-secondary-tint: #eff0f2;
+    --nrki-accent-highlight: #2563eb;
+    --nrki-accent-highlight-hover: #1d4ed8;
+    --nrki-accent-highlight-tint: #e8f0fe;
+
+    --nrki-border-strong: #d4d4d8;
+    --nrki-border-subtle: #e4e4e7;
+    --nrki-border-faint: #ececee;
+    --nrki-border-ornament: #d4d4d8;
+
+    --nrki-status-info-ink: #1e40af;
+    --nrki-status-info-surface: #eff6ff;
+    --nrki-status-info-border: #bfdbfe;
+    --nrki-status-success-ink: #166534;
+    --nrki-status-success-surface: #f0fdf4;
+    --nrki-status-success-border: #bbf7d0;
+    --nrki-status-warning-ink: #92400e;
+    --nrki-status-warning-surface: #fffbeb;
+    --nrki-status-warning-border: #fde68a;
+    --nrki-status-danger-ink: #991b1b;
+    --nrki-status-danger-surface: #fef2f2;
+    --nrki-status-danger-border: #fecaca;
+
+    --nrki-link-ink: #111213;
+    --nrki-link-hover-ink: #2563eb;
+    --nrki-focus-ring: #2563eb;
+    --nrki-selection-surface: #dbeafe;
+    --nrki-selection-ink: #111213;
+    --nrki-code-surface: #f1f1ef;
+    --nrki-code-ink: #18181b;
+    --nrki-code-keyword: #1d4ed8;
+    --nrki-code-string: #0f766e;
+    --nrki-code-comment: #71717a;
+    --nrki-code-prop: #7c3aed;
+    --nrki-code-tag: #111827;
+  }
+
+  [data-theme="minimalistic"][data-mode="dark"] {
+    color-scheme: dark;
+
+    --nrki-card-frame-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+    --nrki-card-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+
+    /* Matte Obsidian & Cool Chalk */
+    --nrki-surface-canvas: #0d0e10;
+    --nrki-surface-panel: #15171a;
+    --nrki-surface-inset: #1e2126;
+    --nrki-surface-elevated: #181a1e;
+
+    --nrki-ink-heading: #f3f4f6;
+    --nrki-ink-body: #d1d5db;
+    --nrki-ink-muted: #8b929e;
+    --nrki-ink-faint: #525866;
+    --nrki-ink-on-accent: #0d0e10;
+
+    --nrki-accent-primary: #e5e7eb;
+    --nrki-accent-primary-hover: #ffffff;
+    --nrki-accent-primary-tint: #22262c;
+    --nrki-accent-secondary: #9ca3af;
+    --nrki-accent-secondary-hover: #d1d5db;
+    --nrki-accent-secondary-tint: #1f2328;
+    --nrki-accent-highlight: #60a5fa;
+    --nrki-accent-highlight-hover: #93c5fd;
+    --nrki-accent-highlight-tint: #17253d;
+
+    --nrki-border-strong: #2d3139;
+    --nrki-border-subtle: #23262c;
+    --nrki-border-faint: #1c1e24;
+    --nrki-border-ornament: #2d3139;
+
+    --nrki-status-info-ink: #93c5fd;
+    --nrki-status-info-surface: #131c2e;
+    --nrki-status-info-border: #253b63;
+    --nrki-status-success-ink: #86efac;
+    --nrki-status-success-surface: #112419;
+    --nrki-status-success-border: #1e4d31;
+    --nrki-status-warning-ink: #fcd34d;
+    --nrki-status-warning-surface: #261f10;
+    --nrki-status-warning-border: #574418;
+    --nrki-status-danger-ink: #fca5a5;
+    --nrki-status-danger-surface: #2b1416;
+    --nrki-status-danger-border: #61262b;
+
+    --nrki-link-ink: #f3f4f6;
+    --nrki-link-hover-ink: #60a5fa;
+    --nrki-focus-ring: #60a5fa;
+    --nrki-selection-surface: #1e3a5f;
+    --nrki-selection-ink: #f3f4f6;
+    --nrki-code-surface: #181b20;
+    --nrki-code-ink: #e5e7eb;
+    --nrki-code-keyword: #93c5fd;
+    --nrki-code-string: #5eead4;
+    --nrki-code-comment: #7d8594;
+    --nrki-code-prop: #c4b5fd;
+    --nrki-code-tag: #f3f4f6;
+  }
+
+  /* ------------------------------------------------------------------------
+     THEME 04: UwU (Kawaii Pastel Zine Broadsheet)
+     Rounded pill geometry, Fredoka display/UI + Nunito prose + Mali handwritten
+     quotes & captions + DM Mono approachable rounded code font.
+     ------------------------------------------------------------------------ */
+  [data-theme="uwu"],
+  [data-theme="uwu"][data-mode="light"] {
+    color-scheme: light;
+
+    --nrki-font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+    --nrki-font-heading: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+    --nrki-font-body: "Nunito", "Trebuchet MS", sans-serif;
+    --nrki-font-quote: "Mali", "Nunito", cursive, sans-serif;
+    --nrki-font-ui: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+    --nrki-font-mono: "DM Mono", "JetBrains Mono", "Courier New", monospace;
+
+    /* Chunky Pastel Zine Geometry */
+    --nrki-radius-control: 12px;
+    --nrki-radius-surface: 18px;
+    --nrki-radius-pill: 999px;
+    --nrki-card-border: 2px solid var(--nrki-border-subtle);
+    --nrki-card-hover-border: var(--nrki-accent-primary);
+    --nrki-card-frame-shadow: 3px 3px 0 var(--nrki-border-faint);
+    --nrki-card-hover-shadow: 4px 4px 0 var(--nrki-accent-primary);
+    --nrki-section-rule-major: 3px dashed var(--nrki-border-strong);
+    --nrki-section-rule-minor: 2px dotted var(--nrki-border-subtle);
+    --nrki-panel-border: 2px solid var(--nrki-border-subtle);
+    --nrki-surface-texture: radial-gradient(rgba(207, 53, 129, 0.045) 1px, transparent 1px);
+    --nrki-ornament-symbol: "✿ ✧ ✿";
+
+    /* Sakura Milk Light Palette */
+    --nrki-surface-canvas: #fff4f9;
+    --nrki-surface-panel: #fce4ef;
+    --nrki-surface-inset: #f3dffb;
+    --nrki-surface-elevated: #ffffff;
+
+    --nrki-ink-heading: #3f1d38;
+    --nrki-ink-body: #562c4d;
+    --nrki-ink-muted: #86567c;
+    --nrki-ink-faint: #bd90b4;
+    --nrki-ink-on-accent: #ffffff;
+
+    --nrki-accent-primary: #cf3581;
+    --nrki-accent-primary-hover: #a82465;
+    --nrki-accent-primary-tint: #fde0ef;
+    --nrki-accent-secondary: #7e52c2;
+    --nrki-accent-secondary-hover: #623ba1;
+    --nrki-accent-secondary-tint: #ede2fc;
+    --nrki-accent-highlight: #d97706;
+    --nrki-accent-highlight-hover: #b45309;
+    --nrki-accent-highlight-tint: #fef0d6;
+
+    --nrki-border-strong: #c95891;
+    --nrki-border-subtle: #eb9fc4;
+    --nrki-border-faint: #f7cbe0;
+    --nrki-border-ornament: #cf3581;
+
+    --nrki-status-info-ink: #5a3891;
+    --nrki-status-info-surface: #eee5fc;
+    --nrki-status-info-border: #9f7be0;
+    --nrki-status-success-ink: #1e6b48;
+    --nrki-status-success-surface: #ddf7ea;
+    --nrki-status-success-border: #4ea87f;
+    --nrki-status-warning-ink: #924c07;
+    --nrki-status-warning-surface: #fef0d6;
+    --nrki-status-warning-border: #d9913b;
+    --nrki-status-danger-ink: #991b3a;
+    --nrki-status-danger-surface: #fde2e8;
+    --nrki-status-danger-border: #d65c78;
+
+    --nrki-link-ink: #cf3581;
+    --nrki-link-hover-ink: #7e52c2;
+    --nrki-focus-ring: #cf3581;
+    --nrki-selection-surface: #fbcfe8;
+    --nrki-selection-ink: #3f1d38;
+    --nrki-code-surface: #fae6f3;
+    --nrki-code-ink: #4a2342;
+    --nrki-code-keyword: #6d28d9;
+    --nrki-code-string: #0f766e;
+    --nrki-code-comment: #9c6a92;
+    --nrki-code-prop: #b45309;
+    --nrki-code-tag: #be185d;
+  }
+
+  [data-theme="uwu"][data-mode="dark"] {
+    color-scheme: dark;
+
+    --nrki-card-frame-shadow: 3px 3px 0 #3a1f45;
+    --nrki-card-hover-shadow: 4px 4px 0 #f472b6;
+    --nrki-surface-texture: radial-gradient(rgba(244, 114, 182, 0.06) 1px, transparent 1px);
+
+    /* Midnight Velvet Plum & Neon Sakura */
+    --nrki-surface-canvas: #1a101d;
+    --nrki-surface-panel: #25172b;
+    --nrki-surface-inset: #311d38;
+    --nrki-surface-elevated: #221426;
+
+    --nrki-ink-heading: #fdf2f8;
+    --nrki-ink-body: #ebd4e4;
+    --nrki-ink-muted: #b88ead;
+    --nrki-ink-faint: #734d6c;
+    --nrki-ink-on-accent: #1a101d;
+
+    --nrki-accent-primary: #f472b6;
+    --nrki-accent-primary-hover: #f9a8d4;
+    --nrki-accent-primary-tint: #421d36;
+    --nrki-accent-secondary: #c4b5fd;
+    --nrki-accent-secondary-hover: #ddd6fe;
+    --nrki-accent-secondary-tint: #2c2047;
+    --nrki-accent-highlight: #fbbf24;
+    --nrki-accent-highlight-hover: #fde68a;
+    --nrki-accent-highlight-tint: #3d2e14;
+
+    --nrki-border-strong: #f472b6;
+    --nrki-border-subtle: #6e3b64;
+    --nrki-border-faint: #42223d;
+    --nrki-border-ornament: #f472b6;
+
+    --nrki-status-info-ink: #c4b5fd;
+    --nrki-status-info-surface: #251d3d;
+    --nrki-status-info-border: #6d52b3;
+    --nrki-status-success-ink: #86efac;
+    --nrki-status-success-surface: #142b21;
+    --nrki-status-success-border: #2e7552;
+    --nrki-status-warning-ink: #fcd34d;
+    --nrki-status-warning-surface: #332612;
+    --nrki-status-warning-border: #876321;
+    --nrki-status-danger-ink: #fda4af;
+    --nrki-status-danger-surface: #3b1721;
+    --nrki-status-danger-border: #8f364e;
+
+    --nrki-link-ink: #f472b6;
+    --nrki-link-hover-ink: #c4b5fd;
+    --nrki-focus-ring: #f472b6;
+    --nrki-selection-surface: #6e2853;
+    --nrki-selection-ink: #fdf2f8;
+    --nrki-code-surface: #29182e;
+    --nrki-code-ink: #f5dce9;
+    --nrki-code-keyword: #c4b5fd;
+    --nrki-code-string: #6ee7b7;
+    --nrki-code-comment: #9e7495;
+    --nrki-code-prop: #fcd34d;
+    --nrki-code-tag: #f472b6;
+  }
+}
+
+
+/* ==========================================================================
+   2. RESET & BASE TYPOGRAPHIC DEFAULTS (`@layer nrki.reset`)
+   ========================================================================== */
+@layer nrki.reset {
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-body);
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--nrki-surface-canvas);
+    background-image: var(--nrki-surface-texture);
+    background-size: 16px 16px;
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  /* Restore non-tiling vignette size and richer serif weight for Ancient vellum */
+  [data-theme="ancient"],
+  [data-theme="ancient"] body {
+    background-size: 100% 100%;
+    font-size: 1.08rem;
+    font-weight: 500;
+  }
+
+  html.nrki-theme-animating,
+  html.nrki-theme-animating body {
+    transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  ::selection {
+    background-color: var(--nrki-selection-surface);
+    color: var(--nrki-selection-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin-top: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.16;
+  }
+
+  h1 {
+    font-family: var(--nrki-font-display);
+  }
+
+  [data-theme="ancient"] h1 {
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    line-height: 1.08;
+  }
+
+  h1 em,
+  h2 em,
+  h3 em,
+  h4 em {
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  strong,
+  b {
+    font-weight: 700;
+    color: var(--nrki-ink-heading);
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--nrki-border-subtle);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition: color var(--nrki-transition-fast), text-decoration-color var(--nrki-transition-fast);
+  }
+
+  a:hover {
+    color: var(--nrki-link-hover-ink);
+    text-decoration-color: currentColor;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--nrki-focus-ring);
+    outline-offset: 3px;
+  }
+}
+
+
+/* ==========================================================================
+   3. ATOMIC ELEMENTS & THEME-ADAPTIVE DIVIDERS (`@layer nrki.elements`)
+   ========================================================================== */
+@layer nrki.elements {
+
+  .nrki-eyebrow,
+  .nrki-edition-line,
+  .nrki-masthead-note,
+  .nrki-folio,
+  .nrki-meta-label {
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-eyebrow {
+    margin-bottom: 0.55rem;
+    color: var(--nrki-accent-primary);
+    font-weight: 700;
+  }
+
+  .nrki-lead-summary {
+    max-width: 42rem;
+    color: var(--nrki-ink-muted);
+    font-size: clamp(1.02rem, 1.85vw, 1.22rem);
+    line-height: 1.55;
+  }
+
+  .nrki-quiet-note {
+    margin-top: 0.9rem;
+    margin-bottom: 0;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-quote);
+    font-size: 0.94rem;
+    font-style: italic;
+  }
+
+  .nrki-byline {
+    margin-bottom: 0.75rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-quote);
+    font-size: 0.94rem;
+    font-style: italic;
+  }
+
+  .nrki-small-caps {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+
+  .nrki-drop-cap::first-letter {
+    float: left;
+    margin-right: 0.38rem;
+    margin-top: 0.1rem;
+    padding: 0.15rem 0.45rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-display);
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 0.94;
+  }
+
+  mark {
+    padding: 0.06rem 0.28rem;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-accent-highlight-tint);
+    color: var(--nrki-ink-heading);
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-bottom-width: 2px;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78em;
+    font-weight: 700;
+  }
+
+  abbr[title] {
+    text-decoration: underline dotted var(--nrki-border-subtle);
+    cursor: help;
+  }
+
+  /* Monospace code styling tailored to each theme's readable mono face */
+  code,
+  pre {
+    font-family: var(--nrki-font-mono);
+    background-color: var(--nrki-code-surface);
+    color: var(--nrki-code-ink);
+    border-radius: var(--nrki-radius-control);
+    letter-spacing: 0;
+  }
+
+  code {
+    padding: 0.1rem 0.36rem;
+    border: 1px solid var(--nrki-border-faint);
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+
+  pre {
+    margin: 1rem 0;
+    padding: 1rem 1.25rem;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--nrki-border-subtle);
+    border-left: 4px solid var(--nrki-accent-primary);
+    font-size: 0.84rem;
+    line-height: 1.6;
+    tab-size: 2;
+  }
+
+  pre code {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-size: inherit;
+    font-weight: 400;
+  }
+
+  .nrki-code-block {
+    margin: 1rem 0;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    overflow: hidden;
+  }
+
+  .nrki-code-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    padding: 0.35rem 0.9rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-code-block pre {
+    margin: 0;
+    border: 0;
+    border-left: 4px solid var(--nrki-accent-primary);
+    border-radius: 0;
+  }
+
+  .nrki-tok-keyword {
+    color: var(--nrki-code-keyword);
+    font-weight: 700;
+  }
+
+  .nrki-tok-prop {
+    color: var(--nrki-code-prop);
+  }
+
+  .nrki-tok-string {
+    color: var(--nrki-code-string);
+  }
+
+  .nrki-tok-comment {
+    color: var(--nrki-code-comment);
+    font-style: italic;
+  }
+
+  .nrki-tok-tag {
+    color: var(--nrki-code-tag);
+    font-weight: 700;
+  }
+
+  /* --- Section Headers & Structural Rules --- */
+  .nrki-page-hero {
+    padding-block: clamp(1.75rem, 4.5vw, 3.25rem);
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-page-hero h1 {
+    max-width: 17ch;
+    margin-bottom: 0.85rem;
+    font-family: var(--nrki-font-display);
+    font-size: clamp(2.1rem, 5vw, 3.85rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .nrki-section-heading h2 {
+    margin-bottom: 0.35rem;
+    font-size: clamp(1.55rem, 3vw, 2.3rem);
+    line-height: 1.1;
+  }
+
+  .nrki-section-heading-note {
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
+  hr,
+  .nrki-rule-single {
+    border: 0;
+    border-top: var(--nrki-section-rule-minor);
+    margin-block: 1.35rem;
+  }
+
+  .nrki-rule-double {
+    border: 0;
+    border-top: var(--nrki-section-rule-major);
+    margin-block: 1.5rem;
+  }
+
+  .nrki-rule-dashed {
+    border: 0;
+    border-top: 1px dashed var(--nrki-border-subtle);
+    margin-block: 1.35rem;
+  }
+
+  /* Theme-adaptive divider: SVG filigree scrollwork in Ancient, floral in UwU,
+     classic double-winged glyph in Classic, whisper hairline in Minimalistic */
+  .nrki-ornate-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block: 1.5rem;
+    min-height: 1.25rem;
+    background: linear-gradient(transparent calc(50% - 0.5px),
+        var(--nrki-border-subtle) calc(50% - 0.5px),
+        var(--nrki-border-subtle) calc(50% + 0.5px),
+        transparent calc(50% + 0.5px));
+  }
+
+  .nrki-ornate-divider::after {
+    content: var(--nrki-ornament-symbol);
+    padding-inline: 0.85rem;
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-border-ornament);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+  }
+
+  [data-theme="ancient"] .nrki-ornate-divider {
+    height: 18px;
+    min-height: 18px;
+    background-image: none;
+    background-color: var(--nrki-border-ornament);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 20' preserveAspectRatio='none'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' d='M0 10 H125 C140 10 144 3 154 3 C162 3 165 10 180 10 C195 10 198 17 206 17 C216 17 220 10 235 10 H360'/%3E%3Ccircle cx='180' cy='10' r='3.5' fill='%23000'/%3E%3Ccircle cx='164' cy='10' r='1.8' fill='%23000'/%3E%3Ccircle cx='196' cy='10' r='1.8' fill='%23000'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 20' preserveAspectRatio='none'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' d='M0 10 H125 C140 10 144 3 154 3 C162 3 165 10 180 10 C195 10 198 17 206 17 C216 17 220 10 235 10 H360'/%3E%3Ccircle cx='180' cy='10' r='3.5' fill='%23000'/%3E%3Ccircle cx='164' cy='10' r='1.8' fill='%23000'/%3E%3Ccircle cx='196' cy='10' r='1.8' fill='%23000'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+  }
+
+  [data-theme="ancient"] .nrki-ornate-divider::after,
+  [data-theme="minimalistic"] .nrki-ornate-divider::after {
+    display: none;
+  }
+
+  [data-theme="minimalistic"] .nrki-ornate-divider {
+    height: 1px;
+    min-height: 1px;
+    background-image: none;
+    background-color: var(--nrki-border-faint);
+  }
+
+  /* Tufte-inspired marginalia sidenote */
+  .nrki-sidenote-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .nrki-sidenote {
+    padding: 0.65rem 0.9rem;
+    border-left: 3px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  /* --- Framed Panel & Corner Frame (Theme-Specific Border & Book-Corner Grammar) --- */
+  .nrki-framed-panel,
+  .nrki-corner-frame {
+    position: relative;
+    padding: 1.3rem;
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="classic"] .nrki-corner-frame {
+    border-top: 3px double var(--nrki-border-strong);
+  }
+
+  /* Why Ancient uses 9-slice SVG `border-image` with outward offset:
+     Allows straight double frame lines to extend beyond the corners and curl
+     outward like old illuminated manuscripts and fantasy book bindings while
+     adapting stroke colors cleanly between Light and Dark modes. */
+  [data-theme="ancient"] .nrki-framed-panel,
+  [data-theme="ancient"] .nrki-corner-frame {
+    overflow: visible;
+    padding: 1.55rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  [data-theme="minimalistic"] .nrki-framed-panel,
+  [data-theme="minimalistic"] .nrki-corner-frame {
+    border-width: 0;
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="uwu"] .nrki-framed-panel,
+  [data-theme="uwu"] .nrki-corner-frame {
+    border-style: dashed;
+    border-color: var(--nrki-border-strong);
+  }
+
+  [data-theme="uwu"] .nrki-corner-frame::after {
+    content: "✦";
+    position: absolute;
+    top: -0.65rem;
+    right: 0.9rem;
+    padding-inline: 0.35rem;
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-accent-primary);
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  /* --- Buttons (All Variants, Sizes & States) --- */
+  .nrki-button,
+  .nrki-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.48rem 0.9rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: transparent;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), transform var(--nrki-transition-fast);
+  }
+
+  /* Why `:where([data-theme=...])` wraps base button overrides:
+     Using zero-specificity `:where()` keeps base rules at (0, 1, 0) so
+     variant classes like `.nrki-button-primary` always win in cascade order
+     rather than losing to a (0, 2, 0) theme-scoped background color. */
+  :where([data-theme="minimalistic"]) .nrki-button,
+  :where([data-theme="minimalistic"]) .nrki-theme-toggle {
+    border-color: var(--nrki-border-faint);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  :where([data-theme="uwu"]) .nrki-button,
+  :where([data-theme="uwu"]) .nrki-theme-toggle {
+    border-width: 2px;
+    border-color: var(--nrki-border-strong);
+  }
+
+  :where([data-theme="ancient"]) .nrki-button,
+  :where([data-theme="ancient"]) .nrki-theme-toggle {
+    border-style: double;
+    border-width: 3px;
+  }
+
+  .nrki-button:hover:not(:disabled),
+  .nrki-theme-toggle:hover:not(:disabled) {
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    border-color: var(--nrki-ink-heading);
+    text-decoration: none;
+  }
+
+  .nrki-button-primary {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-button-primary:hover:not(:disabled) {
+    background-color: var(--nrki-accent-primary-hover);
+    border-color: var(--nrki-accent-primary-hover);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-button-secondary {
+    background-color: var(--nrki-surface-panel);
+    border-color: var(--nrki-border-subtle);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-secondary:hover:not(:disabled) {
+    background-color: var(--nrki-surface-inset);
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-ghost {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-button-ghost:hover:not(:disabled) {
+    border-color: var(--nrki-border-subtle);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-button-danger {
+    background-color: var(--nrki-status-danger-surface);
+    border-color: var(--nrki-status-danger-border);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-button-danger:hover:not(:disabled) {
+    background-color: var(--nrki-status-danger-ink);
+    border-color: var(--nrki-status-danger-ink);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-button-small {
+    padding: 0.28rem 0.62rem;
+    font-size: 0.66rem;
+  }
+
+  .nrki-button-large {
+    padding: 0.72rem 1.35rem;
+    font-size: 0.82rem;
+  }
+
+  .nrki-button:disabled {
+    opacity: 0.46;
+    cursor: not-allowed;
+  }
+
+  .nrki-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* --- Links & Breadcrumbs --- */
+  .nrki-text-link,
+  .nrki-back-link {
+    display: inline-block;
+    color: var(--nrki-link-ink);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration-thickness: 1px;
+  }
+
+  .nrki-text-link:hover,
+  .nrki-back-link:hover {
+    color: var(--nrki-link-hover-ink);
+  }
+
+  .nrki-skip-link {
+    position: absolute;
+    top: 1rem;
+    left: -9999px;
+    z-index: 200;
+    padding: 0.5rem 0.85rem;
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+
+  .nrki-skip-link:focus {
+    left: 1rem;
+  }
+
+  .nrki-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-breadcrumb li+li::before {
+    content: "/";
+    margin-right: 0.45rem;
+    color: var(--nrki-ink-faint);
+  }
+
+  /* --- Badges, Stamps & Tag Pills --- */
+  .nrki-badge {
+    display: inline-block;
+    padding: 0.16rem 0.52rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  :where([data-theme="minimalistic"]) .nrki-badge {
+    border-color: transparent;
+  }
+
+  .nrki-badge-accent {
+    background-color: var(--nrki-accent-primary-tint);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-badge-highlight {
+    background-color: var(--nrki-accent-highlight-tint);
+    border-color: var(--nrki-accent-highlight);
+    color: var(--nrki-accent-highlight);
+  }
+
+  .nrki-badge-success {
+    background-color: var(--nrki-status-success-surface);
+    border-color: var(--nrki-status-success-border);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-badge-warning {
+    background-color: var(--nrki-status-warning-surface);
+    border-color: var(--nrki-status-warning-border);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-badge-danger {
+    background-color: var(--nrki-status-danger-surface);
+    border-color: var(--nrki-status-danger-border);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-rating-stamp {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 0.22rem 0.55rem;
+    border: 1px solid var(--nrki-accent-highlight);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-accent-highlight-tint);
+    color: var(--nrki-accent-highlight);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nrki-tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0.35rem 0 0.75rem;
+    padding: 0;
+  }
+
+  .nrki-tag-pill {
+    display: inline-block;
+    padding: 0.14rem 0.5rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    line-height: 1.3;
+  }
+
+  .nrki-connected-chip {
+    display: inline-block;
+    padding: 0.14rem 0.5rem;
+    border: 1px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-connected-chip:hover {
+    background-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  /* --- Lists, Checklists, Ruled Ledgers & Contextual Markers --- */
+  .nrki-editorial-list {
+    margin: 0.75rem 0 1.25rem;
+    padding-left: 1.4rem;
+    list-style-type: "▪  ";
+  }
+
+  [data-theme="ancient"] .nrki-editorial-list {
+    list-style-type: "❖  ";
+  }
+
+  [data-theme="minimalistic"] .nrki-editorial-list {
+    list-style-type: "–  ";
+  }
+
+  [data-theme="uwu"] .nrki-editorial-list {
+    list-style-type: "✦  ";
+  }
+
+  .nrki-editorial-list li {
+    margin-bottom: 0.35rem;
+  }
+
+  .nrki-editorial-list li::marker {
+    color: var(--nrki-accent-primary);
+    font-weight: 700;
+  }
+
+  /* Why ordered list items and checklist entries use `position: relative`
+     with an absolutely positioned `::before` marker instead of `display: grid`
+     or `display: flex` on the `<li>`:
+     Applying `display: grid` or `display: flex` directly to an `<li>` causes
+     every inline child element inside the sentence (such as `<code>`, `<strong>`,
+     `<em>`, or `<a>`) to become a separate grid cell or flex column, breaking
+     sentences across columns on mobile screens. Keeping `<li>` in normal block
+     flow with `padding-left` preserves natural inline text wrapping. */
+  .nrki-ordered-list {
+    counter-reset: nrki-ordered-counter;
+    list-style: none;
+    margin: 0.75rem 0 1.25rem;
+    padding: 0;
+  }
+
+  .nrki-ordered-list li {
+    counter-increment: nrki-ordered-counter;
+    position: relative;
+    padding-left: 2.25rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .nrki-ordered-list li::before {
+    content: counter(nrki-ordered-counter, decimal-leading-zero) ".";
+    position: absolute;
+    left: 0;
+    top: 0.14rem;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-checklist {
+    list-style: none;
+    margin: 0.75rem 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .nrki-checklist-entry {
+    position: relative;
+    padding-left: 1.55rem;
+    font-size: 0.94rem;
+  }
+
+  .nrki-checklist-entry::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    top: 0.02rem;
+    font-family: var(--nrki-font-mono);
+    font-weight: 700;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-checklist-entry.is-checked {
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-checklist-entry.is-checked::before {
+    content: "☑";
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-ruled-list {
+    list-style: none;
+    margin: 0.75rem 0;
+    padding: 0;
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-ruled-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    font-size: 0.92rem;
+  }
+
+  .nrki-ruled-list li strong {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nrki-inline-meta-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nrki-inline-meta-list li {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-inline-meta-list li:not(:last-child)::after {
+    content: "·";
+    margin-left: 0.35rem;
+  }
+
+  .nrki-definition-list {
+    margin: 0.75rem 0;
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-definition-list dt {
+    padding-top: 0.65rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-definition-list dd {
+    margin: 0.2rem 0 0;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    color: var(--nrki-ink-body);
+    font-size: 0.94rem;
+  }
+
+  /* --- Editorial Blockquotes (Uses contextual `--nrki-font-quote`) --- */
+  blockquote,
+  .nrki-quote {
+    margin: 1.25rem 0;
+    padding: 0.85rem 1.25rem;
+    border-left: 3px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-quote);
+    font-style: italic;
+  }
+
+  [data-theme="ancient"] blockquote,
+  [data-theme="ancient"] .nrki-quote {
+    border-left-width: 4px;
+    border-left-style: double;
+  }
+
+  blockquote cite,
+  .nrki-quote-cite {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-style: normal;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* --- Forms & Validation States --- */
+  .nrki-form-stack {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .nrki-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .nrki-label {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-input,
+  .nrki-textarea,
+  .nrki-select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    transition: border-color var(--nrki-transition-fast), background-color var(--nrki-transition-fast);
+  }
+
+  :where([data-theme="minimalistic"]) .nrki-input,
+  :where([data-theme="minimalistic"]) .nrki-textarea,
+  :where([data-theme="minimalistic"]) .nrki-select {
+    border-color: transparent;
+    background-color: var(--nrki-surface-panel);
+  }
+
+  :where([data-theme="uwu"]) .nrki-input,
+  :where([data-theme="uwu"]) .nrki-textarea,
+  :where([data-theme="uwu"]) .nrki-select {
+    border-width: 2px;
+  }
+
+  .nrki-input::placeholder,
+  .nrki-textarea::placeholder {
+    color: var(--nrki-ink-faint);
+  }
+
+  .nrki-input:hover,
+  .nrki-textarea:hover,
+  .nrki-select:hover {
+    border-color: var(--nrki-border-strong);
+  }
+
+  .nrki-input-invalid {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+  }
+
+  .nrki-field-help {
+    margin: 0;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-field-error {
+    margin: 0;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-checkbox-row,
+  .nrki-radio-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.88rem;
+    color: var(--nrki-ink-body);
+    cursor: pointer;
+  }
+
+  .nrki-checkbox-row input,
+  .nrki-radio-row input {
+    accent-color: var(--nrki-accent-primary);
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Pure CSS toggle switch built on accessible checkbox input */
+  .nrki-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.86rem;
+    color: var(--nrki-ink-body);
+    cursor: pointer;
+  }
+
+  .nrki-switch input {
+    appearance: none;
+    width: 2.35rem;
+    height: 1.3rem;
+    margin: 0;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-inset);
+    position: relative;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .nrki-switch input::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 0.82rem;
+    height: 0.82rem;
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-ink-heading);
+    transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-switch input:checked {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+  }
+
+  .nrki-switch input:checked::before {
+    transform: translateX(1.02rem);
+    background-color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-range {
+    width: 100%;
+    accent-color: var(--nrki-accent-primary);
+    cursor: pointer;
+  }
+
+  /* --- Tables & Data Ledgers --- */
+  .nrki-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nrki-table th,
+  .nrki-table td {
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-table th {
+    border-bottom: 2px solid var(--nrki-border-strong);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-table-compact th,
+  .nrki-table-compact td {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.85rem;
+  }
+
+  .nrki-table-striped tbody tr:nth-child(even) {
+    background-color: var(--nrki-surface-canvas);
+  }
+
+  .nrki-cell-numeric {
+    text-align: right;
+    font-family: var(--nrki-font-mono);
+  }
+
+  /* --- Callouts & Notices --- */
+  .nrki-callout {
+    padding: 0.9rem 1.15rem;
+    border: var(--nrki-panel-border);
+    border-left-width: 4px;
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    margin-block: 1rem;
+  }
+
+  :where([data-theme="uwu"]) .nrki-callout {
+    border-style: dashed;
+    border-width: 2px;
+  }
+
+  .nrki-callout-title {
+    margin-bottom: 0.25rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-callout p:last-child {
+    margin-bottom: 0;
+  }
+
+  .nrki-callout-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-callout-info .nrki-callout-title {
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-callout-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-callout-success .nrki-callout-title {
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-callout-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-callout-warning .nrki-callout-title {
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-callout-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-callout-danger .nrki-callout-title {
+    color: var(--nrki-status-danger-ink);
+  }
+
+  /* --- Media Figures --- */
+  .nrki-media-figure {
+    margin: 1.1rem 0;
+    padding: 0.85rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="ancient"] .nrki-media-figure {
+    overflow: visible;
+    padding: 1.35rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  .nrki-media-header {
+    margin-bottom: 0.55rem;
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-media-figure img,
+  .nrki-media-figure video,
+  .nrki-media-figure svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-media-figure audio {
+    display: block;
+    width: 100%;
+  }
+
+  .nrki-media-caption {
+    margin-top: 0.5rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-quote);
+    font-style: italic;
+    font-size: 0.88rem;
+  }
+
+  /* --- Progress Meters, Stat Strip & Author Bylines --- */
+  .nrki-progress {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .nrki-progress-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--nrki-ink-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nrki-progress-track {
+    width: 100%;
+    height: 0.65rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    overflow: hidden;
+  }
+
+  .nrki-progress-fill {
+    height: 100%;
+    background-color: var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+  }
+
+  .nrki-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    overflow: hidden;
+  }
+
+  .nrki-stat-cell {
+    padding: 0.9rem 1rem;
+  }
+
+  .nrki-stat-cell+.nrki-stat-cell {
+    border-left: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-stat-value {
+    display: block;
+    font-family: var(--nrki-font-display);
+    font-size: 1.65rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-stat-label {
+    display: block;
+    margin-top: 0.2rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-author-byline {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .nrki-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-heading);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  /* --- Tooltips, Empty States & Skeleton Placeholders --- */
+  .nrki-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-bottom: 1px dotted var(--nrki-accent-primary);
+    font-weight: 700;
+    cursor: help;
+  }
+
+  .nrki-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 0.45rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 16rem;
+    padding: 0.38rem 0.6rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--nrki-transition-fast);
+    z-index: 40;
+  }
+
+  .nrki-tooltip:hover::after,
+  .nrki-tooltip:focus-visible::after {
+    opacity: 1;
+  }
+
+  .nrki-empty-state {
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-skeleton-card {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-skeleton-line {
+    height: 0.78rem;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-inset);
+    animation: nrki-skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  .nrki-skeleton-line-short {
+    width: 42%;
+    height: 0.65rem;
+  }
+
+  .nrki-skeleton-line-mid {
+    width: 78%;
+  }
+
+  @keyframes nrki-skeleton-pulse {
+
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   4. REUSABLE BROADSHEET LAYOUTS & INTERACTIVE COMPONENTS (`@layer nrki.components`)
+   ========================================================================== */
+@layer nrki.components {
+
+  /* --- Shell & 6 Reusable Newspaper Layouts --- */
+  .nrki-page-shell {
+    width: min(100% - 3rem, var(--nrki-shell-max-width));
+    margin-inline: auto;
+  }
+
+  /* Layout 01: Classic 3-Column Broadsheet Front Page */
+  .nrki-layout-frontpage {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(13rem, 0.85fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .nrki-layout-frontpage>*+* {
+    border-left: 1px solid var(--nrki-border-subtle);
+    padding-left: 1.35rem;
+  }
+
+  /* Layout 02: Asymmetric Lead Story + Contents Rail */
+  .nrki-lead-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(14rem, 0.85fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: center;
+    padding-block: clamp(1.5rem, 4vw, 3rem);
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-lead-story h1 {
+    max-width: 15ch;
+    margin-bottom: 1rem;
+    font-family: var(--nrki-font-display);
+    font-size: clamp(2.1rem, 4.8vw, 3.9rem);
+    letter-spacing: -0.04em;
+    line-height: 1.04;
+  }
+
+  .nrki-lead-aside {
+    border-left: 1px solid var(--nrki-border-subtle);
+    padding-left: clamp(1.15rem, 2.5vw, 1.85rem);
+  }
+
+  .nrki-aside-label {
+    margin-bottom: 0.7rem;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-lead-aside ol {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .nrki-lead-aside li {
+    margin-block: 0.55rem;
+  }
+
+  /* Layout 03: Editorial Reading Measure + Tufte Marginalia Rail */
+  .nrki-layout-marginalia {
+    display: grid;
+    grid-template-columns: minmax(0, var(--nrki-reading-max-width)) minmax(12rem, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Layout 04: Flowing Multi-Column Newspaper Prose & Spanning Elements */
+  .nrki-columns-prose {
+    columns: 2 16rem;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-column-span-all {
+    column-span: all;
+    margin-block: 1rem;
+  }
+
+  /* Layout 05: Collection Shelf with Sticky Left Filter Sidebar */
+  .nrki-layout-shelf-sidebar {
+    display: grid;
+    grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .nrki-layout-shelf-sidebar-rail {
+    position: sticky;
+    top: 1rem;
+    padding: 1rem;
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  /* Layout 06: Two-Page Open Newspaper Spread (Left Recto / Right Verso + Center Fold) */
+  .nrki-spread-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0;
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  .nrki-spread-page {
+    padding: 1.35rem;
+  }
+
+  .nrki-spread-page+.nrki-spread-page {
+    border-left: 1px solid var(--nrki-border-subtle);
+    box-shadow: inset 12px 0 18px -14px rgba(0, 0, 0, 0.22);
+  }
+
+  .nrki-section-block {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.65fr) minmax(0, 1.75fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    padding-block: clamp(1.75rem, 4vw, 3rem);
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .nrki-shelf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* --- Newspaper Masthead, Ears, Wordmark & Double-Ruled Navigation --- */
+  .nrki-site-header {
+    padding-top: 0.9rem;
+    text-align: center;
+  }
+
+  .nrki-masthead-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem 1.25rem;
+    padding-block: 0.55rem;
+    border-top: 2px solid var(--nrki-border-strong);
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-edition-line {
+    margin: 0;
+    color: var(--nrki-ink-body);
+    font-weight: 700;
+  }
+
+  .nrki-masthead-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem 0.85rem;
+  }
+
+  .nrki-masthead-dateline {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .nrki-dateline-sep {
+    color: var(--nrki-ink-faint);
+    user-select: none;
+  }
+
+  .nrki-masthead-badgegroup {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-theme-picker {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nrki-theme-select {
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  :where([data-theme="ancient"]) .nrki-theme-select {
+    border-style: double;
+    border-width: 3px;
+  }
+
+  :where([data-theme="minimalistic"]) .nrki-theme-select {
+    border-color: var(--nrki-border-faint);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  :where([data-theme="uwu"]) .nrki-theme-select {
+    border-width: 2px;
+    border-color: var(--nrki-border-strong);
+  }
+
+  .nrki-theme-select:hover {
+    border-color: var(--nrki-accent-primary);
+  }
+
+  .nrki-theme-select option {
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-dateline-edition {
+    padding: 0.12rem 0.45rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .nrki-wordmark {
+    display: inline-block;
+    margin-block: 0.35rem 0.1rem;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-size: clamp(3.4rem, 10vw, 6.8rem);
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+    text-decoration: none;
+  }
+
+  [data-theme="ancient"] .nrki-wordmark {
+    letter-spacing: 0.02em;
+    font-weight: 700;
+  }
+
+  .nrki-wordmark-compact {
+    font-size: clamp(1.8rem, 4.8vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+
+  /* Sub-bar positioned directly below the NRKI wordmark: places the theme
+     selector at the left edge, the tagline centered, and the Light/Dark
+     mode toggle at the right edge. */
+  .nrki-masthead-subbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.65rem 1.25rem;
+    margin-block: 0.25rem 0.9rem;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-picker {
+    justify-self: start;
+  }
+
+  .nrki-masthead-subbar .nrki-masthead-tagline {
+    margin: 0;
+    text-align: center;
+  }
+
+  .nrki-masthead-subbar .nrki-theme-toggle {
+    justify-self: end;
+  }
+
+  .nrki-masthead-tagline {
+    margin-bottom: 0.9rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-quote);
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+
+  .nrki-site-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem 2.15rem;
+    border-top: var(--nrki-section-rule-major);
+    border-bottom: var(--nrki-section-rule-minor);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    padding: 0.6rem 0.85rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .nrki-site-nav a {
+    text-decoration: none;
+    color: var(--nrki-ink-body);
+    padding-block: 0.1rem;
+  }
+
+  .nrki-site-nav a:hover,
+  .nrki-site-nav a[aria-current="page"] {
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-site-nav a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.35rem;
+  }
+
+  /* --- Mobile & Tablet Sticky Bottom Navigation Bar & Theme/Mode Sheet --- */
+  .nrki-mobile-bottom-bar,
+  .nrki-mobile-theme-sheet {
+    display: none;
+  }
+
+  .nrki-mobile-theme-options {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .nrki-mobile-theme-pill {
+    padding: 0.32rem 0.62rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .nrki-mobile-theme-pill:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-mobile-theme-pill[aria-pressed="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  /* --- Cards (Adapts Borders & Corners Dynamically Across All 4 Themes) --- */
+  .nrki-card,
+  .nrki-pin-card,
+  .nrki-media-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    max-width: 100%;
+    padding: 1.25rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), box-shadow var(--nrki-transition-fast);
+  }
+
+  .nrki-card > *,
+  .nrki-pin-card > *,
+  .nrki-media-card > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  [data-theme="ancient"] .nrki-card,
+  [data-theme="ancient"] .nrki-pin-card,
+  [data-theme="ancient"] .nrki-media-card {
+    overflow: visible;
+    padding: 1.45rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  .nrki-card-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .nrki-card-link:hover,
+  .nrki-pin-card:hover {
+    transform: translateY(-2px);
+    background-color: var(--nrki-surface-panel);
+    border-color: var(--nrki-card-hover-border);
+    box-shadow: var(--nrki-card-hover-shadow);
+    color: inherit;
+  }
+
+  .nrki-card-link:hover h3,
+  .nrki-pin-card:hover h3 {
+    color: var(--nrki-accent-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .nrki-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.5rem;
+    margin-bottom: 0.55rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-card h3,
+  .nrki-pin-card h3,
+  .nrki-media-card h3 {
+    margin-bottom: 0.45rem;
+    font-size: 1.18rem;
+    line-height: 1.25;
+  }
+
+  .nrki-card p,
+  .nrki-pin-card p,
+  .nrki-media-card-notes {
+    margin-bottom: 0.85rem;
+    color: var(--nrki-ink-body);
+    font-size: 0.93rem;
+  }
+
+  .nrki-card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.72rem;
+    border-top: 1px solid var(--nrki-border-faint);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  /* Brass pin accent at top edge of Pinboard cards */
+  .nrki-pin-card::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2.75rem;
+    height: 9px;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-accent-highlight-tint);
+    border: 1px solid var(--nrki-accent-highlight);
+  }
+
+  .nrki-card-media {
+    position: relative;
+    margin: 0 0 0.85rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nrki-card-media svg,
+  .nrki-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nrki-motif-row {
+    margin-bottom: 0.8rem;
+    padding: 0.45rem 0.65rem;
+    border-left: 2px solid var(--nrki-accent-highlight);
+    background-color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-motif-row strong {
+    color: var(--nrki-ink-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.66rem;
+    margin-right: 0.35rem;
+  }
+
+  .nrki-connected-row {
+    margin-bottom: 0.8rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-connected-row strong {
+    display: block;
+    margin-bottom: 0.28rem;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-connected-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .nrki-lead-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .nrki-section-intro {
+    max-width: var(--reading-max-width);
+    margin-bottom: 1.5rem;
+    color: var(--nrki-ink-heading);
+    font-size: clamp(1.08rem, 1.9vw, 1.35rem);
+    line-height: 1.44;
+  }
+
+  .nrki-section-content {
+    max-width: 100%;
+  }
+
+  .nrki-about-intro {
+    padding-block: clamp(1.75rem, 4.5vw, 3.25rem);
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-about-intro h1 {
+    max-width: 17ch;
+    margin-bottom: 0.85rem;
+    font-family: var(--nrki-font-display);
+    font-size: clamp(2.1rem, 5vw, 3.85rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .nrki-about-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .nrki-project-links-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 1.15rem;
+  }
+
+  .nrki-media-fallback {
+    padding: 0.75rem;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.76rem;
+  }
+
+  .nrki-card-media-caption {
+    position: absolute;
+    bottom: 0.45rem;
+    right: 0.55rem;
+    padding: 0.12rem 0.45rem;
+    background-color: var(--nrki-surface-canvas);
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.64rem;
+    color: var(--nrki-ink-body);
+  }
+
+  .nrki-media-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .nrki-media-card-title {
+    margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  .nrki-media-card-creator {
+    margin-bottom: 0.6rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* --- Filter Controls & Interactive Shelf --- */
+  .nrki-shelf-section {
+    padding-block: 1.5rem;
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-shelf-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 1.15rem;
+    padding-bottom: 0.9rem;
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-shelf-header-titles h2 {
+    margin-bottom: 0.25rem;
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .nrki-shelf-header-note {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .nrki-filter-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    background-color: var(--nrki-surface-panel);
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+  }
+
+  .nrki-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-filter-button {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--nrki-transition-fast);
+  }
+
+  :where([data-theme="minimalistic"]) .nrki-filter-button {
+    border-color: transparent;
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-filter-button:hover {
+    border-color: var(--nrki-ink-heading);
+    color: var(--nrki-ink-heading);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-filter-button.is-active,
+  .nrki-filter-button[aria-pressed="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-shelf-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    margin-bottom: 0.85rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  /* --- Works Newspaper Index Ledger & Resume Dossier Rows --- */
+  .nrki-works-ledger,
+  .nrki-resume-list {
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-work-row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    text-decoration: none;
+    transition: background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-work-row:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-work-category {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-work-main strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--nrki-ink-heading);
+    font-size: 1.08rem;
+  }
+
+  .nrki-work-main span {
+    display: block;
+    color: var(--nrki-ink-muted);
+    font-size: 0.9rem;
+  }
+
+  .nrki-work-date {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    color: var(--nrki-ink-muted);
+    white-space: nowrap;
+  }
+
+  .nrki-resume-row {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.05rem 0.5rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    transition: background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-resume-row:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  /* --- Accessible Modal / Overlay --- */
+  .nrki-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background-color: rgba(14, 16, 15, 0.74);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 4vw, 2.5rem);
+    overflow-y: auto;
+  }
+
+  .nrki-modal-dialog {
+    width: min(100%, 48rem);
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    padding: clamp(1.35rem, 3.5vw, 2.35rem);
+    box-shadow: var(--nrki-card-frame-shadow), var(--nrki-shadow-overlay);
+  }
+
+  [data-theme="ancient"] .nrki-modal-dialog {
+    overflow: visible;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: var(--nrki-shadow-overlay);
+  }
+
+  .nrki-modal-topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem 1rem;
+    padding-bottom: 0.85rem;
+    margin-bottom: 1.15rem;
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-modal-media {
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .nrki-modal-media img,
+  .nrki-modal-media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .nrki-modal-motifs-box {
+    margin-top: 1.35rem;
+    padding: 1.1rem;
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-modal-motifs-list {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+  }
+
+  .nrki-modal-motifs-list li {
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    font-size: 0.92rem;
+  }
+
+  .nrki-modal-motifs-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* --- Long-Form Article / Project / Work Dossier Reader --- */
+  .nrki-article-shell {
+    max-width: var(--nrki-reading-max-width);
+    margin-inline: auto;
+    padding-block: 2.25rem 3.5rem;
+  }
+
+  .nrki-article-header {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-article-header h1 {
+    font-size: clamp(2.1rem, 4.8vw, 3.45rem);
+    line-height: 1.08;
+    margin-bottom: 0.75rem;
+  }
+
+  .nrki-article-byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-article-body p,
+  .nrki-article-body ul,
+  .nrki-article-body ol,
+  .nrki-article-body blockquote,
+  .nrki-article-body pre,
+  .nrki-modal-article p,
+  .nrki-modal-article ul,
+  .nrki-modal-article ol,
+  .nrki-modal-article blockquote,
+  .nrki-modal-article pre {
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+
+  .nrki-article-body h2,
+  .nrki-modal-article h2 {
+    margin-top: 1.85rem;
+    margin-bottom: 0.65rem;
+    font-size: 1.52rem;
+  }
+
+  .nrki-article-body h3,
+  .nrki-modal-article h3 {
+    margin-top: 1.4rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.24rem;
+  }
+
+  .nrki-article-body a,
+  .nrki-modal-article a {
+    color: var(--nrki-link-ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* --- Tabs, Segmented Controls & Expandable Accordions --- */
+  .nrki-tab-list {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    gap: 0.35rem;
+  }
+
+  .nrki-tab-trigger {
+    padding: 0.5rem 0.95rem;
+    border: 1px solid transparent;
+    border-bottom: 0;
+    border-radius: var(--nrki-radius-control) var(--nrki-radius-control) 0 0;
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .nrki-tab-trigger:hover {
+    color: var(--nrki-ink-heading);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-tab-trigger[aria-selected="true"] {
+    background-color: var(--nrki-surface-elevated);
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-tab-panel {
+    padding: 1.15rem;
+    border: var(--nrki-panel-border);
+    border-top: 0;
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-segmented-control {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 0.22rem;
+    gap: 0.22rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-segmented-option {
+    padding: 0.34rem 0.78rem;
+    border: 0;
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-segmented-option:hover {
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-segmented-option[aria-pressed="true"] {
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-accent-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+
+  .nrki-accordion {
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-accordion-item {
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  /* Why `.nrki-accordion-summary` uses `position: relative` with an
+     absolutely positioned `::after` marker instead of `display: flex`:
+     Putting `display: flex` on `<summary>` turns inline child elements like
+     `<code>` or `<em>` inside the summary question into separate flex items. */
+  .nrki-accordion-summary {
+    position: relative;
+    display: block;
+    padding: 0.85rem 2.15rem 0.85rem 0.65rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--nrki-ink-heading);
+    cursor: pointer;
+    list-style: none;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nrki-accordion-summary:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-accordion-item[open]>.nrki-accordion-summary {
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-accordion-summary::after {
+    content: "+";
+    position: absolute;
+    right: 0.65rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--nrki-font-mono);
+    font-size: 1rem;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-accordion-item[open] .nrki-accordion-summary::after {
+    content: "−";
+  }
+
+  .nrki-accordion-body {
+    padding: 0.15rem 0.65rem 1rem;
+    color: var(--nrki-ink-body);
+    font-size: 0.94rem;
+  }
+
+  /* Boxed card-style accordion variant honoring theme borders & open accent rail */
+  .nrki-accordion-boxed {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-item {
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    overflow: hidden;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-item[open] {
+    border-left: 4px solid var(--nrki-accent-primary);
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-summary {
+    padding: 0.85rem 2.35rem 0.85rem 1rem;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-summary::after {
+    right: 1rem;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid var(--nrki-border-faint);
+    padding-top: 0.75rem;
+  }
+
+  /* --- Pagination, Editorial Timeline, Dropdown Menu & Toast --- */
+  .nrki-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nrki-page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.1rem;
+    padding: 0.34rem 0.65rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nrki-page-link:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-page-link[aria-current="page"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--nrki-border-subtle);
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .nrki-timeline-entry {
+    position: relative;
+  }
+
+  .nrki-timeline-entry::before {
+    content: "";
+    position: absolute;
+    left: -1.87rem;
+    top: 0.28rem;
+    width: 0.68rem;
+    height: 0.68rem;
+    border: 2px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-canvas);
+  }
+
+  .nrki-timeline-date {
+    display: block;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--nrki-accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .nrki-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nrki-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 45;
+    min-width: 13.5rem;
+    padding: 0.35rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .nrki-dropdown-action {
+    width: 100%;
+    text-align: left;
+    padding: 0.45rem 0.65rem;
+    border: 0;
+    border-radius: var(--nrki-radius-control);
+    background-color: transparent;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .nrki-dropdown-action:hover {
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-toast-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem 1rem;
+    padding: 0.75rem 1rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-status-success-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  /* --- Notifications & Floating Toast Stack (Semantic Variants) --- */
+  .nrki-notification {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 0.9rem 1rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  .nrki-notification-icon {
+    width: 1.65rem;
+    height: 1.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .nrki-notification-body {
+    min-width: 0;
+  }
+
+  .nrki-notification-title {
+    margin: 0 0 0.18rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-notification-message {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .nrki-notification-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-notification-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-notification-info .nrki-notification-icon {
+    background-color: var(--nrki-status-info-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-info .nrki-notification-title {
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-notification-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-notification-success .nrki-notification-icon {
+    background-color: var(--nrki-status-success-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-success .nrki-notification-title {
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-notification-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-notification-warning .nrki-notification-icon {
+    background-color: var(--nrki-status-warning-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-warning .nrki-notification-title {
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-notification-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-notification-danger .nrki-notification-icon {
+    background-color: var(--nrki-status-danger-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-danger .nrki-notification-title {
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-toast-stack {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 350;
+    width: min(24rem, calc(100vw - 2rem));
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .nrki-toast-stack-inline {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    width: 100%;
+  }
+
+  .nrki-toast {
+    position: relative;
+    padding: 0.85rem 1rem 0.95rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    box-shadow: var(--nrki-card-frame-shadow), 0 12px 26px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+  }
+
+  .nrki-toast-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-toast-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-toast-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-toast-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .nrki-toast-title {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nrki-toast-message {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .nrki-toast-dismiss {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-family: var(--nrki-font-mono);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.1rem 0.3rem;
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .nrki-toast-dismiss:hover {
+    opacity: 1;
+  }
+
+  .nrki-toast-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: currentColor;
+    opacity: 0.45;
+    transform-origin: left center;
+    animation: nrki-toast-countdown 5s linear forwards;
+  }
+
+  @keyframes nrki-toast-countdown {
+    from {
+      transform: scaleX(1);
+    }
+
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  /* --- Web Resume Sheet, Directory Cards & Action Toolbar --- */
+  .nrki-resume-page {
+    padding-block: 2rem 4rem;
+  }
+
+  .nrki-resume-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-resume-toolbar-actions,
+  .nrki-resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .nrki-resume-row-planned {
+    opacity: 0.72;
+  }
+
+  .nrki-resume-number {
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-resume-copy strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--nrki-ink-heading);
+    font-size: 1.12rem;
+  }
+
+  .nrki-resume-copy>span {
+    display: block;
+    color: var(--nrki-ink-muted);
+    font-size: 0.92rem;
+  }
+
+  .nrki-resume-sheet {
+    padding: clamp(1.5rem, 4.5vw, 3.25rem);
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="ancient"] .nrki-resume-sheet {
+    overflow: visible;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  .nrki-resume-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid var(--nrki-border-strong);
+    margin-bottom: 1.5rem;
+  }
+
+  .nrki-resume-title h1 {
+    margin-bottom: 0.35rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.2rem);
+    letter-spacing: -0.04em;
+  }
+
+  .nrki-resume-role {
+    margin: 0;
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .nrki-resume-contact {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.8rem;
+    color: var(--nrki-ink-muted);
+    text-align: right;
+  }
+
+  .nrki-resume-contact li {
+    margin-bottom: 0.2rem;
+  }
+
+  .nrki-resume-section {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 1.75rem;
+    padding-block: 1.35rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-resume-section:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .nrki-resume-section-title {
+    margin: 0;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-resume-item {
+    margin-bottom: 1.35rem;
+  }
+
+  .nrki-resume-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .nrki-resume-item-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .nrki-resume-item-header h3 {
+    margin: 0;
+    font-size: 1.12rem;
+  }
+
+  .nrki-resume-item-org {
+    color: var(--nrki-accent-primary);
+    font-weight: 400;
+  }
+
+  .nrki-resume-item-date {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.75rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-resume-bullets {
+    margin: 0.5rem 0 0;
+    padding-left: 1.15rem;
+  }
+
+  .nrki-resume-bullets li {
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+  }
+
+  .nrki-skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 1rem;
+  }
+
+  .nrki-skill-group h4 {
+    margin-bottom: 0.3rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-skill-group p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--nrki-ink-body);
+  }
+
+  /* --- Site Footer --- */
+  .nrki-site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.35rem;
+    padding-block: 1.5rem 2.25rem;
+    border-top: var(--nrki-section-rule-major);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.75rem;
+  }
+
+  .nrki-footer-mark {
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 1100px) and (min-width: 768px) {
+    .nrki-masthead-bar {
+      justify-content: center;
+    }
+
+    .nrki-masthead-meta {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  /* Tablet & Mobile (`max-width: 1024px`):
+     Replaces the top `.nrki-site-nav` ribbon and header theme/mode selectors
+     with a fixed Pocket Bottom Navigation Bar + 1-Tap Theme & Mode Drawer. */
+  @media screen and (max-width: 1024px) {
+    body.nrki-has-mobile-bar {
+      padding-bottom: 4.75rem;
+    }
+
+    .nrki-site-header .nrki-site-nav,
+    .nrki-masthead-subbar .nrki-theme-picker,
+    .nrki-masthead-subbar .nrki-theme-toggle {
+      display: none;
+    }
+
+    .nrki-masthead-subbar {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      margin-block: 0.15rem 0.5rem;
+    }
+
+    .nrki-mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 110;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.15rem;
+      padding: 0.42rem 0.45rem;
+      border-top: 2px solid var(--nrki-border-strong);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .nrki-mobile-nav-link {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.32rem 0.22rem;
+      border-radius: var(--nrki-radius-control);
+      color: var(--nrki-ink-muted);
+      font-family: var(--nrki-font-ui);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-decoration: none;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .nrki-mobile-nav-link:hover {
+      color: var(--nrki-ink-heading);
+    }
+
+    .nrki-mobile-nav-link[aria-current="page"] {
+      background-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+    }
+
+    .nrki-mobile-theme-trigger {
+      flex: 0 0 auto;
+      padding: 0.36rem 0.52rem;
+      border: 1px solid var(--nrki-border-strong);
+      border-radius: var(--nrki-radius-pill);
+      background-color: var(--nrki-surface-panel);
+      color: var(--nrki-ink-heading);
+      font-family: var(--nrki-font-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .nrki-mobile-theme-sheet {
+      position: fixed;
+      bottom: 3.45rem;
+      left: 0.65rem;
+      right: 0.65rem;
+      max-width: 28rem;
+      margin-inline: auto;
+      z-index: 115;
+      display: block;
+      padding: 1rem;
+      border: var(--nrki-card-border);
+      border-radius: var(--nrki-radius-surface);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: var(--nrki-shadow-overlay);
+    }
+
+    .nrki-mobile-theme-sheet[hidden] {
+      display: none;
+    }
+  }
+
+  /* Mobile-only layout stacking wrapped cleanly in `@media screen` so print
+     engines never collapse grids on narrower print pages */
+  @media screen and (max-width: 767px) {
+    .nrki-page-shell {
+      width: min(100% - 1.5rem, var(--nrki-shell-max-width));
+    }
+
+    .nrki-masthead-bar {
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .nrki-masthead-meta {
+      justify-content: center;
+    }
+
+    .nrki-masthead-dateline {
+      justify-content: center;
+    }
+
+    .nrki-masthead-dateline .nrki-dateline-sep:last-child {
+      display: none;
+    }
+
+    .nrki-masthead-badgegroup {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .nrki-masthead-subbar {
+      grid-template-columns: 1fr auto;
+      gap: 0.55rem 0.75rem;
+    }
+
+    .nrki-masthead-subbar .nrki-masthead-tagline {
+      grid-column: 1 / -1;
+      order: -1;
+    }
+
+    .nrki-site-nav {
+      position: sticky;
+      top: 0;
+      gap: 0.65rem 1rem;
+      font-size: 0.7rem;
+    }
+
+    .nrki-layout-frontpage,
+    .nrki-lead-story,
+    .nrki-layout-marginalia,
+    .nrki-layout-shelf-sidebar,
+    .nrki-spread-grid,
+    .nrki-section-block,
+    .nrki-resume-section,
+    .nrki-sidenote-layout,
+    .nrki-work-row,
+    .nrki-resume-row,
+    .nrki-stat-strip,
+    .nrki-notification,
+    .nrki-card-grid,
+    .nrki-shelf-grid,
+    .nrki-about-columns,
+    .nrki-skills-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nrki-layout-frontpage > *,
+    .nrki-lead-story > *,
+    .nrki-layout-marginalia > *,
+    .nrki-layout-shelf-sidebar > *,
+    .nrki-spread-grid > *,
+    .nrki-section-block > *,
+    .nrki-resume-section > *,
+    .nrki-sidenote-layout > *,
+    .nrki-card-grid > *,
+    .nrki-shelf-grid > *,
+    .nrki-about-columns > * {
+      min-width: 0;
+    }
+
+    .nrki-table th,
+    .nrki-table td {
+      padding: 0.5rem 0.65rem;
+      font-size: 0.84rem;
+    }
+
+    .nrki-code-header {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.64rem;
+    }
+
+    pre {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.78rem;
+    }
+
+    .nrki-tooltip::after {
+      left: 0;
+      transform: none;
+      max-width: min(15rem, calc(100vw - 3rem));
+      white-space: normal;
+    }
+
+    .nrki-stat-cell+.nrki-stat-cell {
+      border-left: 0;
+      border-top: 1px solid var(--nrki-border-faint);
+    }
+
+    .nrki-ruled-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+
+    .nrki-layout-frontpage>*+*,
+    .nrki-lead-aside,
+    .nrki-spread-page+.nrki-spread-page {
+      border-left: 0;
+      border-top: 1px solid var(--nrki-border-subtle);
+      padding-left: 0;
+      padding-top: 1rem;
+      box-shadow: none;
+    }
+
+    .nrki-columns-prose {
+      columns: 1;
+    }
+
+    .nrki-layout-shelf-sidebar-rail {
+      position: static;
+    }
+
+    .nrki-resume-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .nrki-resume-contact {
+      text-align: left;
+    }
+
+    .nrki-toast-stack {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      width: auto;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   5. UTILITY CLASSES (`@layer nrki.utilities`)
+   ========================================================================== */
+@layer nrki.utilities {
+
+  [hidden],
+  .nrki-hidden {
+    display: none;
+  }
+
+  /* Scopes typography, paper surface, and texture inside any themed card or
+     preview container cleanly */
+  .nrki-theme-surface {
+    background-color: var(--nrki-surface-canvas);
+    background-image: var(--nrki-surface-texture);
+    background-size: 100% 100%;
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-body);
+    border-radius: var(--nrki-radius-surface);
+  }
+
+  .nrki-theme-surface[data-theme="ancient"] {
+    font-size: 1.08rem;
+    font-weight: 500;
+  }
+
+  .nrki-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .nrki-stack-sm {
+    display: grid;
+    gap: var(--nrki-space-2);
+  }
+
+  .nrki-stack-md {
+    display: grid;
+    gap: var(--nrki-space-4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms;
+      animation-duration: 0.01ms;
+    }
+  }
+}
+
+
+/* ==========================================================================
+   6. CROSS-BROWSER PRINT / SAVE-AS-PDF STYLESHEET (`@page` + `@layer nrki.print`)
+   ========================================================================== */
+@page {
+  size: auto;
+  margin: 0;
+}
+
+@layer nrki.print {
+  @media print {
+
+    /* Reset any active theme or dark polarity cleanly to crisp black-on-white
+       print ink and standard serif/sans CV typography without using `!important` */
+    :root,
+    [data-theme],
+    [data-theme][data-mode="dark"] {
+      color-scheme: light;
+      --nrki-font-display: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-heading: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-body: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-quote: Georgia, serif;
+      --nrki-font-ui: Arial, Helvetica, system-ui, sans-serif;
+      --nrki-font-mono: "Courier New", Courier, monospace;
+      --nrki-surface-canvas: #ffffff;
+      --nrki-surface-panel: #ffffff;
+      --nrki-surface-inset: #f4f4f4;
+      --nrki-surface-elevated: #ffffff;
+      --nrki-ink-heading: #000000;
+      --nrki-ink-body: #1a1a1a;
+      --nrki-ink-muted: #444444;
+      --nrki-ink-faint: #666666;
+      --nrki-link-ink: #000000;
+      --nrki-link-hover-ink: #000000;
+      --nrki-border-strong: #000000;
+      --nrki-border-subtle: #888888;
+      --nrki-border-faint: #dddddd;
+      --nrki-accent-primary: #000000;
+      --nrki-surface-texture: none;
+      --nrki-radius-control: 0px;
+      --nrki-radius-surface: 0px;
+      --nrki-radius-pill: 0px;
+      --nrki-card-frame-shadow: none;
+      --nrki-card-border: 1px solid #888888;
+      --nrki-panel-border: 1px solid #888888;
+    }
+
+    html,
+    body,
+    html.nrki-theme-animating,
+    html.nrki-theme-animating body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      background-image: none;
+      color: #000000;
+      font-size: 9.8pt;
+      font-weight: 400;
+      line-height: 1.4;
+      transition: none;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .nrki-print-hidden,
+    .nrki-site-header,
+    .nrki-site-footer,
+    .nrki-resume-toolbar,
+    .nrki-skip-link,
+    .nrki-toast-stack,
+    .nrki-mobile-bottom-bar,
+    .nrki-mobile-theme-sheet {
+      display: none;
+    }
+
+    .nrki-page-shell {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 12mm 14mm;
+      box-sizing: border-box;
+    }
+
+    .nrki-resume-page {
+      padding: 0;
+    }
+
+    .nrki-resume-sheet {
+      padding: 0;
+      border: 0;
+      border-image: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+
+    .nrki-resume-header {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+      padding-bottom: 0.9rem;
+      margin-bottom: 1rem;
+      border-bottom: 1.5pt solid #000000;
+    }
+
+    .nrki-resume-title .nrki-eyebrow {
+      font-size: 7.5pt;
+      margin-bottom: 0.25rem;
+    }
+
+    .nrki-resume-title h1 {
+      font-size: 22pt;
+      line-height: 1.08;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nrki-resume-role {
+      font-size: 8.5pt;
+    }
+
+    .nrki-resume-contact {
+      text-align: right;
+      flex-shrink: 0;
+      font-size: 8.5pt;
+      line-height: 1.35;
+    }
+
+    .nrki-resume-contact li {
+      margin-bottom: 0.15rem;
+    }
+
+    .nrki-resume-section {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.15rem;
+      padding-block: 0.65rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .nrki-resume-section-title {
+      font-size: 8pt;
+    }
+
+    .nrki-resume-item {
+      margin-bottom: 0.85rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .nrki-resume-item-header {
+      margin-bottom: 0.25rem;
+    }
+
+    .nrki-resume-item-header h3 {
+      font-size: 10.5pt;
+    }
+
+    .nrki-resume-item-date {
+      font-size: 8pt;
+    }
+
+    .nrki-resume-bullets {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .nrki-resume-bullets li {
+      margin-bottom: 0.2rem;
+      font-size: 9.4pt;
+    }
+
+    .nrki-skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .nrki-skill-group h4 {
+      font-size: 7.8pt;
+      margin-bottom: 0.2rem;
+    }
+
+    .nrki-skill-group p {
+      font-size: 9pt;
+    }
+
+    a {
+      text-decoration: none;
+      color: #000000;
+    }
+  }
+}

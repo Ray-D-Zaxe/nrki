@@ -1,0 +1,969 @@
+/**
+ * ============================================================================
+ * ISSUE 01 — NEWSPAPER BROADSHEET & POCKET EDITION SHELL CSS
+ * (`magazines/issue-01-newspaper-web-design/broadsheet-magazine-shell.css`)
+ * ----------------------------------------------------------------------------
+ * Architectural Rationale:
+ *   1. Desktop/Tablet (`>= 768px`) renders Issue 01 as a true Broadsheet
+ *      Spread: a ruled directory column beside ONE active specimen card at
+ *      a time (with an optional `Full Sheet` toggle), avoiding endless scrolling.
+ *   2. Mobile (`<= 767px`) switches seamlessly to a Pocket Newspaper stream:
+ *      edge-to-edge scrolling, top reading-progress hairline, tactile specimen
+ *      dividers, and a sticky bottom folio bar with a 1-tap Theme & Mode
+ *      bottom sheet.
+ *   3. Strictly zero `!important` — isolated cleanly in `@layer magazine.shell`.
+ * ============================================================================
+ */
+
+@layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, magazine.shell, nrki.utilities, nrki.print;
+
+@layer magazine.shell {
+  /* ========================================================================
+     1. READING PROGRESS BAR & TOP UTILITY BAR
+     ======================================================================== */
+  .magazine-mobile-progress-track {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 120;
+    background-color: var(--nrki-border-faint);
+    pointer-events: none;
+  }
+
+  .magazine-mobile-progress-fill {
+    width: 100%;
+    height: 100%;
+    background-color: var(--nrki-accent-primary);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 80ms linear;
+  }
+
+  .magazine-broadsheet-masthead {
+    border-bottom: var(--nrki-section-rule-major);
+    background-color: var(--nrki-surface-elevated);
+    background-image: var(--nrki-surface-texture);
+    background-size: 100% 100%;
+  }
+
+  .magazine-masthead-inner {
+    width: min(100% - 2.5rem, 82rem);
+    margin-inline: auto;
+    padding-block: 0.65rem 0;
+  }
+
+  .magazine-utility-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem 1.25rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .magazine-back-cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.9rem;
+  }
+
+  .magazine-back-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.24rem 0.6rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .magazine-back-pill:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .magazine-meta-dateline {
+    margin: 0;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  /* Dual Theme + Mode Bar (Desktop/Tablet header controls) */
+  .magazine-theme-mode-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.75rem;
+  }
+
+  .magazine-control-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .magazine-mode-caption {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.66rem;
+    color: var(--nrki-ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 0.2rem;
+  }
+
+  .magazine-theme-pill,
+  .magazine-mode-pill {
+    padding: 0.24rem 0.56rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  [data-theme="minimalistic"] .magazine-theme-pill,
+  [data-theme="minimalistic"] .magazine-mode-pill {
+    border-color: transparent;
+    background-color: var(--nrki-surface-panel);
+  }
+
+  [data-theme="uwu"] .magazine-theme-pill,
+  [data-theme="uwu"] .magazine-mode-pill {
+    border-width: 2px;
+  }
+
+  .magazine-mode-pill {
+    border-color: var(--nrki-border-strong);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+  }
+
+  .magazine-theme-pill:hover,
+  .magazine-mode-pill:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .magazine-theme-pill[aria-pressed="true"],
+  .magazine-mode-pill[aria-pressed="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+
+  /* ========================================================================
+     2. NEWSPAPER FLAG ROW (WORDMARK) & SECTION RIBBON
+     ======================================================================== */
+  .magazine-flag-row {
+    display: block;
+    text-align: center;
+    padding-block: 0.85rem;
+  }
+
+  .magazine-flag-center {
+    text-align: center;
+  }
+
+  .magazine-flag-title {
+    margin: 0;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-display);
+    font-size: clamp(2rem, 4.4vw, 3.35rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    text-transform: uppercase;
+  }
+
+  [data-theme="ancient"] .magazine-flag-title {
+    font-weight: 700;
+    font-size: clamp(2.35rem, 5vw, 3.85rem);
+    letter-spacing: 0.015em;
+    text-transform: none;
+  }
+
+  [data-theme="uwu"] .magazine-flag-title {
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+
+  .magazine-flag-subtitle {
+    margin: 0.2rem 0 0;
+    font-family: var(--nrki-font-quote);
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .magazine-section-ribbon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 1.25rem;
+    padding-block: 0.55rem;
+    border-top: var(--nrki-section-rule-major);
+    background-color: var(--nrki-surface-canvas);
+  }
+
+  .magazine-page-tab {
+    padding: 0.28rem 0.65rem;
+    border: 1px solid transparent;
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .magazine-page-tab:hover {
+    color: var(--nrki-accent-primary);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .magazine-page-tab.is-current-page,
+  .magazine-page-tab[aria-current="page"] {
+    background-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+
+  /* ========================================================================
+     3. MAIN WORKBENCH, FRONT PAGE & INDEX SPREAD
+     ======================================================================== */
+  .magazine-workbench {
+    width: min(100% - 2.5rem, 82rem);
+    margin-inline: auto;
+    padding-block: 1.5rem 3rem;
+  }
+
+  .magazine-view-section[hidden] {
+    display: none;
+  }
+
+  .magazine-frontpage-banner {
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .magazine-frontpage-banner h2 {
+    font-family: var(--nrki-font-heading);
+    font-size: clamp(2.1rem, 4.4vw, 3.45rem);
+    line-height: 1.04;
+    margin-bottom: 0.65rem;
+  }
+
+  .magazine-index-card {
+    padding: 1.15rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="ancient"] .magazine-index-card {
+    overflow: visible;
+    padding: 1.45rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  .magazine-index-list {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+  }
+
+  .magazine-index-list li {
+    border-bottom: 1px solid var(--nrki-border-faint);
+  }
+
+  .magazine-index-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .magazine-index-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.58rem;
+    text-decoration: none;
+    color: var(--nrki-ink-heading);
+    font-size: 0.92rem;
+  }
+
+  .magazine-index-link span {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.7rem;
+    color: var(--nrki-accent-primary);
+    flex-shrink: 0;
+  }
+
+  .magazine-index-link:hover strong {
+    color: var(--nrki-accent-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Live Token Inspector Ledger */
+  .magazine-tokens-panel {
+    margin-top: 1.5rem;
+    padding: 1.15rem;
+    border: var(--nrki-panel-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .magazine-token-swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+    gap: 0.65rem;
+    margin-top: 0.85rem;
+  }
+
+  .magazine-token-swatch {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid var(--nrki-border-faint);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .magazine-token-chip {
+    width: 1.85rem;
+    height: 1.85rem;
+    flex-shrink: 0;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+  }
+
+  .magazine-token-meta code {
+    display: block;
+    font-size: 0.68rem;
+    padding: 0;
+    background: transparent;
+    color: var(--nrki-ink-heading);
+    font-weight: 700;
+  }
+
+  .magazine-token-meta span {
+    display: block;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.64rem;
+    color: var(--nrki-ink-muted);
+  }
+
+
+  /* ========================================================================
+     4. DESKTOP/TABLET BROADSHEET SPREAD WORKBENCH (`min-width: 768px`)
+     ------------------------------------------------------------------------
+     Displays a ruled left directory column alongside ONE active specimen
+     spread cleanly in view (with an optional `Full Sheet` toggle), avoiding
+     endless vertical documentation scrolling on larger screens.
+     ======================================================================== */
+  .specimen-catalog-header {
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.35rem;
+    border-bottom: var(--nrki-section-rule-major);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.85rem 1.5rem;
+  }
+
+  .specimen-catalog-header h2 {
+    font-family: var(--nrki-font-heading);
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    margin-bottom: 0.25rem;
+  }
+
+  .magazine-spread-workbench {
+    display: grid;
+    grid-template-columns: minmax(15rem, 18.5rem) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .magazine-directory-column {
+    position: sticky;
+    top: 0.75rem;
+    padding: 1rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  .magazine-directory-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.6rem;
+    border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .magazine-directory-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 58vh;
+    overflow-y: auto;
+  }
+
+  .magazine-directory-entry + .magazine-directory-entry {
+    border-top: 1px solid var(--nrki-border-faint);
+  }
+
+  .magazine-directory-button {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.52rem 0.5rem;
+    border: 0;
+    border-radius: var(--nrki-radius-control);
+    background-color: transparent;
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .magazine-directory-button:hover {
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+  }
+
+  .magazine-directory-button.is-current-specimen {
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+    font-weight: 700;
+  }
+
+  .magazine-directory-pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    margin-top: 0.65rem;
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .specimen-catalog-stack {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    /* Spread View collapses inactive cards cleanly without touching mobile stream */
+    .magazine-spread-workbench:not(.is-full-sheet) .specimen-container.magazine-spread-inactive {
+      display: none;
+    }
+
+    .magazine-spread-workbench.is-full-sheet {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-spread-workbench.is-full-sheet .magazine-directory-column {
+      position: static;
+    }
+
+    .magazine-spread-workbench.is-full-sheet .magazine-directory-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: 0.35rem 1rem;
+      max-height: none;
+    }
+
+    /* Hide mobile-only controls cleanly on desktop & tablet */
+    .magazine-mobile-progress-track,
+    .magazine-mobile-folio-divider,
+    .magazine-mobile-bottom-bar,
+    .magazine-mobile-theme-sheet {
+      display: none;
+    }
+  }
+
+
+  /* ========================================================================
+     5. SPECIMEN CONTAINER (DUAL THEME+MODE TOGGLE + CODE TABS + COPY)
+     ======================================================================== */
+  .specimen-container {
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    overflow: hidden;
+  }
+
+  .specimen-container-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.85rem 1.25rem;
+    padding: 1rem 1.2rem;
+    border-bottom: var(--nrki-section-rule-minor);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .specimen-header-details {
+    max-width: 38rem;
+  }
+
+  .specimen-title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.28rem;
+  }
+
+  .specimen-title-row h3 {
+    margin: 0;
+    font-size: 1.22rem;
+  }
+
+  .specimen-usage-note {
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-body);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  /* Per-Specimen Theme + Light/Dark Switcher */
+  .specimen-mode-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .specimen-mode-button {
+    padding: 0.26rem 0.56rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .specimen-mode-button[data-specimen-mode-toggle] {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .specimen-mode-button:hover {
+    border-color: var(--nrki-border-strong);
+    color: var(--nrki-ink-heading);
+  }
+
+  .specimen-mode-button[aria-pressed="true"] {
+    background-color: var(--nrki-ink-heading);
+    border-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+  }
+
+  .specimen-polarity-separator {
+    width: 1px;
+    height: 1.15rem;
+    background-color: var(--nrki-border-subtle);
+    margin-inline: 0.15rem;
+  }
+
+  /* Isolated Live Preview Stage — inherits its OWN theme font, paper texture & palette */
+  .specimen-preview-stage {
+    padding: clamp(1.3rem, 3vw, 2rem);
+    background-color: var(--nrki-surface-canvas);
+    background-image: var(--nrki-surface-texture);
+    background-size: 16px 16px;
+    color: var(--nrki-ink-body);
+    font-family: var(--nrki-font-body);
+    transition: background-color 160ms ease, color 160ms ease;
+  }
+
+  .specimen-preview-stage[data-theme="ancient"] {
+    background-size: 100% 100%;
+    font-size: 1.08rem;
+  }
+
+  /* Code Inspection Footer (`HTML`, `CSS`, conditional `JS` + `Copy`) */
+  .specimen-code-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    padding: 0.58rem 1.05rem;
+    border-top: var(--nrki-section-rule-minor);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .specimen-code-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .specimen-code-tab-button {
+    padding: 0.28rem 0.68rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .specimen-code-tab-button:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .specimen-code-tab-button[aria-expanded="true"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .specimen-copy-button {
+    padding: 0.28rem 0.75rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .specimen-copy-button:hover:not(:disabled) {
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+  }
+
+  .specimen-copy-button.is-copied {
+    background-color: var(--nrki-status-success-surface);
+    border-color: var(--nrki-status-success-border);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .specimen-copy-button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .specimen-code-drawer {
+    border-top: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-code-surface);
+  }
+
+  .specimen-code-drawer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1.2rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-surface-inset);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .specimen-code-drawer pre {
+    margin: 0;
+    border: 0;
+    border-left: 4px solid var(--nrki-accent-primary);
+    border-radius: 0;
+    padding: 1rem 1.2rem;
+    max-height: 22rem;
+    overflow: auto;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.82rem;
+    line-height: 1.58;
+    tab-size: 2;
+  }
+
+
+  /* ========================================================================
+     6. RUNNING NEWSPAPER FOLIO & COLOPHON
+     ======================================================================== */
+  .magazine-colophon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .magazine-colophon-grid > * {
+    min-width: 0;
+  }
+
+  .magazine-pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.15rem;
+    border-top: var(--nrki-section-rule-major);
+  }
+
+  .magazine-running-folio {
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+
+  /* ========================================================================
+     7. MOBILE POCKET NEWSPAPER EDITION (`max-width: 767px`)
+     ------------------------------------------------------------------------
+     Why mobile breaks away from the desktop Broadsheet Spread:
+     Vertical scrolling feels native on handheld screens, so mobile hides
+     the sidebar directory & top nav duplication, stretches specimens cleanly
+     across full width, and pins a 1-thumb Sticky Bottom Folio Bar +
+     Theme/Mode Sheet.
+     ======================================================================== */
+  @media screen and (max-width: 767px) {
+    .magazine-masthead-inner,
+    .magazine-workbench {
+      width: min(100% - 1.25rem, 82rem);
+    }
+
+    .magazine-workbench {
+      padding-top: 1rem;
+      padding-bottom: 5.5rem;
+    }
+
+    .magazine-theme-mode-bar,
+    .magazine-section-ribbon,
+    .magazine-directory-column {
+      display: none;
+    }
+
+    .magazine-flag-row {
+      padding-block: 0.65rem 0.5rem;
+    }
+
+    .magazine-flag-title {
+      font-size: 1.85rem;
+    }
+
+    .magazine-spread-workbench {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-spread-workbench > * {
+      min-width: 0;
+    }
+
+    .specimen-catalog-stack > * {
+      min-width: 0;
+    }
+
+    .magazine-colophon-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-token-swatch-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .magazine-token-swatch {
+      min-width: 0;
+    }
+
+    .magazine-token-meta {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .magazine-index-link {
+      flex-wrap: wrap;
+    }
+
+    .magazine-pagination-bar {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+
+    .magazine-pagination-bar .nrki-button {
+      width: 100%;
+    }
+
+    .magazine-mobile-folio-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-block: 0.5rem 0.25rem;
+      font-family: var(--nrki-font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--nrki-ink-muted);
+    }
+
+    .specimen-container {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .specimen-container-header,
+    .specimen-preview-stage {
+      padding: 0.9rem;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .specimen-code-drawer-bar {
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.4rem 0.9rem;
+    }
+
+    .specimen-code-drawer pre {
+      padding: 0.85rem 0.9rem;
+      font-size: 0.76rem;
+    }
+
+    /* Sticky Bottom Pocket Newspaper Folio Bar */
+    .magazine-mobile-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 110;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.45rem 0.5rem;
+      border-top: 2px solid var(--nrki-border-strong);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .magazine-mobile-nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem 0.2rem;
+      border-radius: var(--nrki-radius-control);
+      color: var(--nrki-ink-muted);
+      font-family: var(--nrki-font-ui);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .magazine-mobile-nav-link[aria-current="page"] {
+      background-color: var(--nrki-accent-primary);
+      color: var(--nrki-ink-on-accent);
+    }
+
+    .magazine-mobile-theme-trigger {
+      padding: 0.38rem 0.6rem;
+      border: 1px solid var(--nrki-border-strong);
+      border-radius: var(--nrki-radius-pill);
+      background-color: var(--nrki-surface-panel);
+      color: var(--nrki-ink-heading);
+      font-family: var(--nrki-font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* 1-Tap Bottom Theme & Mode Drawer */
+    .magazine-mobile-theme-sheet {
+      position: fixed;
+      bottom: 3.45rem;
+      left: 0.65rem;
+      right: 0.65rem;
+      z-index: 115;
+      padding: 1rem;
+      border: 2px solid var(--nrki-border-strong);
+      border-radius: var(--nrki-radius-surface);
+      background-color: var(--nrki-surface-elevated);
+      box-shadow: var(--nrki-shadow-overlay);
+    }
+
+    .magazine-mobile-theme-sheet[hidden] {
+      display: none;
+    }
+  }
+}

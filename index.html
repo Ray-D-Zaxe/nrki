@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic" data-mode="light">
 
 <head>
     <meta charset="UTF-8">
@@ -7,50 +7,70 @@
     <meta name="description"
         content="NRKI - a personal broadsheet for software projects, writing, ideas, resumes, and media notes.">
     <title>NRKI - Personal Broadsheet &amp; Portfolio</title>
-    <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
+    <!-- Synchronous theme + mode script: applies [data-theme] and [data-mode] before first paint to prevent flicker -->
     <script>
-        (function () {
-            var saved = localStorage.getItem("nrki-theme");
-            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
-    <link rel="stylesheet" href="./assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="./assets/styles/nrki-broadsheet-library.css">
     <script defer src="./assets/scripts/main.js"></script>
 </head>
 
 <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
 
-    <div class="page-shell">
+    <div class="nrki-page-shell">
         <!-- ================================================================
              SITE MASTHEAD & PRIMARY NAVIGATION
              ================================================================ -->
-        <header class="site-header">
-            <div class="masthead-bar">
-                <p class="edition-line">Vol. I · No. 01 <span>-</span> Independent Press &amp; Personal Archive</p>
-                <div class="masthead-meta">
-                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · No. 01 <span>-</span> Independent Press &amp; Personal Archive</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                         <span data-masthead-time>18:50</span>
                         <span data-masthead-tz>LOCAL</span>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
                     </p>
-                    <div class="masthead-badgegroup">
-                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
-                        <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
-                            Ink: Paper ☀
-                        </button>
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Evening Edition</span>
                     </div>
                 </div>
             </div>
 
-            <a class="wordmark" href="./index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Pronounced “anarchy” - Dispatches on software engineering, visual motifs, stories,
-                and works in progress.</p>
+            <a class="nrki-wordmark" href="./index.html" aria-label="NRKI home">NRKI</a>
+            <div class="nrki-masthead-subbar">
+                <label class="nrki-theme-picker">
+                    <span class="nrki-sr-only">Select broadsheet theme</span>
+                    <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                        <option value="classic">Theme: Classic</option>
+                        <option value="ancient">Theme: Ancient</option>
+                        <option value="minimalistic">Theme: Minimalistic</option>
+                        <option value="uwu">Theme: UwU</option>
+                    </select>
+                </label>
+                <p class="nrki-masthead-tagline">Pronounced “anarchy” - Dispatches on software engineering, visual motifs, stories,
+                    and works in progress.</p>
+                <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+                    Ink: Paper ☀
+                </button>
+            </div>
 
-            <nav class="site-nav" aria-label="Main navigation">
+            <nav class="nrki-site-nav" aria-label="Main navigation">
                 <a href="./index.html" aria-current="page">Home</a>
                 <a href="./pages/magazines-index.html">Magazines</a>
                 <a href="./pages/projects.html">Projects</a>
@@ -64,57 +84,57 @@
             <!-- ============================================================
                  THE FRONT PAGE / LEAD STORY
                  ============================================================ -->
-            <section class="lead-story" id="home" aria-labelledby="lead-title">
-                <div class="lead-copy">
-                    <p class="eyebrow">The front page</p>
+            <section class="nrki-lead-story" id="home" aria-labelledby="lead-title">
+                <div>
+                    <p class="nrki-eyebrow">The front page</p>
                     <h1 id="lead-title">A place for things<br>still becoming.</h1>
-                    <p class="lead-summary">
+                    <p class="nrki-lead-summary">
                         Welcome to NRKI—my independent corner of the web designed like a minimalist broadsheet for
                         shipping software projects, collecting visual &amp; narrative ideas, publishing essays, and
                         hosting my resumes.
                     </p>
-                    <div class="lead-actions">
-                        <a class="btn-editorial btn-editorial--primary" href="./pages/about.html#resumes">
+                    <div class="nrki-lead-actions">
+                        <a class="nrki-button nrki-button-primary" href="./pages/about.html#resumes">
                             View Resumes (Web &amp; PDF) →
                         </a>
-                        <a class="btn-editorial" href="./pages/about.html">
+                        <a class="nrki-button" href="./pages/about.html">
                             About &amp; Contact →
                         </a>
                     </div>
                 </div>
 
-                <aside class="lead-aside" aria-label="Directory">
-                    <p class="aside-label">Site Directory</p>
+                <aside class="nrki-lead-aside" aria-label="Directory">
+                    <p class="nrki-aside-label">Site Directory</p>
                     <ol>
                         <li><a href="./pages/about.html#resumes">Resumes - General CV &amp; Front-End Engineering</a></li>
                         <li><a href="./pages/projects.html">Projects - Software builds &amp; experiments (Coming soon)</a></li>
                         <li><a href="./pages/works.html">Works - Blogs, poems, dev logs &amp; articles (Coming soon)</a></li>
-                        <li><a href="./pages/magazines-index.html">Magazines - Design monographs &amp; CSS systems (Coming soon)</a></li>
+                        <li><a href="./pages/magazines-index.html">Magazines - Design monographs &amp; Issue 01 Broadsheet CSS</a></li>
                         <li><a href="./pages/media.html">Media - Reviews, ratings &amp; watchlist (Coming soon)</a></li>
                     </ol>
-                    <p class="folio">No. 01 <span>·</span> Built with HTML, CSS, JavaScript &amp; React</p>
+                    <p class="nrki-folio">No. 01 <span>·</span> Built with HTML, CSS, JavaScript &amp; React</p>
                 </aside>
             </section>
 
             <!-- ============================================================
                  GENERAL OVERVIEW OF SECTIONS
                  ============================================================ -->
-            <section class="section-block" aria-labelledby="overview-title">
-                <div class="section-heading">
-                    <p class="eyebrow">Index</p>
+            <section class="nrki-section-block" aria-labelledby="overview-title">
+                <div class="nrki-section-heading">
+                    <p class="nrki-eyebrow">Index</p>
                     <h2 id="overview-title">Sections</h2>
-                    <p class="section-heading-note">
+                    <p class="nrki-section-heading-note">
                         What lives inside this broadsheet.
                     </p>
                 </div>
 
-                <div class="section-content">
-                    <div class="editorial-grid">
-                        <a class="editorial-card editorial-card--link" href="./pages/about.html#resumes">
+                <div class="nrki-section-content">
+                    <div class="nrki-card-grid">
+                        <a class="nrki-card nrki-card-link" href="./pages/about.html#resumes">
                             <div>
-                                <div class="card-meta">
+                                <div class="nrki-card-meta">
                                     <span>01 / Dossier</span>
-                                    <span class="badge badge--accent">Available</span>
+                                    <span class="nrki-badge nrki-badge-accent">Available</span>
                                 </div>
                                 <h3>About &amp; Curriculum Vitae</h3>
                                 <p>
@@ -122,17 +142,17 @@
                                     for General Software Engineering and Front-End Engineering.
                                 </p>
                             </div>
-                            <div class="card-footer">
+                            <div class="nrki-card-footer">
                                 <span>Web &amp; Printable PDF</span>
-                                <span class="text-link" style="margin: 0;">Open Resumes →</span>
+                                <span class="nrki-text-link" style="margin: 0;">Open Resumes →</span>
                             </div>
                         </a>
 
-                        <a class="editorial-card editorial-card--link" href="./pages/projects.html">
+                        <a class="nrki-card nrki-card-link" href="./pages/projects.html">
                             <div>
-                                <div class="card-meta">
+                                <div class="nrki-card-meta">
                                     <span>02 / Build</span>
-                                    <span class="badge">Under Construction</span>
+                                    <span class="nrki-badge">Under Construction</span>
                                 </div>
                                 <h3>Projects &amp; Software Builds</h3>
                                 <p>
@@ -140,17 +160,17 @@
                                     single-page applications with source links.
                                 </p>
                             </div>
-                            <div class="card-footer">
+                            <div class="nrki-card-footer">
                                 <span>Status: Updating</span>
-                                <span class="text-link" style="margin: 0;">View Page →</span>
+                                <span class="nrki-text-link" style="margin: 0;">View Page →</span>
                             </div>
                         </a>
 
-                        <a class="editorial-card editorial-card--link" href="./pages/works.html">
+                        <a class="nrki-card nrki-card-link" href="./pages/works.html">
                             <div>
-                                <div class="card-meta">
+                                <div class="nrki-card-meta">
                                     <span>03 / Publish</span>
-                                    <span class="badge">Under Construction</span>
+                                    <span class="nrki-badge">Under Construction</span>
                                 </div>
                                 <h3>Works, Essays &amp; Verse</h3>
                                 <p>
@@ -158,27 +178,27 @@
                                     text and typeset for the web.
                                 </p>
                             </div>
-                            <div class="card-footer">
+                            <div class="nrki-card-footer">
                                 <span>Status: Updating</span>
-                                <span class="text-link" style="margin: 0;">View Page →</span>
+                                <span class="nrki-text-link" style="margin: 0;">View Page →</span>
                             </div>
                         </a>
 
-                        <a class="editorial-card editorial-card--link" href="./pages/magazines-index.html">
+                        <a class="nrki-card nrki-card-link" href="./pages/magazines-index.html">
                             <div>
-                                <div class="card-meta">
+                                <div class="nrki-card-meta">
                                     <span>04 / Editions</span>
-                                    <span class="badge">Under Construction</span>
+                                    <span class="nrki-badge nrki-badge-accent">Available</span>
                                 </div>
                                 <h3>Magazines &amp; Design Systems</h3>
                                 <p>
                                     Self-contained editorial issues documenting NRKI's standalone CSS architecture and
-                                    component specimens—plus the Media Ledger of reviews and watchlists.
+                                    component specimens—opening Issue 01 now live.
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <span>Status: Updating</span>
-                                <span class="text-link" style="margin: 0;">View Page →</span>
+                            <div class="nrki-card-footer">
+                                <span>Issue 01 Live</span>
+                                <span class="nrki-text-link" style="margin: 0;">Open Magazines →</span>
                             </div>
                         </a>
                     </div>
@@ -189,8 +209,8 @@
         <!-- ================================================================
              SITE FOOTER
              ================================================================ -->
-        <footer class="site-footer">
-            <a class="footer-mark" href="#home">NRKI</a>
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="#home">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
             <div>
                 <a href="./pages/magazines-index.html">Magazines</a>

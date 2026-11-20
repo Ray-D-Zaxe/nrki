@@ -18,48 +18,80 @@
   const { loadTabCollection } = global.NRKIContentLoader;
 
   /**
+   * Normalizes legacy badge tokens (`badge--accent`, `badge--gold`) and v2
+   * tokens (`nrki-badge-*`) into broadsheet `.nrki-badge` class names so
+   * existing content files render seamlessly alongside new entries.
+   *
+   * @param {string} rawBadgeVariant
+   * @returns {string}
+   */
+  function resolveBadgeClassName(rawBadgeVariant) {
+    if (!rawBadgeVariant) return "nrki-badge";
+    if (
+      rawBadgeVariant === "badge--accent" ||
+      rawBadgeVariant === "nrki-badge-accent"
+    ) {
+      return "nrki-badge nrki-badge-accent";
+    }
+    if (
+      rawBadgeVariant === "badge--gold" ||
+      rawBadgeVariant === "nrki-badge-highlight"
+    ) {
+      return "nrki-badge nrki-badge-highlight";
+    }
+    if (rawBadgeVariant.startsWith("nrki-badge-")) {
+      return `nrki-badge ${rawBadgeVariant}`;
+    }
+    return "nrki-badge";
+  }
+
+  /**
    * 1. PROJECT CARD RENDERER (Full clickable `<a>` card with tags)
    */
-  function renderProjectCard(item) {
+  function renderProjectCard(projectRecord) {
     return h(
       "a",
       {
-        key: item.id,
-        href: `./project-view.html?id=${encodeURIComponent(item.id)}`,
-        className: "editorial-card editorial-card--link",
+        key: projectRecord.id,
+        href: `./project-view.html?id=${encodeURIComponent(projectRecord.id)}`,
+        className: "nrki-card nrki-card-link",
       },
       h(
         "div",
         null,
         h(
           "div",
-          { className: "card-meta" },
-          h("span", null, item.projectNumber),
+          { className: "nrki-card-meta" },
+          h("span", null, projectRecord.projectNumber),
           h(
             "span",
-            { className: `badge ${item.badgeVariant || ""}`.trim() },
-            item.statusLabel
+            { className: resolveBadgeClassName(projectRecord.badgeVariant) },
+            projectRecord.statusLabel
           )
         ),
-        h("h3", null, item.title),
-        h("p", null, item.summary),
-        Array.isArray(item.tags) && item.tags.length > 0
+        h("h3", null, projectRecord.title),
+        h("p", null, projectRecord.summary),
+        Array.isArray(projectRecord.tags) && projectRecord.tags.length > 0
           ? h(
               "ul",
-              { className: "tag-pills", "aria-label": "Project tags" },
-              item.tags.map((tag) =>
-                h("li", { key: tag, className: "tag-pill" }, `#${tag}`)
+              { className: "nrki-tag-pills", "aria-label": "Project tags" },
+              projectRecord.tags.map((tagLabel) =>
+                h(
+                  "li",
+                  { key: tagLabel, className: "nrki-tag-pill" },
+                  `#${tagLabel}`
+                )
               )
             )
           : null
       ),
       h(
         "div",
-        { className: "card-footer" },
+        { className: "nrki-card-footer" },
         h("span", null, "Project page & GitHub links"),
         h(
           "span",
-          { className: "text-link", style: { margin: 0 } },
+          { className: "nrki-text-link", style: { margin: 0 } },
           "Explore project →"
         )
       )
@@ -69,42 +101,50 @@
   /**
    * 2. WORK CARD RENDERER (Full clickable `<a>` card with tags)
    */
-  function renderWorkCard(item) {
+  function renderWorkCard(workRecord) {
     return h(
       "a",
       {
-        key: item.id,
-        href: `./work-view.html?id=${encodeURIComponent(item.id)}`,
-        className: "editorial-card editorial-card--link",
+        key: workRecord.id,
+        href: `./work-view.html?id=${encodeURIComponent(workRecord.id)}`,
+        className: "nrki-card nrki-card-link",
       },
       h(
         "div",
         null,
         h(
           "div",
-          { className: "card-meta" },
-          h("span", { className: "badge badge--accent" }, item.categoryLabel),
-          h("span", null, `${item.date} · ${item.readTime}`)
+          { className: "nrki-card-meta" },
+          h(
+            "span",
+            { className: "nrki-badge nrki-badge-accent" },
+            workRecord.categoryLabel
+          ),
+          h("span", null, `${workRecord.date} · ${workRecord.readTime}`)
         ),
-        h("h3", null, item.title),
-        h("p", null, item.summary),
-        Array.isArray(item.tags) && item.tags.length > 0
+        h("h3", null, workRecord.title),
+        h("p", null, workRecord.summary),
+        Array.isArray(workRecord.tags) && workRecord.tags.length > 0
           ? h(
               "ul",
-              { className: "tag-pills", "aria-label": "Work tags" },
-              item.tags.map((tag) =>
-                h("li", { key: tag, className: "tag-pill" }, `#${tag}`)
+              { className: "nrki-tag-pills", "aria-label": "Work tags" },
+              workRecord.tags.map((tagLabel) =>
+                h(
+                  "li",
+                  { key: tagLabel, className: "nrki-tag-pill" },
+                  `#${tagLabel}`
+                )
               )
             )
           : null
       ),
       h(
         "div",
-        { className: "card-footer" },
-        h("span", null, `Format: ${item.categoryLabel}`),
+        { className: "nrki-card-footer" },
+        h("span", null, `Format: ${workRecord.categoryLabel}`),
         h(
           "span",
-          { className: "text-link", style: { margin: 0 } },
+          { className: "nrki-text-link", style: { margin: 0 } },
           "Read piece →"
         )
       )
@@ -114,71 +154,77 @@
   /**
    * 3. MEDIA CARD RENDERER (Review or Watchlist entry with rating/status & tags)
    */
-  function renderMediaCard(item) {
+  function renderMediaCard(mediaRecord) {
     return h(
       "article",
-      { key: item.id, className: "media-entry" },
+      { key: mediaRecord.id, className: "nrki-media-card" },
       h(
         "div",
         null,
         h(
           "div",
-          { className: "media-entry__header" },
+          { className: "nrki-media-card-header" },
           h(
             "div",
             null,
             h(
               "span",
-              { className: `badge ${item.badgeVariant || ""}`.trim() },
-              item.badgeLabel
+              { className: resolveBadgeClassName(mediaRecord.badgeVariant) },
+              mediaRecord.badgeLabel
             ),
-            h("h3", { className: "media-entry__title" }, item.title)
+            h("h3", { className: "nrki-media-card-title" }, mediaRecord.title)
           ),
           h(
             "span",
             {
-              className: item.isRating ? "media-rating" : "badge",
-              "aria-label": item.isRating
-                ? `Rating: ${item.ratingOrStatus}`
-                : `Status: ${item.ratingOrStatus}`,
+              className: mediaRecord.isRating
+                ? "nrki-rating-stamp"
+                : "nrki-badge",
+              "aria-label": mediaRecord.isRating
+                ? `Rating: ${mediaRecord.ratingOrStatus}`
+                : `Status: ${mediaRecord.ratingOrStatus}`,
             },
-            item.ratingOrStatus
+            mediaRecord.ratingOrStatus
           )
         ),
-        h("p", { className: "media-entry__creator" }, item.creator),
-        h("p", { className: "media-entry__notes" }, item.notes),
-        Array.isArray(item.tags) && item.tags.length > 0
+        h("p", { className: "nrki-media-card-creator" }, mediaRecord.creator),
+        h("p", { className: "nrki-media-card-notes" }, mediaRecord.notes),
+        Array.isArray(mediaRecord.tags) && mediaRecord.tags.length > 0
           ? h(
               "ul",
-              { className: "tag-pills", "aria-label": "Media tags" },
-              item.tags.map((tag) =>
-                h("li", { key: tag, className: "tag-pill" }, `#${tag}`)
+              { className: "nrki-tag-pills", "aria-label": "Media tags" },
+              mediaRecord.tags.map((tagLabel) =>
+                h(
+                  "li",
+                  { key: tagLabel, className: "nrki-tag-pill" },
+                  `#${tagLabel}`
+                )
               )
             )
           : null
       ),
       h(
         "div",
-        { className: "media-entry__footer" },
-        h("span", null, item.footerLeft),
-        h("span", null, item.footerRight)
+        { className: "nrki-card-footer" },
+        h("span", null, mediaRecord.footerLeft),
+        h("span", null, mediaRecord.footerRight)
       )
     );
   }
 
-  const mountNode = document.getElementById("shelf-root");
-  if (mountNode) {
-    const pageType = mountNode.getAttribute("data-shelf-page");
+  const mountContainer = document.getElementById("shelf-root");
+  if (mountContainer) {
+    const shelfPageType = mountContainer.getAttribute("data-shelf-page");
     if (
-      pageType === "projects" ||
-      pageType === "works" ||
-      pageType === "media"
+      shelfPageType === "projects" ||
+      shelfPageType === "works" ||
+      shelfPageType === "media"
     ) {
-      loadTabCollection(pageType).then(({ filters, items }) => {
-        const root = createRoot(mountNode);
+      loadTabCollection(shelfPageType).then(({ filters, items }) => {
+        const reactRoot = createRoot(mountContainer);
 
-        if (pageType === "projects") {
-          root.render(
+        if (shelfPageType === "projects") {
+          reactRoot.render(
             h(Shelf, {
               eyebrow: "02 / Build",
               title: "The Projects Shelf",
@@ -186,12 +232,12 @@
               filters,
               items,
               enableTagFilter: true,
-              gridClassName: "media-grid",
+              gridClassName: "nrki-shelf-grid",
               renderCard: renderProjectCard,
             })
           );
-        } else if (pageType === "works") {
-          root.render(
+        } else if (shelfPageType === "works") {
+          reactRoot.render(
             h(Shelf, {
               eyebrow: "03 / Publish",
               title: "The Works Shelf",
@@ -199,12 +245,12 @@
               filters,
               items,
               enableTagFilter: true,
-              gridClassName: "media-grid",
+              gridClassName: "nrki-shelf-grid",
               renderCard: renderWorkCard,
             })
           );
-        } else if (pageType === "media") {
-          root.render(
+        } else if (shelfPageType === "media") {
+          reactRoot.render(
             h(Shelf, {
               eyebrow: "04 / Ledger",
               title: "The Media Shelf",
@@ -212,7 +258,7 @@
               filters,
               items,
               enableTagFilter: true,
-              gridClassName: "media-grid",
+              gridClassName: "nrki-shelf-grid",
               renderCard: renderMediaCard,
             })
           );
