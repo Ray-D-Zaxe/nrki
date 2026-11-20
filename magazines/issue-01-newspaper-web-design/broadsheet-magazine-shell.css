@@ -191,6 +191,19 @@
     text-align: center;
   }
 
+  [data-theme="ancient"] .magazine-ear-box {
+    overflow: visible;
+    padding: 0.65rem 0.85rem;
+    border-style: solid;
+    border-width: 2px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 18px;
+    border-image-outset: 4px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
   .magazine-ear-box strong {
     display: block;
     color: var(--nrki-ink-heading);
@@ -211,18 +224,26 @@
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.04;
+    text-transform: uppercase;
   }
 
   [data-theme="ancient"] .magazine-flag-title {
-    font-weight: 400;
-    letter-spacing: 0.02em;
+    font-weight: 700;
+    font-size: clamp(2.35rem, 5vw, 3.85rem);
+    letter-spacing: 0.015em;
+    text-transform: none;
+  }
+
+  [data-theme="uwu"] .magazine-flag-title {
+    text-transform: none;
+    letter-spacing: 0.01em;
   }
 
   .magazine-flag-subtitle {
     margin: 0.2rem 0 0;
-    font-family: var(--nrki-font-body);
+    font-family: var(--nrki-font-quote);
     font-style: italic;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     color: var(--nrki-ink-muted);
   }
 
@@ -285,7 +306,7 @@
   }
 
   .magazine-frontpage-banner h2 {
-    font-family: var(--nrki-font-display);
+    font-family: var(--nrki-font-heading);
     font-size: clamp(2.1rem, 4.4vw, 3.45rem);
     line-height: 1.04;
     margin-bottom: 0.65rem;
@@ -297,6 +318,19 @@
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-elevated);
     box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="ancient"] .magazine-index-card {
+    overflow: visible;
+    padding: 1.45rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
   }
 
   .magazine-index-list {
@@ -407,7 +441,7 @@
   }
 
   .specimen-catalog-header h2 {
-    font-family: var(--nrki-font-display);
+    font-family: var(--nrki-font-heading);
     font-size: clamp(1.75rem, 3.2vw, 2.5rem);
     margin-bottom: 0.25rem;
   }
@@ -570,8 +604,8 @@
   .specimen-usage-note {
     margin: 0;
     color: var(--nrki-ink-muted);
-    font-family: var(--nrki-font-ui);
-    font-size: 0.82rem;
+    font-family: var(--nrki-font-body);
+    font-size: 0.9rem;
     line-height: 1.45;
   }
 
@@ -618,7 +652,7 @@
 
   /* Isolated Live Preview Stage — inherits its OWN theme font, paper texture & palette */
   .specimen-preview-stage {
-    padding: clamp(1.1rem, 2.8vw, 1.85rem);
+    padding: clamp(1.3rem, 3vw, 2rem);
     background-color: var(--nrki-surface-canvas);
     background-image: var(--nrki-surface-texture);
     background-size: 16px 16px;
@@ -629,6 +663,7 @@
 
   .specimen-preview-stage[data-theme="ancient"] {
     background-size: 100% 100%;
+    font-size: 1.08rem;
   }
 
   /* Code Inspection Footer (`HTML`, `CSS`, conditional `JS` + `Copy`) */
@@ -710,15 +745,33 @@
     background-color: var(--nrki-code-surface);
   }
 
+  .specimen-code-drawer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 1.2rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-surface-inset);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .specimen-code-drawer pre {
     margin: 0;
-    border-left: 0;
+    border: 0;
+    border-left: 4px solid var(--nrki-accent-primary);
     border-radius: 0;
     padding: 1rem 1.2rem;
     max-height: 22rem;
     overflow: auto;
-    font-size: 0.81rem;
-    line-height: 1.5;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.82rem;
+    line-height: 1.58;
+    tab-size: 2;
   }
 
 

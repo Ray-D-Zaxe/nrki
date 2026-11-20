@@ -101,9 +101,9 @@
   <aside class="nrki-lead-aside">
     <p class="nrki-aside-label">In This Edition</p>
     <ol>
-      <li><a href="#layouts">Broadsheet Layouts</a></li>
-      <li><a href="#elements">Simple Elements</a></li>
-      <li><a href="#components">Complex Components</a></li>
+      <li><a href="#specimen-preview">Broadsheet Layouts</a></li>
+      <li><a href="#specimen-preview">Simple Elements</a></li>
+      <li><a href="#specimen-preview">Complex Components</a></li>
     </ol>
   </aside>
 </section>`,

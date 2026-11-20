@@ -84,6 +84,142 @@
   }
 
   /* ========================================================================
+     1B. LIGHTWEIGHT SAFE SYNTAX HIGHLIGHTER FOR CODE SPECIMENS & DRAWER
+     ------------------------------------------------------------------------
+     Why a single-pass tokenizer is used: Every source fragment outside matched
+     tokens goes straight through HTML escaping and is never re-scanned, so
+     inserted `<span class="nrki-tok-*">` tags cannot corrupt or nest badly.
+     ======================================================================== */
+  function escapeHtmlEntities(rawSourceText) {
+    return rawSourceText
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function highlightHtmlTagMarkup(rawTagString) {
+    const openingMatch = rawTagString.match(/^<\/?[a-zA-Z0-9-]+/);
+    if (!openingMatch) return escapeHtmlEntities(rawTagString);
+
+    const tagPrefix = openingMatch[0];
+    const remainderText = rawTagString.slice(tagPrefix.length);
+    let highlightedResult = `<span class="nrki-tok-tag">${escapeHtmlEntities(
+      tagPrefix
+    )}</span>`;
+
+    const attributePattern =
+      /(\s+)([a-zA-Z0-9:-]+)(?:(=)("[^"]*"|'[^']*'))?/g;
+    let scanCursor = 0;
+    let attrMatch;
+
+    while ((attrMatch = attributePattern.exec(remainderText)) !== null) {
+      if (attrMatch.index > scanCursor) {
+        highlightedResult += escapeHtmlEntities(
+          remainderText.slice(scanCursor, attrMatch.index)
+        );
+      }
+      highlightedResult += escapeHtmlEntities(attrMatch[1]);
+      highlightedResult += `<span class="nrki-tok-prop">${escapeHtmlEntities(
+        attrMatch[2]
+      )}</span>`;
+      if (attrMatch[3] && attrMatch[4]) {
+        highlightedResult += escapeHtmlEntities(attrMatch[3]);
+        highlightedResult += `<span class="nrki-tok-string">${escapeHtmlEntities(
+          attrMatch[4]
+        )}</span>`;
+      }
+      scanCursor = attributePattern.lastIndex;
+    }
+
+    if (scanCursor < remainderText.length) {
+      highlightedResult += escapeHtmlEntities(remainderText.slice(scanCursor));
+    }
+    return highlightedResult;
+  }
+
+  function renderHighlightedCodeMarkup(rawSourceText, languageKey) {
+    if (!rawSourceText) return "";
+
+    if (languageKey === "html") {
+      const htmlPattern = /(<!--[\s\S]*?-->)|(<\/?[a-zA-Z0-9-]+(?:\s+[^>]*)?>)/g;
+      const htmlChunks = [];
+      let scanCursor = 0;
+      let tokenMatch;
+
+      while ((tokenMatch = htmlPattern.exec(rawSourceText)) !== null) {
+        if (tokenMatch.index > scanCursor) {
+          htmlChunks.push(
+            escapeHtmlEntities(rawSourceText.slice(scanCursor, tokenMatch.index))
+          );
+        }
+        if (tokenMatch[1]) {
+          htmlChunks.push(
+            `<span class="nrki-tok-comment">${escapeHtmlEntities(
+              tokenMatch[1]
+            )}</span>`
+          );
+        } else if (tokenMatch[2]) {
+          htmlChunks.push(highlightHtmlTagMarkup(tokenMatch[2]));
+        }
+        scanCursor = htmlPattern.lastIndex;
+      }
+
+      if (scanCursor < rawSourceText.length) {
+        htmlChunks.push(escapeHtmlEntities(rawSourceText.slice(scanCursor)));
+      }
+      return htmlChunks.join("");
+    }
+
+    const languagePattern =
+      languageKey === "css"
+        ? /(\/\*[\s\S]*?\*\/)|("(?:\\.|[^"])*"|'(?:\\.|[^'])*')|(@[a-z-]+)|([a-z-]+(?=\s*:))/gi
+        : /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|(`(?:\\.|[^`])*`|"(?:\\.|[^"])*"|'(?:\\.|[^'])*')|\b(const|let|var|function|return|if|else|for|of|in|async|await|true|false|null|new)\b/g;
+
+    const codeChunks = [];
+    let scanCursor = 0;
+    let tokenMatch;
+
+    while ((tokenMatch = languagePattern.exec(rawSourceText)) !== null) {
+      if (tokenMatch.index > scanCursor) {
+        codeChunks.push(
+          escapeHtmlEntities(rawSourceText.slice(scanCursor, tokenMatch.index))
+        );
+      }
+      if (tokenMatch[1]) {
+        codeChunks.push(
+          `<span class="nrki-tok-comment">${escapeHtmlEntities(
+            tokenMatch[1]
+          )}</span>`
+        );
+      } else if (tokenMatch[2]) {
+        codeChunks.push(
+          `<span class="nrki-tok-string">${escapeHtmlEntities(
+            tokenMatch[2]
+          )}</span>`
+        );
+      } else if (tokenMatch[3]) {
+        codeChunks.push(
+          `<span class="nrki-tok-keyword">${escapeHtmlEntities(
+            tokenMatch[3]
+          )}</span>`
+        );
+      } else if (tokenMatch[4]) {
+        codeChunks.push(
+          `<span class="nrki-tok-prop">${escapeHtmlEntities(
+            tokenMatch[4]
+          )}</span>`
+        );
+      }
+      scanCursor = languagePattern.lastIndex;
+    }
+
+    if (scanCursor < rawSourceText.length) {
+      codeChunks.push(escapeHtmlEntities(rawSourceText.slice(scanCursor)));
+    }
+    return codeChunks.join("");
+  }
+
+  /* ========================================================================
      2. HASH-ROUTED 5-PAGE NEWSPAPER SECTION CONTROLLER
      ======================================================================== */
   function resolveHashSectionId() {
@@ -376,6 +512,22 @@
     previewStage.setAttribute("data-mode", initialModeKey);
     previewStage.innerHTML = specimenEntry.previewHtml;
 
+    /* Why showcased links & forms are intercepted:
+       Specimen containers demonstrate visuals and local interactive widgets
+       purely inside the showcase box—clicking an illustrated link or submitting
+       a sample form must never navigate the magazine page, mutate `location.hash`,
+       or scroll the viewport away from the active specimen. */
+    previewStage.addEventListener("click", (pointerEvent) => {
+      const clickedAnchor = pointerEvent.target.closest("a[href]");
+      if (clickedAnchor) {
+        pointerEvent.preventDefault();
+      }
+    });
+
+    previewStage.addEventListener("submit", (submitEvent) => {
+      submitEvent.preventDefault();
+    });
+
     BROADSHEET_THEME_DEFINITIONS.forEach((themeDefinition) => {
       const themeOptionButton = browserDocument.createElement("button");
       themeOptionButton.type = "button";
@@ -459,9 +611,17 @@
     codeDrawer.className = "specimen-code-drawer";
     codeDrawer.hidden = true;
 
+    const codeDrawerHeaderBar = browserDocument.createElement("div");
+    codeDrawerHeaderBar.className = "specimen-code-drawer-bar";
+    const drawerLanguageLabel = browserDocument.createElement("span");
+    const drawerLineCountLabel = browserDocument.createElement("span");
+    codeDrawerHeaderBar.appendChild(drawerLanguageLabel);
+    codeDrawerHeaderBar.appendChild(drawerLineCountLabel);
+
     const preElement = browserDocument.createElement("pre");
     const codeElement = browserDocument.createElement("code");
     preElement.appendChild(codeElement);
+    codeDrawer.appendChild(codeDrawerHeaderBar);
     codeDrawer.appendChild(preElement);
 
     const availableCodeSnippets = [
@@ -516,7 +676,15 @@
         }
 
         activeLanguageKey = snippetDefinition.languageKey;
-        codeElement.textContent = snippetDefinition.sourceText;
+        const lineTotal = snippetDefinition.sourceText.split(/\r?\n/).length;
+        drawerLanguageLabel.textContent = `${snippetDefinition.languageLabel} Source`;
+        drawerLineCountLabel.textContent = `${lineTotal} ${
+          lineTotal === 1 ? "line" : "lines"
+        }`;
+        codeElement.innerHTML = renderHighlightedCodeMarkup(
+          snippetDefinition.sourceText,
+          snippetDefinition.languageKey
+        );
         codeDrawer.hidden = false;
 
         codeTabsContainer

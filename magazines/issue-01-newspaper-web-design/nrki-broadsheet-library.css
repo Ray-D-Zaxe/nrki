@@ -3,12 +3,13 @@
  * NRKI BROADSHEET — STANDALONE 4-THEME × 2-MODE EDITORIAL CSS LIBRARY
  * (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`)
  * ----------------------------------------------------------------------------
- * Version: 2.1.0
+ * Version: 2.2.0
  *
  * Orthogonal 2-Axis Architecture:
  *   1. `[data-theme="classic" | "ancient" | "minimalistic" | "uwu"]`
- *      Defines each theme's typographic personality, border grammar, corner
- *      geometry, ornamental dividers, and card framing style.
+ *      Defines each theme's contextual font palette (`display`, `heading`,
+ *      `body`, `quote`, `ui`, `mono`), border & corner geometry (including
+ *      Ancient outward-curved book corners), and syntax code palette.
  *   2. `[data-mode="light" | "dark"]`
  *      Flips ink & paper polarity within each theme—yielding 8 complete,
  *      high-contrast editions without duplicating component rules.
@@ -46,20 +47,24 @@
     --nrki-space-6: 3.25rem;
     --nrki-transition-fast: 140ms ease;
     --nrki-shadow-overlay: 0 20px 50px rgba(0, 0, 0, 0.42);
+    --nrki-ancient-frame-svg: none;
   }
 
   /* ------------------------------------------------------------------------
      THEME 01: CLASSIC (Metropolitan Botanical Broadsheet)
+     Context Typography: Playfair Display h1–h3 + Newsreader body + Playfair
+     italic quotes + Libre Franklin UI + JetBrains Mono code.
      ------------------------------------------------------------------------ */
   :root,
   [data-theme="classic"],
   [data-theme="classic"][data-mode="light"] {
     color-scheme: light;
 
-    /* Typography Personality */
+    /* Contextual Typography Roles */
     --nrki-font-display: "Playfair Display", Georgia, "Times New Roman", serif;
     --nrki-font-heading: "Playfair Display", Georgia, serif;
     --nrki-font-body: "Newsreader", Georgia, Baskerville, serif;
+    --nrki-font-quote: "Playfair Display", Georgia, serif;
     --nrki-font-ui: "Libre Franklin", Arial, Helvetica, system-ui, sans-serif;
     --nrki-font-mono: "JetBrains Mono", "Courier New", Courier, monospace;
 
@@ -123,7 +128,12 @@
     --nrki-selection-surface: #c9d6c3;
     --nrki-selection-ink: #171b16;
     --nrki-code-surface: #e3e6dd;
-    --nrki-code-ink: #283329;
+    --nrki-code-ink: #232b24;
+    --nrki-code-keyword: #1f4d35;
+    --nrki-code-string: #7c2d23;
+    --nrki-code-comment: #687062;
+    --nrki-code-prop: #5c5323;
+    --nrki-code-tag: #2d4f36;
   }
 
   :root[data-mode="dark"],
@@ -174,27 +184,38 @@
     --nrki-focus-ring: #98bfa0;
     --nrki-selection-surface: #334836;
     --nrki-selection-ink: #f0f4ee;
-    --nrki-code-surface: #1a221b;
+    --nrki-code-surface: #161d17;
     --nrki-code-ink: #dbe3d6;
+    --nrki-code-keyword: #9bd1a3;
+    --nrki-code-string: #ebaa9b;
+    --nrki-code-comment: #768271;
+    --nrki-code-prop: #dbcc88;
+    --nrki-code-tag: #8bc7aa;
     --nrki-card-hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
   }
 
   /* ------------------------------------------------------------------------
      THEME 02: ANCIENT (Fantasy Kingdom Royal Chronicle)
-     Features Blackletter nameplate, Cinzel headings, IM Fell English prose,
-     aged vellum vignette, inset double-gold frames, and SVG scrollwork dividers.
+     Contextual Voice:
+       - `h1` & drop-caps: UnifrakturCook (True Old English Blackletter)
+       - Subheadings & UI chrome: Cinzel (Engraved Roman capitals)
+       - Body copy: Cormorant Garamond (High-contrast calligraphic book serif)
+       - Quotes, captions & epigraphs: IM Fell English (Italic antique type)
+       - Code spans & blocks: Courier Prime (Crisp traditional typewriter slab)
+     Borders: Outward-curved 9-slice SVG book-frame corners + double gold rails.
      ------------------------------------------------------------------------ */
   [data-theme="ancient"],
   [data-theme="ancient"][data-mode="light"] {
     color-scheme: light;
 
-    --nrki-font-display: "UnifrakturMaguntia", "Cinzel Decorative", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --nrki-font-display: "UnifrakturCook", "Old English Text MT", "Blackletter", Georgia, serif;
     --nrki-font-heading: "Cinzel", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-    --nrki-font-body: "IM Fell English", "EB Garamond", "Palatino Linotype", Georgia, serif;
+    --nrki-font-body: "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    --nrki-font-quote: "IM Fell English", "Cormorant Garamond", Georgia, serif;
     --nrki-font-ui: "Cinzel", "Palatino Linotype", "Book Antiqua", serif;
-    --nrki-font-mono: "JetBrains Mono", "Courier New", monospace;
+    --nrki-font-mono: "Courier Prime", "Courier New", Courier, monospace;
 
-    /* Ornate Royal Border & Swirl Grammar */
+    /* Ornate Royal Border & Outward-Curved Book Corner Grammar */
     --nrki-radius-control: 2px;
     --nrki-radius-surface: 3px;
     --nrki-radius-pill: 2px;
@@ -207,6 +228,7 @@
     --nrki-panel-border: 3px double var(--nrki-border-strong);
     --nrki-surface-texture: radial-gradient(circle at 50% 20%, transparent 58%, rgba(120, 82, 34, 0.1) 100%);
     --nrki-ornament-symbol: "❧ ⚜ ❧";
+    --nrki-ancient-frame-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='%238c6821' stroke-width='1' d='M17 17H73V73H17Z'/%3E%3Cpath stroke='%234a331d' stroke-width='1.6' d='M12 12H78V78H12Z'/%3E%3Cpath stroke='%234a331d' stroke-width='1.45' d='M12 12H4C1 12 1 3 6 3C9 3 9 7 6 8M12 12V4C12 1 3 1 3 6C3 9 7 9 8 6M78 12H86C89 12 89 3 84 3C81 3 81 7 84 8M78 12V4C78 1 87 1 87 6C87 9 83 9 82 6M12 78H4C1 78 1 87 6 87C9 87 9 83 6 82M12 78V86C12 89 3 89 3 84C3 81 7 81 8 84M78 78H86C89 78 89 87 84 87C81 87 81 83 84 82M78 78V86C78 89 87 89 87 84C87 81 83 81 82 84'/%3E%3Ccircle cx='17' cy='17' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='73' cy='17' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='17' cy='73' r='1.8' fill='%238c6821'/%3E%3Ccircle cx='73' cy='73' r='1.8' fill='%238c6821'/%3E%3C/g%3E%3C/svg%3E");
 
     /* Aged Royal Vellum Palette */
     --nrki-surface-canvas: #efe3c6;
@@ -254,7 +276,12 @@
     --nrki-selection-surface: #dcc38f;
     --nrki-selection-ink: #2a1c11;
     --nrki-code-surface: #e3d2af;
-    --nrki-code-ink: #332214;
+    --nrki-code-ink: #2f1f12;
+    --nrki-code-keyword: #7d1f1a;
+    --nrki-code-string: #2b4d2a;
+    --nrki-code-comment: #786043;
+    --nrki-code-prop: #734e11;
+    --nrki-code-tag: #5e1511;
   }
 
   [data-theme="ancient"][data-mode="dark"] {
@@ -263,6 +290,7 @@
     --nrki-card-frame-shadow: inset 0 0 0 4px var(--nrki-surface-elevated), inset 0 0 0 5px var(--nrki-border-ornament);
     --nrki-card-hover-shadow: inset 0 0 0 4px var(--nrki-surface-panel), inset 0 0 0 5px var(--nrki-accent-primary), 0 10px 24px rgba(0, 0, 0, 0.52);
     --nrki-surface-texture: radial-gradient(circle at 50% 25%, rgba(214, 174, 85, 0.05) 0%, rgba(0, 0, 0, 0.35) 100%);
+    --nrki-ancient-frame-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke='%239a7834' stroke-width='1' d='M17 17H73V73H17Z'/%3E%3Cpath stroke='%23d6ae55' stroke-width='1.6' d='M12 12H78V78H12Z'/%3E%3Cpath stroke='%23d6ae55' stroke-width='1.45' d='M12 12H4C1 12 1 3 6 3C9 3 9 7 6 8M12 12V4C12 1 3 1 3 6C3 9 7 9 8 6M78 12H86C89 12 89 3 84 3C81 3 81 7 84 8M78 12V4C78 1 87 1 87 6C87 9 83 9 82 6M12 78H4C1 78 1 87 6 87C9 87 9 83 6 82M12 78V86C12 89 3 89 3 84C3 81 7 81 8 84M78 78H86C89 78 89 87 84 87C81 87 81 83 84 82M78 78V86C78 89 87 89 87 84C87 81 83 81 82 84'/%3E%3Ccircle cx='17' cy='17' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='73' cy='17' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='17' cy='73' r='1.8' fill='%23d6ae55'/%3E%3Ccircle cx='73' cy='73' r='1.8' fill='%23d6ae55'/%3E%3C/g%3E%3C/svg%3E");
 
     /* Candlelit Obsidian & Gilded Parchment */
     --nrki-surface-canvas: #16120d;
@@ -309,13 +337,19 @@
     --nrki-focus-ring: #d6ae55;
     --nrki-selection-surface: #473922;
     --nrki-selection-ink: #efe1c4;
-    --nrki-code-surface: #231c14;
-    --nrki-code-ink: #e8d8b7;
+    --nrki-code-surface: #211a12;
+    --nrki-code-ink: #ead9b7;
+    --nrki-code-keyword: #f08a7e;
+    --nrki-code-string: #9fd19b;
+    --nrki-code-comment: #8e7b5c;
+    --nrki-code-prop: #e8c474;
+    --nrki-code-tag: #e8b861;
   }
 
   /* ------------------------------------------------------------------------
      THEME 03: MINIMALISTIC (Swiss Neo-Editorial Broadsheet)
-     Barely any borders: whitespace & subtle surface elevation define hierarchy.
+     Barely any borders: tonal elevation & whitespace define hierarchy; subtle
+     Newsreader serif quote contrast against Space Grotesk + Inter + IBM Plex Mono.
      ------------------------------------------------------------------------ */
   [data-theme="minimalistic"],
   [data-theme="minimalistic"][data-mode="light"] {
@@ -324,17 +358,18 @@
     --nrki-font-display: "Space Grotesk", "Inter", "Helvetica Neue", system-ui, sans-serif;
     --nrki-font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
     --nrki-font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --nrki-font-quote: "Newsreader", Georgia, serif;
     --nrki-font-ui: "Inter", system-ui, -apple-system, sans-serif;
     --nrki-font-mono: "IBM Plex Mono", "JetBrains Mono", Consolas, monospace;
 
-    /* Minimalistic Border Grammar (Near-zero outlines; clean whitespace grid) */
+    /* Minimalistic Border Grammar (Near-zero outlines; subtle gallery shadow) */
     --nrki-radius-control: 2px;
     --nrki-radius-surface: 2px;
     --nrki-radius-pill: 2px;
     --nrki-card-border: 0px solid transparent;
     --nrki-card-hover-border: transparent;
-    --nrki-card-frame-shadow: none;
-    --nrki-card-hover-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    --nrki-card-frame-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    --nrki-card-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     --nrki-section-rule-major: 1px solid var(--nrki-border-faint);
     --nrki-section-rule-minor: 1px solid var(--nrki-border-faint);
     --nrki-panel-border: 0px solid transparent;
@@ -388,12 +423,18 @@
     --nrki-selection-ink: #111213;
     --nrki-code-surface: #f1f1ef;
     --nrki-code-ink: #18181b;
+    --nrki-code-keyword: #1d4ed8;
+    --nrki-code-string: #0f766e;
+    --nrki-code-comment: #71717a;
+    --nrki-code-prop: #7c3aed;
+    --nrki-code-tag: #111827;
   }
 
   [data-theme="minimalistic"][data-mode="dark"] {
     color-scheme: dark;
 
-    --nrki-card-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    --nrki-card-frame-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
+    --nrki-card-hover-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 
     /* Matte Obsidian & Cool Chalk */
     --nrki-surface-canvas: #0d0e10;
@@ -442,22 +483,28 @@
     --nrki-selection-ink: #f3f4f6;
     --nrki-code-surface: #181b20;
     --nrki-code-ink: #e5e7eb;
+    --nrki-code-keyword: #93c5fd;
+    --nrki-code-string: #5eead4;
+    --nrki-code-comment: #7d8594;
+    --nrki-code-prop: #c4b5fd;
+    --nrki-code-tag: #f3f4f6;
   }
 
   /* ------------------------------------------------------------------------
      THEME 04: UwU (Kawaii Pastel Zine Broadsheet)
-     Soft rounded pill geometry, Fredoka + Nunito fonts, chunky 2px pastel
-     frames, dashed rules, and hard offset candy shadows.
+     Rounded pill geometry, Fredoka display/UI + Nunito prose + Mali handwritten
+     quotes & captions + DM Mono approachable rounded code font.
      ------------------------------------------------------------------------ */
   [data-theme="uwu"],
   [data-theme="uwu"][data-mode="light"] {
     color-scheme: light;
 
-    --nrki-font-display: "Fredoka", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
+    --nrki-font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
     --nrki-font-heading: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
-    --nrki-font-body: "Nunito", "Quicksand", "Trebuchet MS", sans-serif;
+    --nrki-font-body: "Nunito", "Trebuchet MS", sans-serif;
+    --nrki-font-quote: "Mali", "Nunito", cursive, sans-serif;
     --nrki-font-ui: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
-    --nrki-font-mono: "Fira Code", "JetBrains Mono", "Courier New", monospace;
+    --nrki-font-mono: "DM Mono", "JetBrains Mono", "Courier New", monospace;
 
     /* Chunky Pastel Zine Geometry */
     --nrki-radius-control: 12px;
@@ -520,6 +567,11 @@
     --nrki-selection-ink: #3f1d38;
     --nrki-code-surface: #fae6f3;
     --nrki-code-ink: #4a2342;
+    --nrki-code-keyword: #6d28d9;
+    --nrki-code-string: #0f766e;
+    --nrki-code-comment: #9c6a92;
+    --nrki-code-prop: #b45309;
+    --nrki-code-tag: #be185d;
   }
 
   [data-theme="uwu"][data-mode="dark"] {
@@ -576,6 +628,11 @@
     --nrki-selection-ink: #fdf2f8;
     --nrki-code-surface: #29182e;
     --nrki-code-ink: #f5dce9;
+    --nrki-code-keyword: #c4b5fd;
+    --nrki-code-string: #6ee7b7;
+    --nrki-code-comment: #9e7495;
+    --nrki-code-prop: #fcd34d;
+    --nrki-code-tag: #f472b6;
   }
 }
 
@@ -607,10 +664,12 @@
     line-height: 1.65;
   }
 
-  /* Restore non-tiling vignette size specifically for Ancient mode parchment */
+  /* Restore non-tiling vignette size and richer serif weight for Ancient vellum */
   [data-theme="ancient"],
   [data-theme="ancient"] body {
     background-size: 100% 100%;
+    font-size: 1.08rem;
+    font-weight: 500;
   }
 
   html.nrki-theme-animating,
@@ -644,6 +703,35 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.16;
+  }
+
+  h1 {
+    font-family: var(--nrki-font-display);
+  }
+
+  [data-theme="ancient"] h1 {
+    font-weight: 700;
+    letter-spacing: 0.015em;
+    line-height: 1.08;
+  }
+
+  h1 em,
+  h2 em,
+  h3 em,
+  h4 em {
+    font-weight: 600;
+    font-style: italic;
+  }
+
+  strong,
+  b {
+    font-weight: 700;
+    color: var(--nrki-ink-heading);
+  }
+
+  em,
+  i {
+    font-style: italic;
   }
 
   a {
@@ -705,8 +793,23 @@
     margin-top: 0.9rem;
     margin-bottom: 0;
     color: var(--nrki-ink-muted);
-    font-size: 0.92rem;
+    font-family: var(--nrki-font-quote);
+    font-size: 0.94rem;
     font-style: italic;
+  }
+
+  .nrki-byline {
+    margin-bottom: 0.75rem;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-quote);
+    font-size: 0.94rem;
+    font-style: italic;
+  }
+
+  .nrki-small-caps {
+    font-variant-caps: small-caps;
+    letter-spacing: 0.06em;
+    font-weight: 600;
   }
 
   .nrki-drop-cap::first-letter {
@@ -750,32 +853,92 @@
     cursor: help;
   }
 
+  /* Monospace code styling tailored to each theme's readable mono face */
   code,
   pre {
     font-family: var(--nrki-font-mono);
     background-color: var(--nrki-code-surface);
     color: var(--nrki-code-ink);
     border-radius: var(--nrki-radius-control);
+    letter-spacing: 0;
   }
 
   code {
-    padding: 0.12rem 0.35rem;
-    font-size: 0.88em;
+    padding: 0.1rem 0.36rem;
+    border: 1px solid var(--nrki-border-faint);
+    font-size: 0.85em;
+    font-weight: 500;
   }
 
   pre {
     margin: 1rem 0;
     padding: 1rem 1.25rem;
     overflow-x: auto;
-    border-left: 3px solid var(--nrki-accent-primary);
-    font-size: 0.85rem;
-    line-height: 1.5;
+    border: 1px solid var(--nrki-border-subtle);
+    border-left: 4px solid var(--nrki-accent-primary);
+    font-size: 0.84rem;
+    line-height: 1.6;
+    tab-size: 2;
   }
 
   pre code {
     padding: 0;
+    border: 0;
     background: transparent;
     font-size: inherit;
+    font-weight: 400;
+  }
+
+  .nrki-code-block {
+    margin: 1rem 0;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    overflow: hidden;
+  }
+
+  .nrki-code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.35rem 0.9rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nrki-code-block pre {
+    margin: 0;
+    border: 0;
+    border-left: 4px solid var(--nrki-accent-primary);
+    border-radius: 0;
+  }
+
+  .nrki-tok-keyword {
+    color: var(--nrki-code-keyword);
+    font-weight: 700;
+  }
+
+  .nrki-tok-prop {
+    color: var(--nrki-code-prop);
+  }
+
+  .nrki-tok-string {
+    color: var(--nrki-code-string);
+  }
+
+  .nrki-tok-comment {
+    color: var(--nrki-code-comment);
+    font-style: italic;
+  }
+
+  .nrki-tok-tag {
+    color: var(--nrki-code-tag);
+    font-weight: 700;
   }
 
   /* --- Section Headers & Structural Rules --- */
@@ -893,18 +1056,61 @@
     line-height: 1.45;
   }
 
-  /* --- Framed Panel (Explicit showcase of each theme's border grammar) --- */
-  .nrki-framed-panel {
+  /* --- Framed Panel & Corner Frame (Theme-Specific Border & Book-Corner Grammar) --- */
+  .nrki-framed-panel,
+  .nrki-corner-frame {
     position: relative;
-    padding: 1.25rem;
+    padding: 1.3rem;
     border: var(--nrki-panel-border);
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-elevated);
     box-shadow: var(--nrki-card-frame-shadow);
   }
 
-  [data-theme="uwu"] .nrki-framed-panel {
+  [data-theme="classic"] .nrki-corner-frame {
+    border-top: 3px double var(--nrki-border-strong);
+  }
+
+  /* Why Ancient uses 9-slice SVG `border-image` with outward offset:
+     Allows straight double frame lines to extend beyond the corners and curl
+     outward like old illuminated manuscripts and fantasy book bindings while
+     adapting stroke colors cleanly between Light and Dark modes. */
+  [data-theme="ancient"] .nrki-framed-panel,
+  [data-theme="ancient"] .nrki-corner-frame {
+    overflow: visible;
+    padding: 1.55rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
+  [data-theme="minimalistic"] .nrki-framed-panel,
+  [data-theme="minimalistic"] .nrki-corner-frame {
+    border-width: 0;
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="uwu"] .nrki-framed-panel,
+  [data-theme="uwu"] .nrki-corner-frame {
     border-style: dashed;
+    border-color: var(--nrki-border-strong);
+  }
+
+  [data-theme="uwu"] .nrki-corner-frame::after {
+    content: "✦";
+    position: absolute;
+    top: -0.65rem;
+    right: 0.9rem;
+    padding-inline: 0.35rem;
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-accent-primary);
+    font-size: 0.95rem;
+    line-height: 1;
   }
 
   /* --- Buttons (All Variants, Sizes & States) --- */
@@ -1141,6 +1347,7 @@
     font-family: var(--nrki-font-mono);
     font-size: 0.78rem;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
 
   .nrki-tag-pills {
@@ -1184,10 +1391,23 @@
     color: var(--nrki-ink-on-accent);
   }
 
-  /* --- Lists & Metadata --- */
+  /* --- Lists, Checklists, Ruled Ledgers & Contextual Markers --- */
   .nrki-editorial-list {
     margin: 0.75rem 0 1.25rem;
-    padding-left: 1.35rem;
+    padding-left: 1.4rem;
+    list-style-type: "▪  ";
+  }
+
+  [data-theme="ancient"] .nrki-editorial-list {
+    list-style-type: "❖  ";
+  }
+
+  [data-theme="minimalistic"] .nrki-editorial-list {
+    list-style-type: "–  ";
+  }
+
+  [data-theme="uwu"] .nrki-editorial-list {
+    list-style-type: "✦  ";
   }
 
   .nrki-editorial-list li {
@@ -1197,6 +1417,86 @@
   .nrki-editorial-list li::marker {
     color: var(--nrki-accent-primary);
     font-weight: 700;
+  }
+
+  .nrki-ordered-list {
+    counter-reset: nrki-ordered-counter;
+    list-style: none;
+    margin: 0.75rem 0 1.25rem;
+    padding: 0;
+  }
+
+  .nrki-ordered-list li {
+    counter-increment: nrki-ordered-counter;
+    display: grid;
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+    gap: 0.45rem;
+    align-items: baseline;
+    margin-bottom: 0.45rem;
+  }
+
+  .nrki-ordered-list li::before {
+    content: counter(nrki-ordered-counter, decimal-leading-zero) ".";
+    font-family: var(--nrki-font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-checklist {
+    list-style: none;
+    margin: 0.75rem 0;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .nrki-checklist-entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.94rem;
+  }
+
+  .nrki-checklist-entry::before {
+    content: "☐";
+    flex-shrink: 0;
+    font-family: var(--nrki-font-mono);
+    font-weight: 700;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-checklist-entry.is-checked {
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-checklist-entry.is-checked::before {
+    content: "☑";
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-ruled-list {
+    list-style: none;
+    margin: 0.75rem 0;
+    padding: 0;
+    border-top: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-ruled-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    font-size: 0.92rem;
+  }
+
+  .nrki-ruled-list li strong {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   .nrki-inline-meta-list {
@@ -1242,7 +1542,7 @@
     font-size: 0.94rem;
   }
 
-  /* --- Editorial Blockquotes --- */
+  /* --- Editorial Blockquotes (Uses contextual `--nrki-font-quote`) --- */
   blockquote,
   .nrki-quote {
     margin: 1.25rem 0;
@@ -1251,6 +1551,7 @@
     border-radius: var(--nrki-radius-control);
     background-color: var(--nrki-surface-panel);
     color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-quote);
     font-style: italic;
   }
 
@@ -1370,6 +1671,59 @@
     height: 1rem;
   }
 
+  /* Pure CSS toggle switch built on accessible checkbox input */
+  .nrki-switch {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.86rem;
+    color: var(--nrki-ink-body);
+    cursor: pointer;
+  }
+
+  .nrki-switch input {
+    appearance: none;
+    width: 2.35rem;
+    height: 1.3rem;
+    margin: 0;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-inset);
+    position: relative;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast);
+  }
+
+  .nrki-switch input::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 0.82rem;
+    height: 0.82rem;
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-ink-heading);
+    transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast);
+  }
+
+  .nrki-switch input:checked {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+  }
+
+  .nrki-switch input:checked::before {
+    transform: translateX(1.02rem);
+    background-color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-range {
+    width: 100%;
+    accent-color: var(--nrki-accent-primary);
+    cursor: pointer;
+  }
+
   /* --- Tables & Data Ledgers --- */
   .nrki-table-wrap {
     width: 100%;
@@ -1384,6 +1738,7 @@
     border-collapse: collapse;
     text-align: left;
     font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
   }
 
   .nrki-table th,
@@ -1498,6 +1853,19 @@
     box-shadow: var(--nrki-card-frame-shadow);
   }
 
+  [data-theme="ancient"] .nrki-media-figure {
+    overflow: visible;
+    padding: 1.35rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
+  }
+
   .nrki-media-header {
     margin-bottom: 0.55rem;
     color: var(--nrki-accent-primary);
@@ -1527,8 +1895,183 @@
   .nrki-media-caption {
     margin-top: 0.5rem;
     color: var(--nrki-ink-muted);
-    font-family: var(--nrki-font-mono);
+    font-family: var(--nrki-font-quote);
+    font-style: italic;
+    font-size: 0.88rem;
+  }
+
+  /* --- Progress Meters, Stat Strip & Author Bylines --- */
+  .nrki-progress {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .nrki-progress-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-family: var(--nrki-font-ui);
     font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--nrki-ink-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nrki-progress-track {
+    width: 100%;
+    height: 0.65rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    overflow: hidden;
+  }
+
+  .nrki-progress-fill {
+    height: 100%;
+    background-color: var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+  }
+
+  .nrki-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    overflow: hidden;
+  }
+
+  .nrki-stat-cell {
+    padding: 0.9rem 1rem;
+  }
+
+  .nrki-stat-cell + .nrki-stat-cell {
+    border-left: 1px solid var(--nrki-border-faint);
+  }
+
+  .nrki-stat-value {
+    display: block;
+    font-family: var(--nrki-font-display);
+    font-size: 1.65rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-stat-label {
+    display: block;
+    margin-top: 0.2rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-author-byline {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .nrki-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+    font-family: var(--nrki-font-heading);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  /* --- Tooltips, Empty States & Skeleton Placeholders --- */
+  .nrki-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-bottom: 1px dotted var(--nrki-accent-primary);
+    font-weight: 700;
+    cursor: help;
+  }
+
+  .nrki-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 0.45rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 16rem;
+    padding: 0.38rem 0.6rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-ink-heading);
+    color: var(--nrki-surface-canvas);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.35;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--nrki-transition-fast);
+    z-index: 40;
+  }
+
+  .nrki-tooltip:hover::after,
+  .nrki-tooltip:focus-visible::after {
+    opacity: 1;
+  }
+
+  .nrki-empty-state {
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-skeleton-card {
+    display: grid;
+    gap: 0.55rem;
+    padding: 1rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-skeleton-line {
+    height: 0.78rem;
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-inset);
+    animation: nrki-skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  .nrki-skeleton-line-short {
+    width: 42%;
+    height: 0.65rem;
+  }
+
+  .nrki-skeleton-line-mid {
+    width: 78%;
+  }
+
+  @keyframes nrki-skeleton-pulse {
+    0%, 100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 }
 
@@ -1806,6 +2349,21 @@
     background-color: var(--nrki-surface-elevated);
     box-shadow: var(--nrki-card-frame-shadow);
     transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), box-shadow var(--nrki-transition-fast);
+  }
+
+  [data-theme="ancient"] .nrki-card,
+  [data-theme="ancient"] .nrki-pin-card,
+  [data-theme="ancient"] .nrki-media-card {
+    overflow: visible;
+    padding: 1.45rem;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
   }
 
   .nrki-card-link {
@@ -2138,6 +2696,18 @@
     box-shadow: var(--nrki-card-frame-shadow), var(--nrki-shadow-overlay);
   }
 
+  [data-theme="ancient"] .nrki-modal-dialog {
+    overflow: visible;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: var(--nrki-shadow-overlay);
+  }
+
   .nrki-modal-topbar {
     display: flex;
     align-items: center;
@@ -2156,7 +2726,7 @@
     background-color: var(--nrki-surface-panel);
   }
 
-  /* --- Tabs & Expandable Accordions --- */
+  /* --- Tabs, Segmented Controls & Expandable Accordions --- */
   .nrki-tab-list {
     display: flex;
     flex-wrap: wrap;
@@ -2197,6 +2767,41 @@
     background-color: var(--nrki-surface-elevated);
   }
 
+  .nrki-segmented-control {
+    display: inline-flex;
+    flex-wrap: wrap;
+    padding: 0.22rem;
+    gap: 0.22rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-segmented-option {
+    padding: 0.34rem 0.78rem;
+    border: 0;
+    border-radius: var(--nrki-radius-pill);
+    background-color: transparent;
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-segmented-option:hover {
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-segmented-option[aria-pressed="true"] {
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-accent-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  }
+
   .nrki-accordion {
     border-top: var(--nrki-section-rule-minor);
   }
@@ -2209,7 +2814,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.85rem 0.5rem;
+    gap: 0.75rem;
+    padding: 0.85rem 0.65rem;
     font-family: var(--nrki-font-ui);
     font-size: 0.82rem;
     font-weight: 700;
@@ -2217,6 +2823,19 @@
     color: var(--nrki-ink-heading);
     cursor: pointer;
     list-style: none;
+    transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  .nrki-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nrki-accordion-summary:hover {
+    background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-accordion-item[open] > .nrki-accordion-summary {
+    color: var(--nrki-accent-primary);
   }
 
   .nrki-accordion-summary::after {
@@ -2224,6 +2843,7 @@
     font-family: var(--nrki-font-mono);
     font-size: 1rem;
     color: var(--nrki-accent-primary);
+    flex-shrink: 0;
   }
 
   .nrki-accordion-item[open] .nrki-accordion-summary::after {
@@ -2231,9 +2851,166 @@
   }
 
   .nrki-accordion-body {
-    padding: 0 0.5rem 1rem;
+    padding: 0.15rem 0.65rem 1rem;
     color: var(--nrki-ink-body);
     font-size: 0.94rem;
+  }
+
+  /* Boxed card-style accordion variant honoring theme borders & open accent rail */
+  .nrki-accordion-boxed {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-item {
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: var(--nrki-card-frame-shadow);
+    overflow: hidden;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-item[open] {
+    border-left: 4px solid var(--nrki-accent-primary);
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-summary {
+    padding: 0.85rem 1rem;
+  }
+
+  .nrki-accordion-boxed .nrki-accordion-body {
+    padding: 0 1rem 1rem;
+    border-top: 1px solid var(--nrki-border-faint);
+    padding-top: 0.75rem;
+  }
+
+  /* --- Pagination, Editorial Timeline, Dropdown Menu & Toast --- */
+  .nrki-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .nrki-page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.1rem;
+    padding: 0.34rem 0.65rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nrki-page-link:hover {
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-page-link[aria-current="page"] {
+    background-color: var(--nrki-accent-primary);
+    border-color: var(--nrki-accent-primary);
+    color: var(--nrki-ink-on-accent);
+  }
+
+  .nrki-timeline {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--nrki-border-subtle);
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .nrki-timeline-entry {
+    position: relative;
+  }
+
+  .nrki-timeline-entry::before {
+    content: "";
+    position: absolute;
+    left: -1.87rem;
+    top: 0.28rem;
+    width: 0.68rem;
+    height: 0.68rem;
+    border: 2px solid var(--nrki-accent-primary);
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-canvas);
+  }
+
+  .nrki-timeline-date {
+    display: block;
+    font-family: var(--nrki-font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--nrki-accent-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .nrki-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nrki-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 45;
+    min-width: 13.5rem;
+    padding: 0.35rem;
+    border: var(--nrki-card-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.2);
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .nrki-dropdown-action {
+    width: 100%;
+    text-align: left;
+    padding: 0.45rem 0.65rem;
+    border: 0;
+    border-radius: var(--nrki-radius-control);
+    background-color: transparent;
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .nrki-dropdown-action:hover {
+    background-color: var(--nrki-accent-primary-tint);
+    color: var(--nrki-accent-primary);
+  }
+
+  .nrki-toast-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-status-success-border);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    box-shadow: var(--nrki-card-frame-shadow);
   }
 
   /* --- Web Resume Sheet & Action Toolbar --- */
@@ -2254,6 +3031,18 @@
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-elevated);
     box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  [data-theme="ancient"] .nrki-resume-sheet {
+    overflow: visible;
+    border-style: solid;
+    border-width: 3px;
+    border-image-source: var(--nrki-ancient-frame-svg);
+    border-image-slice: 30;
+    border-image-width: 22px;
+    border-image-outset: 5px;
+    border-image-repeat: stretch;
+    box-shadow: none;
   }
 
   .nrki-resume-header {
@@ -2356,8 +3145,20 @@
     .nrki-resume-section,
     .nrki-sidenote-layout,
     .nrki-work-row,
-    .nrki-resume-row {
+    .nrki-resume-row,
+    .nrki-stat-strip {
       grid-template-columns: 1fr;
+    }
+
+    .nrki-stat-cell + .nrki-stat-cell {
+      border-left: 0;
+      border-top: 1px solid var(--nrki-border-faint);
+    }
+
+    .nrki-ruled-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
     }
 
     .nrki-layout-frontpage > * + *,
@@ -2403,6 +3204,11 @@
     color: var(--nrki-ink-body);
     font-family: var(--nrki-font-body);
     border-radius: var(--nrki-radius-surface);
+  }
+
+  .nrki-theme-surface[data-theme="ancient"] {
+    font-size: 1.08rem;
+    font-weight: 500;
   }
 
   .nrki-sr-only {

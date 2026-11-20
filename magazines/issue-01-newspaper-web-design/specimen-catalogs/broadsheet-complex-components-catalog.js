@@ -40,13 +40,13 @@
       <span class="nrki-dateline-edition" data-preview-masthead-edition>Evening Edition</span>
     </div>
   </div>
-  <a class="nrki-wordmark nrki-wordmark-compact" href="#components">NRKI</a>
+  <a class="nrki-wordmark nrki-wordmark-compact" href="#specimen-preview">NRKI</a>
   <p class="nrki-masthead-tagline">Dispatches on code, design systems, and quiet archives.</p>
   <nav class="nrki-site-nav" aria-label="Sample broadsheet navigation">
-    <a href="#intro">Home</a>
-    <a href="#elements">Magazines</a>
-    <a href="#components" aria-current="page">Projects</a>
-    <a href="#colophon">Works</a>
+    <a href="#specimen-preview">Home</a>
+    <a href="#specimen-preview">Magazines</a>
+    <a href="#specimen-preview" aria-current="page">Projects</a>
+    <a href="#specimen-preview">Works</a>
   </nav>
 </header>`,
       htmlSnippet: `<header class="nrki-site-header">
@@ -168,7 +168,7 @@
       <span>Read-only</span>
     </div>
   </article>
-  <a class="nrki-card nrki-card-link" href="#components">
+  <a class="nrki-card nrki-card-link" href="#specimen-preview">
     <div>
       <div class="nrki-card-meta">
         <span>Project 02</span>
@@ -244,13 +244,13 @@
       </div>
       <h3>Herbarium Folio Study</h3>
       <div class="nrki-motif-row">
-        <strong>Motif:</strong> <a href="#colophon">19th-C Botanical Prints ↗</a>
+        <strong>Motif:</strong> <a href="#specimen-preview">19th-C Botanical Prints ↗</a>
       </div>
       <div class="nrki-connected-row">
         <strong>Connects To</strong>
         <div class="nrki-connected-links">
-          <a class="nrki-connected-chip" href="#elements">#Pin-01</a>
-          <a class="nrki-connected-chip" href="#colophon">#Pin-04</a>
+          <a class="nrki-connected-chip" href="#specimen-preview">#Pin-01</a>
+          <a class="nrki-connected-chip" href="#specimen-preview">#Pin-04</a>
         </div>
       </div>
     </div>
@@ -332,9 +332,9 @@
     <aside class="nrki-lead-aside">
       <p class="nrki-aside-label">In This Dispatch</p>
       <ol>
-        <li><a href="#intro">Manifesto &amp; Layer Order</a></li>
-        <li><a href="#elements">Atomic Elements Catalog</a></li>
-        <li><a href="#components">Interactive Components</a></li>
+        <li><a href="#specimen-preview">Manifesto &amp; Layer Order</a></li>
+        <li><a href="#specimen-preview">Atomic Elements Catalog</a></li>
+        <li><a href="#specimen-preview">Interactive Components</a></li>
       </ol>
     </aside>
   </section>
@@ -382,7 +382,7 @@
       specimenTitle: "05. Interactive Filter Bar & Collection Shelf",
       categoryLabel: "Interactive Shelf",
       usageRationale:
-        "Powers Projects, Works, and Media filtering using plain ARIA attributes (`aria-pressed`) and `.nrki-hidden` without `!important`.",
+        "Powers Projects, Works, and Media filtering using plain ARIA attributes (aria-pressed) and .nrki-hidden without !important.",
       previewHtml: `<div data-preview-filter-scope>
   <div class="nrki-filter-controls">
     <div class="nrki-filter-bar" role="group" aria-label="Filter specimen cards">
@@ -519,7 +519,7 @@
         "3-column horizontal ledger rows for scannable chronologies (Works index) and Web + PDF resume directories.",
       previewHtml: `<div class="nrki-stack-md">
   <div class="nrki-works-ledger">
-    <a class="nrki-work-row" href="#elements">
+    <a class="nrki-work-row" href="#specimen-preview">
       <span class="nrki-work-category">Dev Log</span>
       <span class="nrki-work-main">
         <strong>Building NRKI v2 Around Cascade Layers</strong>
@@ -527,7 +527,7 @@
       </span>
       <time class="nrki-work-date">Nov 2026 →</time>
     </a>
-    <a class="nrki-work-row" href="#colophon">
+    <a class="nrki-work-row" href="#specimen-preview">
       <span class="nrki-work-category">Article</span>
       <span class="nrki-work-main">
         <strong>Typography &amp; Hairline Rules Over Drop Shadows</strong>
@@ -544,8 +544,8 @@
         <span style="font-size: 0.88rem; color: var(--nrki-ink-muted);">Focused on CSS systems, TypeScript &amp; React architecture.</span>
       </div>
       <div class="nrki-button-group">
-        <a class="nrki-button nrki-button-small nrki-button-primary" href="#components">Web View ↗</a>
-        <a class="nrki-button nrki-button-small" href="#components">PDF ↓</a>
+        <a class="nrki-button nrki-button-small nrki-button-primary" href="#specimen-preview">Web View ↗</a>
+        <a class="nrki-button nrki-button-small" href="#specimen-preview">PDF ↓</a>
       </div>
     </div>
   </div>
@@ -677,12 +677,12 @@
 
         function closeModalOverlay() {
           modalBackdrop.classList.add("nrki-hidden");
-          openButton.focus();
+          openButton.focus({ preventScroll: true });
         }
 
         openButton.addEventListener("click", () => {
           modalBackdrop.classList.remove("nrki-hidden");
-          closeButton.focus();
+          closeButton.focus({ preventScroll: true });
         });
 
         closeButton.addEventListener("click", closeModalOverlay);
@@ -708,19 +708,126 @@
     },
 
     /* ----------------------------------------------------------------------
-       08. Newspaper Tabs & Expandable Accordions (HTML + CSS + JS)
+       08. Expandable Accordions — Flush Hairline & Boxed Exclusive Variants
        ---------------------------------------------------------------------- */
     {
-      specimenId: "complex-tabs-accordions",
-      specimenTitle: "08. Newspaper Tabs & Expandable Accordions",
+      specimenId: "complex-expandable-accordions",
+      specimenTitle: "08. Accordions — Flush Hairline & Boxed Exclusive",
       categoryLabel: "Disclosure",
       usageRationale:
-        "Combines accessible JavaScript ARIA tabs with native zero-JS `<details>` accordions styled to match broadsheet hairlines.",
+        "Showcases flush editorial FAQs (.nrki-accordion) beside framed, single-open accordion cards (.nrki-accordion-boxed) styled with each theme's borders.",
+      previewHtml: `<div class="nrki-stack-md">
+  <div>
+    <p class="nrki-eyebrow" style="margin-bottom: 0.35rem;">Variant A · Flush Broadsheet Hairlines</p>
+    <div class="nrki-accordion">
+      <details class="nrki-accordion-item" open>
+        <summary class="nrki-accordion-summary">Why native &lt;details&gt; for accordions?</summary>
+        <div class="nrki-accordion-body">
+          Native disclosure elements deliver built-in keyboard navigation and screen-reader state cleanly.
+        </div>
+      </details>
+      <details class="nrki-accordion-item">
+        <summary class="nrki-accordion-summary">Can multiple flush panels stay open?</summary>
+        <div class="nrki-accordion-body">
+          Yes—omit the shared <code>name</code> attribute when readers may want to compare sections side by side.
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div>
+    <p class="nrki-eyebrow" style="margin-bottom: 0.45rem;">Variant B · Boxed Exclusive Accordion (One Open At A Time)</p>
+    <div class="nrki-accordion-boxed" data-preview-exclusive-accordion>
+      <details class="nrki-accordion-item" name="nrki-exclusive-faq" open>
+        <summary class="nrki-accordion-summary">01 · How does @layer replace !important?</summary>
+        <div class="nrki-accordion-body">
+          Cascade layers declare explicit precedence upfront so token and component overrides never depend on selector hacks.
+        </div>
+      </details>
+      <details class="nrki-accordion-item" name="nrki-exclusive-faq">
+        <summary class="nrki-accordion-summary">02 · How do Ancient corners extend outward?</summary>
+        <div class="nrki-accordion-body">
+          A 9-slice SVG border-image uses <code>border-image-outset: 5px</code> so baroque flourishes curl past the card frame.
+        </div>
+      </details>
+      <details class="nrki-accordion-item" name="nrki-exclusive-faq">
+        <summary class="nrki-accordion-summary">03 · Does it work over local file:// URLs?</summary>
+        <div class="nrki-accordion-body">
+          Yes—both static HTML/CSS and vanilla scripts run cleanly offline with zero build step.
+        </div>
+      </details>
+    </div>
+  </div>
+</div>`,
+      htmlSnippet: `<div class="nrki-accordion-boxed" data-exclusive-accordion>
+  <details class="nrki-accordion-item" name="faq-group" open>
+    <summary class="nrki-accordion-summary">Question heading</summary>
+    <div class="nrki-accordion-body">Expanded answer panel...</div>
+  </details>
+  <details class="nrki-accordion-item" name="faq-group">
+    <summary class="nrki-accordion-summary">Second question</summary>
+    <div class="nrki-accordion-body">Second answer...</div>
+  </details>
+</div>`,
+      cssSnippet: `.nrki-accordion-boxed .nrki-accordion-item {
+  border: var(--nrki-card-border);
+  border-radius: var(--nrki-radius-surface);
+  background-color: var(--nrki-surface-elevated);
+  box-shadow: var(--nrki-card-frame-shadow);
+}
+
+.nrki-accordion-boxed .nrki-accordion-item[open] {
+  border-left: 4px solid var(--nrki-accent-primary);
+}`,
+      jsSnippet: `function enforceExclusiveAccordion(accordionContainer) {
+  const detailPanels = accordionContainer.querySelectorAll("details.nrki-accordion-item");
+  detailPanels.forEach((panelNode) => {
+    panelNode.addEventListener("toggle", () => {
+      if (!panelNode.open) return;
+      detailPanels.forEach((peerPanel) => {
+        if (peerPanel !== panelNode && peerPanel.open) {
+          peerPanel.open = false;
+        }
+      });
+    });
+  });
+}`,
+      initializePreview(previewStageElement) {
+        const exclusiveGroup = previewStageElement.querySelector(
+          "[data-preview-exclusive-accordion]"
+        );
+        if (!exclusiveGroup) return;
+
+        const detailPanels = exclusiveGroup.querySelectorAll(
+          "details.nrki-accordion-item"
+        );
+        detailPanels.forEach((panelNode) => {
+          panelNode.addEventListener("toggle", () => {
+            if (!panelNode.open) return;
+            detailPanels.forEach((peerPanel) => {
+              if (peerPanel !== panelNode && peerPanel.open) {
+                peerPanel.open = false;
+              }
+            });
+          });
+        });
+      },
+    },
+
+    /* ----------------------------------------------------------------------
+       09. Newspaper Tabs & Segmented Controls (HTML + CSS + JS)
+       ---------------------------------------------------------------------- */
+    {
+      specimenId: "complex-tabs-segmented",
+      specimenTitle: "09. Newspaper Tabs & Segmented Controls",
+      categoryLabel: "Navigation & Toggles",
+      usageRationale:
+        "Combines ARIA tab panels (.nrki-tabs) with compact inline segmented switchers (.nrki-segmented-control) for filtering views or density.",
       previewHtml: `<div class="nrki-stack-md">
   <div class="nrki-tabs" data-preview-tabs-root>
     <div class="nrki-tab-list" role="tablist" aria-label="Sample edition tabs">
       <button type="button" class="nrki-tab-trigger" role="tab" aria-selected="true" data-preview-tab-target="panel-architecture">Architecture</button>
-      <button type="button" class="nrki-tab-trigger" role="tab" aria-selected="false" data-preview-tab-target="panel-theming">5-Mode Tokens</button>
+      <button type="button" class="nrki-tab-trigger" role="tab" aria-selected="false" data-preview-tab-target="panel-theming">4 × 2 Tokens</button>
       <button type="button" class="nrki-tab-trigger" role="tab" aria-selected="false" data-preview-tab-target="panel-portability">Portability</button>
     </div>
     <div class="nrki-tab-panel" role="tabpanel" data-preview-tab-panel="panel-architecture">
@@ -734,19 +841,13 @@
     </div>
   </div>
 
-  <div class="nrki-accordion">
-    <details class="nrki-accordion-item" open>
-      <summary class="nrki-accordion-summary">Why native &lt;details&gt; for accordions?</summary>
-      <div class="nrki-accordion-body">
-        Native disclosure elements deliver built-in keyboard navigation and accessibility without requiring extra JavaScript.
-      </div>
-    </details>
-    <details class="nrki-accordion-item">
-      <summary class="nrki-accordion-summary">Can external projects extend these components?</summary>
-      <div class="nrki-accordion-body">
-        Yes—add custom rules in a later @layer after nrki.utilities or override --nrki-* custom properties on :root.
-      </div>
-    </details>
+  <div class="nrki-stack-sm">
+    <div class="nrki-segmented-control" role="group" aria-label="View density" data-preview-segmented-root>
+      <button type="button" class="nrki-segmented-option" aria-pressed="true" data-preview-segment-label="Spread Edition">Spread</button>
+      <button type="button" class="nrki-segmented-option" aria-pressed="false" data-preview-segment-label="Compact Index">Compact</button>
+      <button type="button" class="nrki-segmented-option" aria-pressed="false" data-preview-segment-label="Reader Stream">Reader</button>
+    </div>
+    <p class="nrki-quiet-note" style="margin: 0;" data-preview-segment-status>Active segment: Spread Edition</p>
   </div>
 </div>`,
       htmlSnippet: `<div class="nrki-tabs" data-tabs-root>
@@ -756,25 +857,23 @@
   </div>
   <div class="nrki-tab-panel" role="tabpanel" data-tab-panel="tab-a">Panel A content</div>
   <div class="nrki-tab-panel nrki-hidden" role="tabpanel" data-tab-panel="tab-b">Panel B content</div>
+</div>
+<div class="nrki-segmented-control" role="group">
+  <button type="button" class="nrki-segmented-option" aria-pressed="true">Spread</button>
+  <button type="button" class="nrki-segmented-option" aria-pressed="false">Compact</button>
 </div>`,
-      cssSnippet: `.nrki-tab-list {
-  display: flex;
-  border-bottom: 2px solid var(--nrki-border-strong);
-  gap: 0.35rem;
+      cssSnippet: `.nrki-segmented-control {
+  display: inline-flex;
+  padding: 0.22rem;
+  gap: 0.22rem;
+  border: var(--nrki-card-border);
+  border-radius: var(--nrki-radius-pill);
+  background-color: var(--nrki-surface-panel);
 }
 
-.nrki-tab-trigger[aria-selected="true"] {
+.nrki-segmented-option[aria-pressed="true"] {
   background-color: var(--nrki-surface-elevated);
-  border-color: var(--nrki-border-strong);
   color: var(--nrki-accent-primary);
-}
-
-.nrki-accordion-summary {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.85rem 0.5rem;
-  font-weight: 700;
-  cursor: pointer;
 }`,
       jsSnippet: `function attachAccessibleTabGroup(tabsContainer) {
   const tabButtons = tabsContainer.querySelectorAll("[data-tab-target]");
@@ -783,14 +882,11 @@
   tabButtons.forEach((selectedButton) => {
     selectedButton.addEventListener("click", () => {
       const targetPanelId = selectedButton.getAttribute("data-tab-target");
-
       tabButtons.forEach((peerButton) => {
         peerButton.setAttribute("aria-selected", String(peerButton === selectedButton));
       });
-
       tabPanels.forEach((panelElement) => {
-        const shouldShowPanel = panelElement.getAttribute("data-tab-panel") === targetPanelId;
-        panelElement.classList.toggle("nrki-hidden", !shouldShowPanel);
+        panelElement.classList.toggle("nrki-hidden", panelElement.getAttribute("data-tab-panel") !== targetPanelId);
       });
     });
   });
@@ -799,46 +895,69 @@
         const tabsRoot = previewStageElement.querySelector(
           "[data-preview-tabs-root]"
         );
-        if (!tabsRoot) return;
+        if (tabsRoot) {
+          const tabTriggers = tabsRoot.querySelectorAll(
+            "[data-preview-tab-target]"
+          );
+          const tabPanels = tabsRoot.querySelectorAll("[data-preview-tab-panel]");
 
-        const tabTriggers = tabsRoot.querySelectorAll(
-          "[data-preview-tab-target]"
-        );
-        const tabPanels = tabsRoot.querySelectorAll("[data-preview-tab-panel]");
-
-        tabTriggers.forEach((clickedTrigger) => {
-          clickedTrigger.addEventListener("click", () => {
-            const targetPanelName = clickedTrigger.getAttribute(
-              "data-preview-tab-target"
-            );
-
-            tabTriggers.forEach((peerTrigger) => {
-              peerTrigger.setAttribute(
-                "aria-selected",
-                String(peerTrigger === clickedTrigger)
+          tabTriggers.forEach((clickedTrigger) => {
+            clickedTrigger.addEventListener("click", () => {
+              const targetPanelName = clickedTrigger.getAttribute(
+                "data-preview-tab-target"
               );
-            });
-
-            tabPanels.forEach((tabPanel) => {
-              const isMatch =
-                tabPanel.getAttribute("data-preview-tab-panel") ===
-                targetPanelName;
-              tabPanel.classList.toggle("nrki-hidden", !isMatch);
+              tabTriggers.forEach((peerTrigger) => {
+                peerTrigger.setAttribute(
+                  "aria-selected",
+                  String(peerTrigger === clickedTrigger)
+                );
+              });
+              tabPanels.forEach((tabPanel) => {
+                const isMatch =
+                  tabPanel.getAttribute("data-preview-tab-panel") ===
+                  targetPanelName;
+                tabPanel.classList.toggle("nrki-hidden", !isMatch);
+              });
             });
           });
-        });
+        }
+
+        const segmentedRoot = previewStageElement.querySelector(
+          "[data-preview-segmented-root]"
+        );
+        const segmentStatus = previewStageElement.querySelector(
+          "[data-preview-segment-status]"
+        );
+        if (segmentedRoot && segmentStatus) {
+          const segmentOptions = segmentedRoot.querySelectorAll(
+            ".nrki-segmented-option"
+          );
+          segmentOptions.forEach((clickedOption) => {
+            clickedOption.addEventListener("click", () => {
+              segmentOptions.forEach((peerOption) => {
+                peerOption.setAttribute(
+                  "aria-pressed",
+                  String(peerOption === clickedOption)
+                );
+              });
+              segmentStatus.textContent = `Active segment: ${clickedOption.getAttribute(
+                "data-preview-segment-label"
+              )}`;
+            });
+          });
+        }
       },
     },
 
     /* ----------------------------------------------------------------------
-       09. Print-Ready Resume Sheet & Site Footer
+       10. Print-Ready Resume Sheet & Site Footer
        ---------------------------------------------------------------------- */
     {
       specimenId: "complex-resume-sheet-footer",
-      specimenTitle: "09. Print-Ready Resume Sheet & Site Footer",
+      specimenTitle: "10. Print-Ready Resume Sheet & Site Footer",
       categoryLabel: "Print & Shell",
       usageRationale:
-        "Showcases the structured CV document sheet (built for `@page` + `@media print`) paired with the double-ruled site footer.",
+        "Showcases the structured CV document sheet (built for @page + @media print) paired with the double-ruled site footer.",
       previewHtml: `<div>
   <div class="nrki-resume-sheet">
     <div class="nrki-resume-header">
@@ -867,9 +986,9 @@
     </section>
   </div>
   <footer class="nrki-site-footer">
-    <a class="nrki-footer-mark" href="#intro">NRKI</a>
+    <a class="nrki-footer-mark" href="#specimen-preview">NRKI</a>
     <span>A personal broadsheet, made one issue at a time.</span>
-    <a href="#colophon">Credits →</a>
+    <a href="#specimen-preview">Credits →</a>
   </footer>
 </div>`,
       htmlSnippet: `<article class="nrki-resume-sheet">
@@ -908,6 +1027,276 @@
     }
   }
 }`,
+    },
+
+    /* ----------------------------------------------------------------------
+       11. Archive Pagination & Editorial Timeline (HTML + CSS + JS)
+       ---------------------------------------------------------------------- */
+    {
+      specimenId: "complex-pagination-timeline",
+      specimenTitle: "11. Archive Pagination & Editorial Timeline",
+      categoryLabel: "Chronology",
+      usageRationale:
+        "Combines interactive folio page-number controls (preview clicks stay strictly local without changing URL or scroll) with a vertical chronological timeline.",
+      previewHtml: `<div class="nrki-stack-md">
+  <nav aria-label="Archive pagination example">
+    <ul class="nrki-pagination" data-preview-pagination-root>
+      <li><a class="nrki-page-link" href="#specimen-preview" data-preview-page-num="prev">← Prev</a></li>
+      <li><a class="nrki-page-link" href="#specimen-preview" aria-current="page" data-preview-page-num="1">01</a></li>
+      <li><a class="nrki-page-link" href="#specimen-preview" data-preview-page-num="2">02</a></li>
+      <li><a class="nrki-page-link" href="#specimen-preview" data-preview-page-num="3">03</a></li>
+      <li><a class="nrki-page-link" href="#specimen-preview" data-preview-page-num="next">Next →</a></li>
+    </ul>
+  </nav>
+  <p class="nrki-quiet-note" style="margin: 0;" data-preview-pagination-status>Inspecting Folio Sheet 01</p>
+
+  <ol class="nrki-timeline">
+    <li class="nrki-timeline-entry">
+      <time class="nrki-timeline-date">Edition v2.2 · Nov 2026</time>
+      <strong style="display: block; color: var(--nrki-ink-heading);">Contextual Fonts &amp; Book Corners</strong>
+      <span style="font-size: 0.92rem;">Old English headings, syntax-framed code, accordions, lists &amp; inert specimen links.</span>
+    </li>
+    <li class="nrki-timeline-entry">
+      <time class="nrki-timeline-date">Edition v2.1 · Nov 2026</time>
+      <strong style="display: block; color: var(--nrki-ink-heading);">4 Themes × Light/Dark Split</strong>
+      <span style="font-size: 0.92rem;">Separated <code>data-theme</code> personality from <code>data-mode</code> brightness.</span>
+    </li>
+  </ol>
+</div>`,
+      htmlSnippet: `<nav aria-label="Archive pagination">
+  <ul class="nrki-pagination">
+    <li><a class="nrki-page-link" href="#p1" aria-current="page">01</a></li>
+    <li><a class="nrki-page-link" href="#p2">02</a></li>
+  </ul>
+</nav>
+<ol class="nrki-timeline">
+  <li class="nrki-timeline-entry">
+    <time class="nrki-timeline-date">Nov 2026</time>
+    <strong>Release Milestone</strong>
+  </li>
+</ol>`,
+      cssSnippet: `.nrki-timeline {
+  border-left: 2px solid var(--nrki-border-subtle);
+  padding-left: 1.5rem;
+  display: grid;
+  gap: 1.15rem;
+}
+
+.nrki-page-link[aria-current="page"] {
+  background-color: var(--nrki-accent-primary);
+  border-color: var(--nrki-accent-primary);
+  color: var(--nrki-ink-on-accent);
+}`,
+      jsSnippet: `function attachPreviewPagination(paginationListElement, statusTextElement) {
+  const numberLinks = paginationListElement.querySelectorAll("[data-page-number]");
+  numberLinks.forEach((pageAnchor) => {
+    pageAnchor.addEventListener("click", (clickEvent) => {
+      clickEvent.preventDefault();
+      numberLinks.forEach((peerAnchor) => peerAnchor.removeAttribute("aria-current"));
+      pageAnchor.setAttribute("aria-current", "page");
+      statusTextElement.textContent = "Sheet 0" + pageAnchor.getAttribute("data-page-number");
+    });
+  });
+}`,
+      initializePreview(previewStageElement) {
+        const paginationRoot = previewStageElement.querySelector(
+          "[data-preview-pagination-root]"
+        );
+        const statusElement = previewStageElement.querySelector(
+          "[data-preview-pagination-status]"
+        );
+        if (!paginationRoot || !statusElement) return;
+
+        let activePage = 1;
+        const pageLinks = paginationRoot.querySelectorAll("[data-preview-page-num]");
+
+        function syncPageDisplay() {
+          pageLinks.forEach((pageLink) => {
+            const token = pageLink.getAttribute("data-preview-page-num");
+            if (token === String(activePage)) {
+              pageLink.setAttribute("aria-current", "page");
+            } else {
+              pageLink.removeAttribute("aria-current");
+            }
+          });
+          statusElement.textContent = `Inspecting Folio Sheet 0${activePage}`;
+        }
+
+        pageLinks.forEach((pageLink) => {
+          pageLink.addEventListener("click", (pointerEvent) => {
+            pointerEvent.preventDefault();
+            const token = pageLink.getAttribute("data-preview-page-num");
+            if (token === "prev") {
+              activePage = Math.max(1, activePage - 1);
+            } else if (token === "next") {
+              activePage = Math.min(3, activePage + 1);
+            } else {
+              activePage = Number(token) || 1;
+            }
+            syncPageDisplay();
+          });
+        });
+      },
+    },
+
+    /* ----------------------------------------------------------------------
+       12. Action Dropdown Menu & Dismissible Editorial Toast (HTML + CSS + JS)
+       ---------------------------------------------------------------------- */
+    {
+      specimenId: "complex-dropdown-toast",
+      specimenTitle: "12. Dropdown Menu & Dismissible Editorial Toast",
+      categoryLabel: "Interactive Popover",
+      usageRationale:
+        "Pairs a keyboard-friendly menu button (.nrki-dropdown) with an in-flow dismissible status banner (.nrki-toast-banner) adapting to all 8 editions.",
+      previewHtml: `<div class="nrki-stack-md" style="min-height: 11.5rem;">
+  <div class="nrki-button-group">
+    <div class="nrki-dropdown" data-preview-dropdown-root>
+      <button type="button" class="nrki-button nrki-button-secondary" aria-expanded="false" data-preview-dropdown-trigger>
+        Edition Actions ▾
+      </button>
+      <div class="nrki-dropdown-menu nrki-hidden" role="menu" data-preview-dropdown-menu>
+        <button type="button" class="nrki-dropdown-action" role="menuitem" data-preview-menu-action="Export Print Sheet">Export Print Sheet</button>
+        <button type="button" class="nrki-dropdown-action" role="menuitem" data-preview-menu-action="Inspect Token Diff">Inspect Token Diff</button>
+        <button type="button" class="nrki-dropdown-action" role="menuitem" data-preview-menu-action="Reset Specimen Frame">Reset Specimen Frame</button>
+      </div>
+    </div>
+    <button type="button" class="nrki-button nrki-button-primary" data-preview-toast-trigger>
+      Show Toast Notice
+    </button>
+  </div>
+
+  <div class="nrki-toast-banner" role="status" data-preview-toast-banner>
+    <div>
+      <strong style="display: block; font-size: 0.85rem;" data-preview-toast-title>Edition Ready</strong>
+      <span style="font-size: 0.84rem; color: var(--nrki-ink-muted);" data-preview-toast-copy>Choose an action above or dismiss this notice cleanly.</span>
+    </div>
+    <button type="button" class="nrki-button nrki-button-small" data-preview-toast-dismiss>Dismiss ×</button>
+  </div>
+</div>`,
+      htmlSnippet: `<div class="nrki-dropdown" data-dropdown-root>
+  <button type="button" class="nrki-button" aria-expanded="false" data-dropdown-trigger>Actions ▾</button>
+  <div class="nrki-dropdown-menu nrki-hidden" role="menu" data-dropdown-menu>
+    <button type="button" class="nrki-dropdown-action" role="menuitem">Export Sheet</button>
+  </div>
+</div>
+<div class="nrki-toast-banner" role="status">
+  <span><strong>Saved:</strong> Edition stylesheet updated.</span>
+  <button type="button" class="nrki-button nrki-button-small">Dismiss ×</button>
+</div>`,
+      cssSnippet: `.nrki-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  border: var(--nrki-card-border);
+  border-radius: var(--nrki-radius-surface);
+  background-color: var(--nrki-surface-elevated);
+}
+
+.nrki-toast-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 4px solid var(--nrki-status-success-border);
+  background-color: var(--nrki-surface-elevated);
+}`,
+      jsSnippet: `function attachDropdownAndToast(scopeElement) {
+  const triggerBtn = scopeElement.querySelector("[data-dropdown-trigger]");
+  const menuPanel = scopeElement.querySelector("[data-dropdown-menu]");
+  triggerBtn.addEventListener("click", () => {
+    const isOpen = !menuPanel.classList.toggle("nrki-hidden");
+    triggerBtn.setAttribute("aria-expanded", String(isOpen));
+  });
+}`,
+      initializePreview(previewStageElement) {
+        const dropdownRoot = previewStageElement.querySelector(
+          "[data-preview-dropdown-root]"
+        );
+        const dropdownTrigger = previewStageElement.querySelector(
+          "[data-preview-dropdown-trigger]"
+        );
+        const dropdownMenu = previewStageElement.querySelector(
+          "[data-preview-dropdown-menu]"
+        );
+        const toastTrigger = previewStageElement.querySelector(
+          "[data-preview-toast-trigger]"
+        );
+        const toastBanner = previewStageElement.querySelector(
+          "[data-preview-toast-banner]"
+        );
+        const toastTitle = previewStageElement.querySelector(
+          "[data-preview-toast-title]"
+        );
+        const toastCopy = previewStageElement.querySelector(
+          "[data-preview-toast-copy]"
+        );
+        const toastDismiss = previewStageElement.querySelector(
+          "[data-preview-toast-dismiss]"
+        );
+        if (!dropdownRoot || !dropdownTrigger || !dropdownMenu || !toastBanner) {
+          return;
+        }
+
+        function setMenuVisible(shouldShow) {
+          dropdownMenu.classList.toggle("nrki-hidden", !shouldShow);
+          dropdownTrigger.setAttribute("aria-expanded", String(shouldShow));
+        }
+
+        dropdownTrigger.addEventListener("click", () => {
+          setMenuVisible(dropdownMenu.classList.contains("nrki-hidden"));
+        });
+
+        dropdownMenu
+          .querySelectorAll("[data-preview-menu-action]")
+          .forEach((menuButton) => {
+            menuButton.addEventListener("click", () => {
+              const selectedAction = menuButton.getAttribute(
+                "data-preview-menu-action"
+              );
+              setMenuVisible(false);
+              if (toastTitle && toastCopy) {
+                toastTitle.textContent = `Selected: ${selectedAction}`;
+                toastCopy.textContent =
+                  "Preview dropdown callback executed strictly inside this showcase.";
+              }
+              toastBanner.classList.remove("nrki-hidden");
+            });
+          });
+
+        if (toastTrigger) {
+          toastTrigger.addEventListener("click", () => {
+            if (toastTitle && toastCopy) {
+              toastTitle.textContent = "Broadsheet Dispatch Pinned";
+              toastCopy.textContent =
+                "Status banner triggered locally inside the specimen stage.";
+            }
+            toastBanner.classList.remove("nrki-hidden");
+          });
+        }
+
+        if (toastDismiss) {
+          toastDismiss.addEventListener("click", () => {
+            toastBanner.classList.add("nrki-hidden");
+          });
+        }
+
+        previewStageElement.ownerDocument.addEventListener(
+          "click",
+          (pointerEvent) => {
+            if (!dropdownRoot.contains(pointerEvent.target)) {
+              setMenuVisible(false);
+            }
+          }
+        );
+
+        previewStageElement.ownerDocument.addEventListener(
+          "keydown",
+          (keyboardEvent) => {
+            if (keyboardEvent.key === "Escape") {
+              setMenuVisible(false);
+            }
+          }
+        );
+      },
     },
   ];
 })(window);

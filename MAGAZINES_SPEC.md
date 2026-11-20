@@ -39,12 +39,12 @@ Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** spl
 
 ### The 4 Themes × 2 Modes = 8 Editions
 
-| Theme (`data-theme`) | Personality & Border Grammar | Default Font Pairing (with Native Fallbacks) | Light Mode (`data-mode="light"`) | Dark Mode (`data-mode="dark"`) |
+| Theme (`data-theme`) | Personality & Border Grammar | Contextual Font Pairing (with Native Fallbacks) | Light Mode (`data-mode="light"`) | Dark Mode (`data-mode="dark"`) |
 | :--- | :--- | :--- | :--- | :--- |
-| **`classic`** *(Default)* | Metropolitan broadsheet: `1px solid` column hairlines, `3px double` major rules, razor `0px` corners. | **Playfair Display** (masthead), **Newsreader / Georgia** (body), **Libre Franklin** (UI), **JetBrains Mono** (code). | Dried-sage botanical newsprint (`#f2efe7`), deep pine-carbon ink (`#171b16`), forest green (`#2d4f36`). | Pine-charcoal ink (`#121613`), linen parchment text (`#e6e8df`), luminous sage (`#7ea383`). |
-| **`ancient`** | Old Fantasy Kingdom Chronicle: ornate `4px double` frames + inset outline, CSS `mask-image` SVG corner/divider scrollwork filigree, subtle aged vignette texture. | **UnifrakturMaguntia** (blackletter nameplate), **Cinzel** (royal small-caps headings/UI), **IM Fell English / Palatino** (prose). | Aged royal vellum (`#efe3c6`), deep walnut-sepia ink (`#2a1c11`), crimson wax seal (`#7d1f1a`), antique gold (`#8c6821`). | Candlelit obsidian leather (`#16120d`), warm ivory vellum (`#efe1c4`), gilded gold (`#d6ae55`), ember crimson (`#d45d54`). |
-| **`minimalistic`** | Swiss Neo-Editorial: **barely any borders** (`0px` card borders, soft tonal surface elevation instead of outlines, single whisper `1px` section dividers). | **Space Grotesk** (display/headings), **Inter / system-ui** (body/UI), **IBM Plex Mono** (code). | Pure gallery alabaster (`#fafaf9`), stone panel (`#f1f1ef`), pure carbon ink (`#111213`). | Deep matte obsidian (`#0d0e10`), elevated graphite (`#15171a`), crisp chalk (`#f3f4f6`). |
-| **`uwu`** | Kawaii Pastel Zine: chunky `2px solid` / `2px dashed` pastel frames, offset candy shadows (`3px 3px 0`), rounded `12px–999px` pill geometry, floral divider ornaments (`✿ ✧ ✿`). | **Fredoka** (display/UI), **Nunito / Trebuchet MS** (body), **Fira Code** (code). | Sakura milk (`#fff4f9`), strawberry cream (`#fce4ef`), plum-berry ink (`#3f1d38`), sakura magenta (`#cf3581`). | Velvet midnight plum (`#1a101d`), berry dusk (`#25172b`), cotton-candy white (`#fdf2f8`), neon sakura (`#f472b6`). |
+| **`classic`** *(Default)* | Metropolitan broadsheet: `1px solid` column hairlines, `3px double` major rules & `.nrki-corner-frame` press trim, razor `0px` corners. | **Playfair Display** (h1/headings/italic quotes), **Newsreader / Georgia** (body), **Libre Franklin** (UI), **JetBrains Mono** (code). | Dried-sage botanical newsprint (`#f2efe7`), deep pine-carbon ink (`#171b16`), forest green (`#2d4f36`). | Pine-charcoal ink (`#121613`), linen parchment text (`#e6e8df`), luminous sage (`#7ea383`). |
+| **`ancient`** | Old Fantasy Kingdom Chronicle: extended outward-curved 9-slice SVG book corners (`border-image-outset: 5px`), double gold/walnut rails, SVG scrollwork dividers. | **UnifrakturCook** (`h1` Old English blackletter), **Cinzel** (subheadings/UI), **Cormorant Garamond** (body), **IM Fell English** (italic quotes/bylines), **Courier Prime** (code). | Aged royal vellum (`#efe3c6`), deep walnut-sepia ink (`#2a1c11`), crimson wax seal (`#7d1f1a`), antique gold (`#8c6821`). | Candlelit obsidian leather (`#16120d`), warm ivory vellum (`#efe1c4`), gilded gold (`#d6ae55`), ember crimson (`#d45d54`). |
+| **`minimalistic`** | Swiss Neo-Editorial: **barely any borders** (`0px` card borders, soft gallery shadow & tonal elevation, subtle hairline dividers). | **Space Grotesk** (`h1`/headings), **Inter / system-ui** (body/UI), **Newsreader** (italic quotes/notes), **IBM Plex Mono** (code). | Pure gallery alabaster (`#fafaf9`), stone panel (`#f1f1ef`), pure carbon ink (`#111213`). | Deep matte obsidian (`#0d0e10`), elevated graphite (`#15171a`), crisp chalk (`#f3f4f6`). |
+| **`uwu`** | Kawaii Pastel Zine: chunky `2px solid` / `2px dashed` pastel frames, offset candy shadows (`3px 3px 0`), rounded `12px–999px` pill geometry, corner sparkles `✦` & floral dividers. | **Fredoka** (display/headings/UI), **Nunito** (body), **Mali** (quotes/captions), **DM Mono** (code). | Sakura milk (`#fff4f9`), strawberry cream (`#fce4ef`), plum-berry ink (`#3f1d38`), sakura magenta (`#cf3581`). | Velvet midnight plum (`#1a101d`), berry dusk (`#25172b`), cotton-candy white (`#fdf2f8`), neon sakura (`#f472b6`). |
 
 ### Cascade Layer Order (Zero `!important`)
 ```css
@@ -69,29 +69,34 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 5. **Collection Shelf with Sticky Filter Sidebar** (`.nrki-layout-shelf-sidebar` — includes interactive filter `JS`)
 6. **Two-Page Newspaper Spread & Mobile Folio Stack** (`.nrki-spread-grid`)
 
-### Page 03: Simple Elements (`#elements` — 11 Specimens)
-1. **Editorial Typography & Headings** (`h1`–`h6`, `.nrki-eyebrow`, `.nrki-lead-summary`, `.nrki-drop-cap`, `<mark>`, `<kbd>`, `<code>`, `<abbr>`)
-2. **Headers, Structural Rules & Tufte Sidenote** (`.nrki-page-hero`, `.nrki-section-heading`, `.nrki-ornate-divider`, `.nrki-rule-double`, `.nrki-sidenote`)
+### Page 03: Simple Elements (`#elements` — 13 Specimens)
+1. **Editorial Typography, Hierarchy & Emphasis** (`h1` Old English display in Ancient, `h2`–`h3`, `.nrki-byline`, `.nrki-small-caps`, `.nrki-drop-cap`, bold/italic styling, `<mark>`, `<kbd>`, `<code>`, `<abbr>`)
+2. **Headers, Outward Book Corners, Rules & Sidenote** (`.nrki-corner-frame`, `.nrki-framed-panel`, `.nrki-ornate-divider`, `.nrki-sidenote`)
 3. **Buttons — Variants, Sizes & Button Groups** (`.nrki-button`, `-primary`, `-secondary`, `-ghost`, `-danger`, `-small`, `-large`, `:disabled`)
 4. **Links, Back-Links & Breadcrumbs** (`.nrki-text-link`, `.nrki-back-link`, `.nrki-skip-link`, `.nrki-breadcrumb`)
 5. **Badges, Status Stamps, Rating Seal & Tag Pills** (`.nrki-badge-*`, `.nrki-rating-stamp`, `.nrki-tag-pill`, `.nrki-connected-chip`)
-6. **Lists, Definition Lists & Inline Metadata** (`.nrki-editorial-list`, `.nrki-definition-list`, `.nrki-inline-meta-list`)
-7. **Editorial Blockquotes & Preformatted Code** (`blockquote` / `.nrki-quote`, `<pre><code>`)
-8. **Form Inputs, Selects, Checkboxes & Validation** (`.nrki-field`, `.nrki-input`, `.nrki-textarea`, `.nrki-select`, `.nrki-input-invalid`, `.nrki-field-error`)
+6. **Lists — Editorial, Ordered, Checklists, Ruled & Definitions** (theme-specific list markers, `.nrki-ordered-list`, `.nrki-checklist`, `.nrki-ruled-list`, `.nrki-definition-list`, `.nrki-inline-meta-list`)
+7. **Blockquotes & Syntax-Framed Code Blocks** (`blockquote` / `.nrki-quote`, `.nrki-code-block`, `.nrki-code-header`, `.nrki-tok-*`)
+8. **Form Inputs, Textareas, Switches & Sliders** (`.nrki-field`, `.nrki-input`, `.nrki-textarea`, `.nrki-select`, `.nrki-switch`, `.nrki-range`, `.nrki-input-invalid`, `.nrki-field-error`)
 9. **Newspaper Tables & Structured Ledgers** (`.nrki-table`, `.nrki-table-compact`, `.nrki-table-striped`, `.nrki-cell-numeric`)
 10. **Editorial Callouts & Status Notices** (`.nrki-callout`, `-info`, `-success`, `-warning`, `-danger`)
-11. **Media Figure Frame & Theme/Mode Cycle** (`.nrki-media-figure`, `.nrki-theme-toggle` — includes `JS` tab cycling themes + light/dark mode)
+11. **Media Figure Frame & Captioned Plate** (`.nrki-media-figure`, controlled exclusively from outside specimen controls)
+12. **Progress Bars, Stat Metrics & Author Byline** (`.nrki-progress`, `.nrki-stat-strip`, `.nrki-author-byline`, `.nrki-avatar`)
+13. **Tooltips, Empty States & Skeletons** (`.nrki-tooltip`, `.nrki-empty-state`, `.nrki-skeleton-card`)
 
-### Page 04: Complex Components (`#components` — 9 Specimens)
+### Page 04: Complex Components (`#components` — 12 Specimens)
 1. **Newspaper Masthead Bar, Wordmark, Live Clock & Nav** *(includes `JS`)*
 2. **Editorial & Interactive Link Cards** (`.nrki-card`, `.nrki-card-link`, `.nrki-framed-panel`)
 3. **Pinboard Card & Media Ledger Card** (`.nrki-pin-card`, `.nrki-media-card`)
 4. **Lead Story Split, Section Grid & Prose Columns** (`.nrki-lead-story`, `.nrki-section-block`)
 5. **Interactive Filter Bar & Shelf Controls** *(includes `JS`)*
 6. **Works Newspaper Index & Resume Dossier Rows** (`.nrki-works-ledger`, `.nrki-resume-row`)
-7. **Accessible Modal & Article Overlay** *(includes `JS`)*
-8. **Newspaper Tabs & Expandable Accordions (`<details>`)** *(includes `JS`)*
-9. **Print-Ready Resume Sheet & Site Footer** (cross-browser `@page` + `@media print`)
+7. **Accessible Modal & Article Overlay** *(includes `JS`, `{ preventScroll: true }`)*
+8. **Accordions — Flush Hairline & Boxed Exclusive Variants** (`.nrki-accordion`, `.nrki-accordion-boxed`, `<details name="...">` *(includes `JS`)*)
+9. **Newspaper Tabs & Segmented Controls** (`.nrki-tabs`, `.nrki-segmented-control` *(includes `JS`)*)
+10. **Print-Ready Resume Sheet & Site Footer** (cross-browser `@page` + `@media print`)
+11. **Archive Pagination & Editorial Timeline** (`.nrki-pagination`, `.nrki-timeline` *(includes `JS`)*)
+12. **Dropdown Menu & Dismissible Editorial Toast** (`.nrki-dropdown`, `.nrki-toast-banner` *(includes `JS`)*)
 
 ### Page 05: Colophon — GitHub Stylesheet, Reusability & Credits (`#colophon`)
 - Direct GitHub links to `nrki-broadsheet-library.css`, `@layer` extension snippets, and full lineage/inspirations list.
@@ -118,8 +123,9 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 ## 5. Specimen Container Specification
 
 Every specimen on `#layouts`, `#elements`, and `#components` renders inside the reusable `.specimen-container`:
-- **Per-Specimen Dual Controls:** Independent **Theme (`Classic | Ancient | Minimalistic | UwU`)** + **Mode (`☀ | ☾`)** buttons controlling `data-theme` and `data-mode` directly on `.specimen-preview-stage`.
-- **Code Inspection & Copy:** `HTML`, `CSS`, and conditional `JS` *(shown strictly when `jsSnippet` exists)* toggles + context-aware `Copy <LANG>` button (with `file://` clipboard fallback).
+- **Per-Specimen Dual Controls:** Independent **Theme (`Classic | Ancient | Minimalistic | UwU`)** + **Mode (`☀ | ☾`)** buttons controlling `data-theme` and `data-mode` directly on `.specimen-preview-stage` (all specimens—including #11 Media Figure Frame—are controlled strictly from these external header controls).
+- **Inert Preview Guard:** Links (`a[href]`) and forms inside `.specimen-preview-stage` have default navigation and submission prevented so users can inspect visuals and local widget interactions without changing URL hash, active magazine page, or scroll position.
+- **Syntax-Highlighted Code Inspection & Copy:** `HTML`, `CSS`, and conditional `JS` *(shown strictly when `jsSnippet` exists)* toggles with a single-pass tokenizer (`.nrki-tok-*`) rendered in each theme's readable `--nrki-font-mono`, paired with a language header bar and context-aware `Copy <LANG>` button.
 
 ---
 
@@ -137,11 +143,11 @@ NRKI AG/
         ├── nrki-broadsheet-library.css                     # Standalone reusable 4-theme × 2-mode CSS library (@layer)
         ├── broadsheet-magazine-shell.css                   # Issue 01 desktop spread + mobile pocket newspaper chrome
         ├── newspaper-design-magazine.html                  # Issue 01 5-page hash-routed SPA (#intro..#colophon)
-        ├── broadsheet-magazine-viewer.js                   # Spread/Mobile router, dual theme controller, copy engine
+        ├── broadsheet-magazine-viewer.js                   # Spread/Mobile router, inert guard, syntax highlighter, copy
         └── specimen-catalogs/
             ├── broadsheet-layouts-catalog.js               # Page 02: 6 Reusable Broadsheet Layouts
-            ├── broadsheet-simple-elements-catalog.js       # Page 03: 11 Simple Element specimens
-            └── broadsheet-complex-components-catalog.js    # Page 04: 9 Complex Component specimens
+            ├── broadsheet-simple-elements-catalog.js       # Page 03: 13 Simple Element specimens
+            └── broadsheet-complex-components-catalog.js    # Page 04: 12 Complex Component specimens
 ```
 
 ---
