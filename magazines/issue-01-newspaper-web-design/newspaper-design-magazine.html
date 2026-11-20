@@ -376,9 +376,9 @@
     </main>
 
     <!-- ====================================================================
-         MOBILE POCKET NEWSPAPER STICKY BOTTOM FOLIO BAR & 1-TAP THEME DRAWER
+         MOBILE POCKET NEWSPAPER STICKY BOTTOM BAR, NAV MENU & THEME DRAWERS
          ==================================================================== -->
-    <div class="magazine-mobile-theme-sheet" hidden role="dialog" aria-label="Mobile theme and mode switcher" data-mobile-theme-sheet>
+    <div id="magazine-mobile-theme-sheet" class="magazine-mobile-theme-sheet" hidden role="dialog" aria-modal="false" aria-label="Mobile theme and mode switcher" data-mobile-theme-sheet>
         <div class="nrki-modal-topbar" style="margin-bottom: 0.75rem; padding-bottom: 0.5rem;">
             <span class="nrki-eyebrow" style="margin: 0;">Pocket Newspaper Edition</span>
             <button type="button" class="nrki-button nrki-button-small" data-mobile-theme-sheet-close>Done ×</button>
@@ -402,16 +402,39 @@
         </div>
     </div>
 
-    <nav class="magazine-mobile-bottom-bar" aria-label="Pocket newspaper navigation">
-        <a class="magazine-mobile-nav-link" href="#intro" data-magazine-nav-target="intro" aria-current="page">Front</a>
-        <a class="magazine-mobile-nav-link" href="#layouts" data-magazine-nav-target="layouts">Layouts</a>
-        <a class="magazine-mobile-nav-link" href="#elements" data-magazine-nav-target="elements">Elem</a>
-        <a class="magazine-mobile-nav-link" href="#components" data-magazine-nav-target="components">Comp</a>
-        <a class="magazine-mobile-nav-link" href="#colophon" data-magazine-nav-target="colophon">Info</a>
-        <button type="button" class="magazine-mobile-theme-trigger" data-mobile-theme-drawer-toggle aria-expanded="false">
+    <div id="magazine-mobile-nav-sheet" class="magazine-mobile-nav-sheet" hidden role="dialog" aria-modal="false" aria-label="Issue 01 navigation menu" data-magazine-mobile-nav-sheet>
+        <div class="nrki-modal-topbar" style="margin-bottom: 0.75rem; padding-bottom: 0.5rem;">
+            <span class="nrki-eyebrow" style="margin: 0;">Issue 01 Sections</span>
+            <button type="button" class="nrki-button nrki-button-small" data-magazine-mobile-nav-close>Close ×</button>
+        </div>
+        <nav aria-label="Pocket newspaper pages">
+            <ul class="magazine-mobile-nav-list">
+                <li><a class="magazine-mobile-nav-menu-link" href="#intro" data-magazine-nav-target="intro" aria-current="page"><span>Front Page</span><span aria-hidden="true">→</span></a></li>
+                <li><a class="magazine-mobile-nav-menu-link" href="#layouts" data-magazine-nav-target="layouts"><span>Layouts (6)</span><span aria-hidden="true">→</span></a></li>
+                <li><a class="magazine-mobile-nav-menu-link" href="#elements" data-magazine-nav-target="elements"><span>Elements (13)</span><span aria-hidden="true">→</span></a></li>
+                <li><a class="magazine-mobile-nav-menu-link" href="#components" data-magazine-nav-target="components"><span>Components (13)</span><span aria-hidden="true">→</span></a></li>
+                <li><a class="magazine-mobile-nav-menu-link" href="#colophon" data-magazine-nav-target="colophon"><span>Colophon</span><span aria-hidden="true">→</span></a></li>
+                <li><a class="magazine-mobile-nav-menu-link" href="../../pages/magazines-index.html"><span>All Magazines</span><span aria-hidden="true">↗</span></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="magazine-mobile-bottom-bar" role="region" aria-label="Pocket newspaper quick controls" data-magazine-mobile-bottom-bar>
+        <button type="button" class="magazine-mobile-theme-trigger" data-mobile-theme-drawer-toggle aria-expanded="false" aria-controls="magazine-mobile-theme-sheet" aria-label="Open theme and color mode switcher">
             classic ☀
         </button>
-    </nav>
+        <button type="button" class="magazine-mobile-swap-button" data-magazine-mobile-bar-swap aria-pressed="false" aria-label="Swap theme and navigation menu button positions" title="Swap left and right controls">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M3 6H15M12 3L15 6L12 9M15 12H3M6 9L3 12L6 15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <button type="button" class="magazine-mobile-menu-trigger" data-magazine-mobile-nav-toggle aria-expanded="false" aria-controls="magazine-mobile-nav-sheet" aria-label="Open Issue 01 navigation menu">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                <path d="M2.5 4.5H15.5M2.5 9H15.5M2.5 13.5H15.5" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" />
+            </svg>
+            <span class="magazine-mobile-menu-label">Menu</span>
+        </button>
+    </div>
 </body>
 
 </html>
