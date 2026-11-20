@@ -1057,6 +1057,35 @@
       font-size: 0.74rem;
     }
 
+    .magazine-mobile-nav-sheet .nrki-modal-topbar {
+      gap: 0.4rem 0.5rem;
+    }
+
+    .magazine-mobile-nav-sheet .nrki-eyebrow {
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .magazine-mobile-sheet-actions {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.38rem;
+      margin-left: auto;
+    }
+
+    /* Match explicit line-height and min-height across <a> and <button> controls */
+    .magazine-mobile-sheet-actions .nrki-button-small {
+      min-height: 2rem;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.64rem;
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
     .magazine-mobile-nav-list {
       list-style: none;
       margin: 0;
@@ -1064,6 +1093,11 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0.55rem;
+    }
+
+    /* Span the 5th section (Colophon) cleanly across both columns so the 5-section menu has no orphan gap */
+    .magazine-mobile-nav-list li:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
     }
 
     .magazine-mobile-nav-menu-link {
