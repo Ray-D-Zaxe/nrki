@@ -7,9 +7,10 @@
  * 1. initializeMastheadDateline()       — Live date, 5-minute clock, time zone,
  *                                         and edition stamp inside `.nrki-site-header`.
  * 2. initializeMobileAndTabletBottomBar() — Builds the fixed mobile/tablet
- *                                         (`max-width: 1024px`) bottom nav bar
- *                                         and 1-tap theme/mode drawer sheet
- *                                         directly from `.nrki-site-nav`.
+ *                                         (`max-width: 1024px`) 3-control bar
+ *                                         (swappable Theme trigger, Swap button,
+ *                                         and Hamburger menu opening `.nrki-mobile-nav-sheet`)
+ *                                         plus the Theme/Mode drawer sheet.
  * 3. initializeBroadsheetThemeAndMode() — 2-axis theme (`[data-theme]`) +
  *                                         mode (`[data-mode]`) persistence and
  *                                         synchronized header & bottom-bar controls.
@@ -21,6 +22,7 @@
 
 const STORAGE_KEY_BROADSHEET_THEME = "nrki-broadsheet-theme";
 const STORAGE_KEY_BROADSHEET_MODE = "nrki-broadsheet-mode";
+const STORAGE_KEY_MOBILE_BAR_SWAPPED = "nrki-mobile-bar-swapped";
 const LEGACY_STORAGE_KEY_MODE = "nrki-theme";
 const VALID_BROADSHEET_THEMES = ["classic", "ancient", "minimalistic", "uwu"];
 const BROADSHEET_THEME_LABELS = [
@@ -109,24 +111,61 @@ function initializeMastheadDateline() {
 }
 
 /* ============================================================================
-   2. MOBILE & TABLET STICKY BOTTOM BAR + THEME & MODE DRAWER (`max-width: 1024px`)
+   2. MOBILE & TABLET STICKY BOTTOM BAR + NAV MENU & THEME DRAWERS (`max-width: 1024px`)
    ----------------------------------------------------------------------------
-   Mirrors Issue 01's Pocket Newspaper bottom bar across all NRKI site pages on
-   mobile and tablet viewports: turns `.nrki-site-nav` into a bottom navigation
-   bar paired with a 1-tap theme & mode trigger button and popup sheet.
+   Why this renders a 3-control bar (Theme button | Swap button | Hamburger menu)
+   instead of cramming 6 inline links along the bottom edge:
+   Separate popup sheets for Themes and Site Navigation keep every touch target
+   at >= 44px height with comfortable spacing, while the center Swap button lets
+   left- and right-handed readers flip button sides cleanly in one tap.
    ============================================================================ */
 
+const SVG_XML_NAMESPACE = "http://www.w3.org/2000/svg";
+
 /**
- * Maps full desktop nav link labels to compact mobile/tablet bottom-bar labels.
+ * Builds a crisp opposing-arrows SVG icon (`⇄`) for swapping bottom-bar sides.
  *
- * @param {string} rawNavLabel
- * @returns {string}
+ * @returns {SVGElement}
  */
-function formatCompactBottomNavLabel(rawNavLabel) {
-  const cleanedLabel = (rawNavLabel || "").trim();
-  if (/^magazines$/i.test(cleanedLabel)) return "Mags";
-  if (/^about/i.test(cleanedLabel)) return "About";
-  return cleanedLabel;
+function buildSwapArrowsIconSvg() {
+  const iconSvg = document.createElementNS(SVG_XML_NAMESPACE, "svg");
+  iconSvg.setAttribute("viewBox", "0 0 18 18");
+  iconSvg.setAttribute("fill", "none");
+  iconSvg.setAttribute("aria-hidden", "true");
+
+  const arrowsPath = document.createElementNS(SVG_XML_NAMESPACE, "path");
+  arrowsPath.setAttribute(
+    "d",
+    "M3 6H15M12 3L15 6L12 9M15 12H3M6 9L3 12L6 15"
+  );
+  arrowsPath.setAttribute("stroke", "currentColor");
+  arrowsPath.setAttribute("stroke-width", "1.9");
+  arrowsPath.setAttribute("stroke-linecap", "round");
+  arrowsPath.setAttribute("stroke-linejoin", "round");
+
+  iconSvg.appendChild(arrowsPath);
+  return iconSvg;
+}
+
+/**
+ * Builds a crisp 3-bar hamburger SVG icon for the bottom-bar navigation trigger.
+ *
+ * @returns {SVGElement}
+ */
+function buildHamburgerIconSvg() {
+  const menuSvg = document.createElementNS(SVG_XML_NAMESPACE, "svg");
+  menuSvg.setAttribute("viewBox", "0 0 18 18");
+  menuSvg.setAttribute("fill", "none");
+  menuSvg.setAttribute("aria-hidden", "true");
+
+  const barsPath = document.createElementNS(SVG_XML_NAMESPACE, "path");
+  barsPath.setAttribute("d", "M2.5 4.5H15.5M2.5 9H15.5M2.5 13.5H15.5");
+  barsPath.setAttribute("stroke", "currentColor");
+  barsPath.setAttribute("stroke-width", "2.1");
+  barsPath.setAttribute("stroke-linecap", "round");
+
+  menuSvg.appendChild(barsPath);
+  return menuSvg;
 }
 
 /**
@@ -158,8 +197,8 @@ function synchronizeMobileBottomBarControls() {
 }
 
 /**
- * Mounts `.nrki-mobile-theme-sheet` and `.nrki-mobile-bottom-bar` onto `document.body`
- * for any NRKI site page that contains `.nrki-site-header .nrki-site-nav`.
+ * Mounts `.nrki-mobile-theme-sheet`, `.nrki-mobile-nav-sheet`, and the
+ * 3-control `.nrki-mobile-bottom-bar` onto `document.body` for NRKI pages.
  */
 function initializeMobileAndTabletBottomBar() {
   const primarySiteNav = document.querySelector(
@@ -179,36 +218,38 @@ function initializeMobileAndTabletBottomBar() {
 
   // 1. Build 1-Tap Bottom Theme & Mode Drawer Sheet
   const themeSheetElement = document.createElement("div");
+  themeSheetElement.id = "nrki-mobile-theme-sheet";
   themeSheetElement.className = "nrki-mobile-theme-sheet";
   themeSheetElement.hidden = true;
   themeSheetElement.setAttribute("role", "dialog");
+  themeSheetElement.setAttribute("aria-modal", "false");
   themeSheetElement.setAttribute(
     "aria-label",
-    "Mobile and tablet theme and mode switcher"
+    "Theme and color mode switcher"
   );
   themeSheetElement.setAttribute("data-mobile-theme-sheet", "");
 
-  const topBarElement = document.createElement("div");
-  topBarElement.className = "nrki-modal-topbar";
-  topBarElement.style.marginBottom = "0.75rem";
-  topBarElement.style.paddingBottom = "0.5rem";
+  const themeTopBarElement = document.createElement("div");
+  themeTopBarElement.className = "nrki-modal-topbar";
+  themeTopBarElement.style.marginBottom = "0.75rem";
+  themeTopBarElement.style.paddingBottom = "0.5rem";
 
-  const sheetEyebrow = document.createElement("span");
-  sheetEyebrow.className = "nrki-eyebrow";
-  sheetEyebrow.style.margin = "0";
-  sheetEyebrow.textContent = "Broadsheet Edition & Ink";
+  const themeSheetEyebrow = document.createElement("span");
+  themeSheetEyebrow.className = "nrki-eyebrow";
+  themeSheetEyebrow.style.margin = "0";
+  themeSheetEyebrow.textContent = "Broadsheet Edition & Ink";
 
-  const closeSheetButton = document.createElement("button");
-  closeSheetButton.type = "button";
-  closeSheetButton.className = "nrki-button nrki-button-small";
-  closeSheetButton.setAttribute("data-mobile-theme-sheet-close", "");
-  closeSheetButton.textContent = "Done ×";
+  const closeThemeSheetButton = document.createElement("button");
+  closeThemeSheetButton.type = "button";
+  closeThemeSheetButton.className = "nrki-button nrki-button-small";
+  closeThemeSheetButton.setAttribute("data-mobile-theme-sheet-close", "");
+  closeThemeSheetButton.textContent = "Done ×";
 
-  topBarElement.appendChild(sheetEyebrow);
-  topBarElement.appendChild(closeSheetButton);
+  themeTopBarElement.appendChild(themeSheetEyebrow);
+  themeTopBarElement.appendChild(closeThemeSheetButton);
 
-  const stackContainer = document.createElement("div");
-  stackContainer.className = "nrki-stack-sm";
+  const themeStackContainer = document.createElement("div");
+  themeStackContainer.className = "nrki-stack-sm";
 
   const themeSection = document.createElement("div");
   const themeHeading = document.createElement("p");
@@ -248,64 +289,230 @@ function initializeMobileAndTabletBottomBar() {
   modeSection.appendChild(modeHeading);
   modeSection.appendChild(modeToggleInSheet);
 
-  stackContainer.appendChild(themeSection);
-  stackContainer.appendChild(modeSection);
+  themeStackContainer.appendChild(themeSection);
+  themeStackContainer.appendChild(modeSection);
 
-  themeSheetElement.appendChild(topBarElement);
-  themeSheetElement.appendChild(stackContainer);
+  themeSheetElement.appendChild(themeTopBarElement);
+  themeSheetElement.appendChild(themeStackContainer);
 
-  // 2. Build Sticky Bottom Navigation + Theme Trigger Bar
-  const bottomBarNav = document.createElement("nav");
-  bottomBarNav.className = "nrki-mobile-bottom-bar";
-  bottomBarNav.setAttribute("aria-label", "Mobile and tablet navigation");
+  // 2. Build Site Navigation Menu Drawer Sheet (opened by Hamburger button)
+  const navigationSheetElement = document.createElement("div");
+  navigationSheetElement.id = "nrki-mobile-nav-sheet";
+  navigationSheetElement.className = "nrki-mobile-nav-sheet";
+  navigationSheetElement.hidden = true;
+  navigationSheetElement.setAttribute("role", "dialog");
+  navigationSheetElement.setAttribute("aria-modal", "false");
+  navigationSheetElement.setAttribute("aria-label", "Site navigation menu");
+  navigationSheetElement.setAttribute("data-mobile-nav-sheet", "");
+
+  const navTopBarElement = document.createElement("div");
+  navTopBarElement.className = "nrki-modal-topbar";
+  navTopBarElement.style.marginBottom = "0.75rem";
+  navTopBarElement.style.paddingBottom = "0.5rem";
+
+  const navSheetEyebrow = document.createElement("span");
+  navSheetEyebrow.className = "nrki-eyebrow";
+  navSheetEyebrow.style.margin = "0";
+  navSheetEyebrow.textContent = "Site Navigation";
+
+  const closeNavSheetButton = document.createElement("button");
+  closeNavSheetButton.type = "button";
+  closeNavSheetButton.className = "nrki-button nrki-button-small";
+  closeNavSheetButton.setAttribute("data-mobile-nav-sheet-close", "");
+  closeNavSheetButton.textContent = "Close ×";
+
+  navTopBarElement.appendChild(navSheetEyebrow);
+  navTopBarElement.appendChild(closeNavSheetButton);
+
+  const sheetNavLandmark = document.createElement("nav");
+  sheetNavLandmark.setAttribute("aria-label", "Mobile and tablet site sections");
+
+  const mobileNavList = document.createElement("ul");
+  mobileNavList.className = "nrki-mobile-nav-list";
 
   navAnchors.forEach((sourceAnchor) => {
-    const mobileNavLink = document.createElement("a");
-    mobileNavLink.className = "nrki-mobile-nav-link";
-    mobileNavLink.href = sourceAnchor.getAttribute("href") || "#";
-    mobileNavLink.textContent = formatCompactBottomNavLabel(
-      sourceAnchor.textContent
-    );
+    const listItem = document.createElement("li");
+    const menuLinkAnchor = document.createElement("a");
+    menuLinkAnchor.className = "nrki-mobile-nav-menu-link";
+    menuLinkAnchor.href = sourceAnchor.getAttribute("href") || "#";
     if (sourceAnchor.getAttribute("aria-current") === "page") {
-      mobileNavLink.setAttribute("aria-current", "page");
+      menuLinkAnchor.setAttribute("aria-current", "page");
     }
-    bottomBarNav.appendChild(mobileNavLink);
+
+    const linkLabelSpan = document.createElement("span");
+    linkLabelSpan.textContent = (sourceAnchor.textContent || "").trim();
+
+    const linkArrowSpan = document.createElement("span");
+    linkArrowSpan.setAttribute("aria-hidden", "true");
+    linkArrowSpan.textContent = "→";
+
+    menuLinkAnchor.appendChild(linkLabelSpan);
+    menuLinkAnchor.appendChild(linkArrowSpan);
+    menuLinkAnchor.addEventListener("click", () => {
+      setActiveMobileSheet(null);
+    });
+
+    listItem.appendChild(menuLinkAnchor);
+    mobileNavList.appendChild(listItem);
   });
 
-  const drawerToggleButton = document.createElement("button");
-  drawerToggleButton.type = "button";
-  drawerToggleButton.className = "nrki-mobile-theme-trigger";
-  drawerToggleButton.setAttribute("data-mobile-theme-drawer-toggle", "");
-  drawerToggleButton.setAttribute("aria-expanded", "false");
-  drawerToggleButton.setAttribute(
-    "aria-label",
-    "Toggle theme and color mode drawer"
+  sheetNavLandmark.appendChild(mobileNavList);
+  navigationSheetElement.appendChild(navTopBarElement);
+  navigationSheetElement.appendChild(sheetNavLandmark);
+
+  // 3. Build 3-Control Sticky Bottom Bar (Left Theme | Center Swap | Right Hamburger)
+  const bottomBarRegion = document.createElement("div");
+  bottomBarRegion.className = "nrki-mobile-bottom-bar";
+  bottomBarRegion.setAttribute("role", "region");
+  bottomBarRegion.setAttribute("aria-label", "Mobile and tablet quick controls");
+
+  const themeDrawerToggleButton = document.createElement("button");
+  themeDrawerToggleButton.type = "button";
+  themeDrawerToggleButton.className = "nrki-mobile-theme-trigger";
+  themeDrawerToggleButton.setAttribute("data-mobile-theme-drawer-toggle", "");
+  themeDrawerToggleButton.setAttribute("aria-expanded", "false");
+  themeDrawerToggleButton.setAttribute(
+    "aria-controls",
+    "nrki-mobile-theme-sheet"
   );
-  drawerToggleButton.textContent = "classic ☀";
+  themeDrawerToggleButton.setAttribute(
+    "aria-label",
+    "Open theme and color mode switcher"
+  );
+  themeDrawerToggleButton.textContent = "classic ☀";
 
-  bottomBarNav.appendChild(drawerToggleButton);
+  const swapBarControlsButton = document.createElement("button");
+  swapBarControlsButton.type = "button";
+  swapBarControlsButton.className = "nrki-mobile-swap-button";
+  swapBarControlsButton.setAttribute("data-mobile-bar-swap", "");
+  swapBarControlsButton.setAttribute("aria-pressed", "false");
+  swapBarControlsButton.setAttribute(
+    "aria-label",
+    "Swap theme and navigation menu button positions"
+  );
+  swapBarControlsButton.setAttribute(
+    "title",
+    "Swap left and right controls"
+  );
+  swapBarControlsButton.appendChild(buildSwapArrowsIconSvg());
 
-  document.body.appendChild(themeSheetElement);
-  document.body.appendChild(bottomBarNav);
+  const navigationMenuToggleButton = document.createElement("button");
+  navigationMenuToggleButton.type = "button";
+  navigationMenuToggleButton.className = "nrki-mobile-menu-trigger";
+  navigationMenuToggleButton.setAttribute("data-mobile-nav-drawer-toggle", "");
+  navigationMenuToggleButton.setAttribute("aria-expanded", "false");
+  navigationMenuToggleButton.setAttribute(
+    "aria-controls",
+    "nrki-mobile-nav-sheet"
+  );
+  navigationMenuToggleButton.setAttribute(
+    "aria-label",
+    "Open site navigation menu"
+  );
 
-  function setDrawerOpenState(shouldOpen) {
-    themeSheetElement.hidden = !shouldOpen;
-    drawerToggleButton.setAttribute("aria-expanded", String(shouldOpen));
+  const menuLabelSpan = document.createElement("span");
+  menuLabelSpan.className = "nrki-mobile-menu-label";
+  menuLabelSpan.textContent = "Menu";
+
+  navigationMenuToggleButton.appendChild(buildHamburgerIconSvg());
+  navigationMenuToggleButton.appendChild(menuLabelSpan);
+
+  function applyMobileBottomBarOrder(shouldSwapSides) {
+    bottomBarRegion.classList.toggle("is-swapped", shouldSwapSides);
+    swapBarControlsButton.setAttribute("aria-pressed", String(shouldSwapSides));
+
+    // Reorder DOM nodes directly so visual placement and keyboard Tab order always agree
+    const orderedControls = shouldSwapSides
+      ? [
+          navigationMenuToggleButton,
+          swapBarControlsButton,
+          themeDrawerToggleButton,
+        ]
+      : [
+          themeDrawerToggleButton,
+          swapBarControlsButton,
+          navigationMenuToggleButton,
+        ];
+
+    orderedControls.forEach((controlButton) => {
+      bottomBarRegion.appendChild(controlButton);
+    });
   }
 
-  drawerToggleButton.addEventListener("click", () => {
-    setDrawerOpenState(themeSheetElement.hidden);
+  let isBottomBarSwapped =
+    localStorage.getItem(STORAGE_KEY_MOBILE_BAR_SWAPPED) === "true";
+  applyMobileBottomBarOrder(isBottomBarSwapped);
+
+  document.body.appendChild(themeSheetElement);
+  document.body.appendChild(navigationSheetElement);
+  document.body.appendChild(bottomBarRegion);
+
+  function setActiveMobileSheet(targetSheetKey) {
+    const openThemeSheet = targetSheetKey === "theme";
+    const openNavSheet = targetSheetKey === "nav";
+
+    themeSheetElement.hidden = !openThemeSheet;
+    navigationSheetElement.hidden = !openNavSheet;
+    themeDrawerToggleButton.setAttribute(
+      "aria-expanded",
+      String(openThemeSheet)
+    );
+    navigationMenuToggleButton.setAttribute(
+      "aria-expanded",
+      String(openNavSheet)
+    );
+  }
+
+  themeDrawerToggleButton.addEventListener("click", () => {
+    setActiveMobileSheet(themeSheetElement.hidden ? "theme" : null);
   });
 
-  closeSheetButton.addEventListener("click", () => {
-    setDrawerOpenState(false);
+  navigationMenuToggleButton.addEventListener("click", () => {
+    setActiveMobileSheet(navigationSheetElement.hidden ? "nav" : null);
+  });
+
+  closeThemeSheetButton.addEventListener("click", () => {
+    setActiveMobileSheet(null);
+    themeDrawerToggleButton.focus({ preventScroll: true });
+  });
+
+  closeNavSheetButton.addEventListener("click", () => {
+    setActiveMobileSheet(null);
+    navigationMenuToggleButton.focus({ preventScroll: true });
+  });
+
+  swapBarControlsButton.addEventListener("click", () => {
+    isBottomBarSwapped = !isBottomBarSwapped;
+    localStorage.setItem(
+      STORAGE_KEY_MOBILE_BAR_SWAPPED,
+      String(isBottomBarSwapped)
+    );
+    applyMobileBottomBarOrder(isBottomBarSwapped);
+    swapBarControlsButton.focus({ preventScroll: true });
   });
 
   document.addEventListener("keydown", (keyboardEvent) => {
-    if (keyboardEvent.key === "Escape" && !themeSheetElement.hidden) {
-      setDrawerOpenState(false);
-      drawerToggleButton.focus();
+    if (keyboardEvent.key !== "Escape") return;
+    if (!themeSheetElement.hidden) {
+      setActiveMobileSheet(null);
+      themeDrawerToggleButton.focus({ preventScroll: true });
+    } else if (!navigationSheetElement.hidden) {
+      setActiveMobileSheet(null);
+      navigationMenuToggleButton.focus({ preventScroll: true });
     }
+  });
+
+  document.addEventListener("click", (pointerEvent) => {
+    if (themeSheetElement.hidden && navigationSheetElement.hidden) return;
+    const clickTarget = pointerEvent.target;
+    if (
+      bottomBarRegion.contains(clickTarget) ||
+      themeSheetElement.contains(clickTarget) ||
+      navigationSheetElement.contains(clickTarget)
+    ) {
+      return;
+    }
+    setActiveMobileSheet(null);
   });
 }
 

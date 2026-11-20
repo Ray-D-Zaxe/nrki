@@ -24,6 +24,7 @@
 
   const STORAGE_KEY_THEME = "nrki-broadsheet-theme";
   const STORAGE_KEY_MODE = "nrki-broadsheet-mode";
+  const STORAGE_KEY_MOBILE_BAR_SWAPPED = "nrki-mobile-bar-swapped";
 
   const ORDERED_SECTION_IDS = [
     "intro",
@@ -981,6 +982,9 @@
       passive: true,
     });
 
+    const bottomBarRegion = browserDocument.querySelector(
+      "[data-magazine-mobile-bottom-bar]"
+    );
     const drawerToggle = browserDocument.querySelector(
       "[data-mobile-theme-drawer-toggle]"
     );
@@ -990,26 +994,127 @@
     const sheetClose = browserDocument.querySelector(
       "[data-mobile-theme-sheet-close]"
     );
-    if (!drawerToggle || !themeSheet) return;
+    const navMenuToggle = browserDocument.querySelector(
+      "[data-magazine-mobile-nav-toggle]"
+    );
+    const navSheet = browserDocument.querySelector(
+      "[data-magazine-mobile-nav-sheet]"
+    );
+    const navSheetClose = browserDocument.querySelector(
+      "[data-magazine-mobile-nav-close]"
+    );
+    const swapBarButton = browserDocument.querySelector(
+      "[data-magazine-mobile-bar-swap]"
+    );
 
-    function setDrawerOpen(shouldOpen) {
-      themeSheet.hidden = !shouldOpen;
-      drawerToggle.setAttribute("aria-expanded", String(shouldOpen));
+    if (!bottomBarRegion || !drawerToggle || !themeSheet) return;
+
+    function setActivePocketSheet(targetSheetKey) {
+      const openThemeSheet = targetSheetKey === "theme";
+      const openNavSheet = targetSheetKey === "nav" && Boolean(navSheet);
+
+      themeSheet.hidden = !openThemeSheet;
+      drawerToggle.setAttribute("aria-expanded", String(openThemeSheet));
+
+      if (navSheet && navMenuToggle) {
+        navSheet.hidden = !openNavSheet;
+        navMenuToggle.setAttribute("aria-expanded", String(openNavSheet));
+      }
     }
 
+    function applyMagazineMobileBarOrder(shouldSwapSides) {
+      if (!swapBarButton || !navMenuToggle) return;
+      bottomBarRegion.classList.toggle("is-swapped", shouldSwapSides);
+      swapBarButton.setAttribute("aria-pressed", String(shouldSwapSides));
+
+      // Reorder DOM nodes directly so visual order and Tab focus order stay aligned
+      const orderedButtons = shouldSwapSides
+        ? [navMenuToggle, swapBarButton, drawerToggle]
+        : [drawerToggle, swapBarButton, navMenuToggle];
+
+      orderedButtons.forEach((controlButton) => {
+        bottomBarRegion.appendChild(controlButton);
+      });
+    }
+
+    let isBarSwapped =
+      browserWindow.localStorage.getItem(STORAGE_KEY_MOBILE_BAR_SWAPPED) ===
+      "true";
+    applyMagazineMobileBarOrder(isBarSwapped);
+
     drawerToggle.addEventListener("click", () => {
-      setDrawerOpen(themeSheet.hidden);
+      setActivePocketSheet(themeSheet.hidden ? "theme" : null);
     });
 
     if (sheetClose) {
-      sheetClose.addEventListener("click", () => setDrawerOpen(false));
+      sheetClose.addEventListener("click", () => {
+        setActivePocketSheet(null);
+        drawerToggle.focus({ preventScroll: true });
+      });
+    }
+
+    if (navMenuToggle && navSheet) {
+      navMenuToggle.addEventListener("click", () => {
+        setActivePocketSheet(navSheet.hidden ? "nav" : null);
+      });
+
+      if (navSheetClose) {
+        navSheetClose.addEventListener("click", () => {
+          setActivePocketSheet(null);
+          navMenuToggle.focus({ preventScroll: true });
+        });
+      }
+
+      navSheet
+        .querySelectorAll(".magazine-mobile-nav-menu-link")
+        .forEach((menuLink) => {
+          menuLink.addEventListener("click", () => {
+            setActivePocketSheet(null);
+          });
+        });
+
+      browserWindow.addEventListener("hashchange", () => {
+        if (!navSheet.hidden) {
+          setActivePocketSheet(null);
+        }
+      });
+    }
+
+    if (swapBarButton) {
+      swapBarButton.addEventListener("click", () => {
+        isBarSwapped = !isBarSwapped;
+        browserWindow.localStorage.setItem(
+          STORAGE_KEY_MOBILE_BAR_SWAPPED,
+          String(isBarSwapped)
+        );
+        applyMagazineMobileBarOrder(isBarSwapped);
+        swapBarButton.focus({ preventScroll: true });
+      });
     }
 
     browserDocument.addEventListener("keydown", (keyboardEvent) => {
-      if (keyboardEvent.key === "Escape" && !themeSheet.hidden) {
-        setDrawerOpen(false);
-        drawerToggle.focus();
+      if (keyboardEvent.key !== "Escape") return;
+      if (!themeSheet.hidden) {
+        setActivePocketSheet(null);
+        drawerToggle.focus({ preventScroll: true });
+      } else if (navSheet && !navSheet.hidden && navMenuToggle) {
+        setActivePocketSheet(null);
+        navMenuToggle.focus({ preventScroll: true });
       }
+    });
+
+    browserDocument.addEventListener("click", (pointerEvent) => {
+      const clickTarget = pointerEvent.target;
+      const navIsOpen = Boolean(navSheet && !navSheet.hidden);
+      if (themeSheet.hidden && !navIsOpen) return;
+      if (
+        bottomBarRegion.contains(clickTarget) ||
+        themeSheet.contains(clickTarget) ||
+        (navSheet && navSheet.contains(clickTarget))
+      ) {
+        return;
+      }
+      setActivePocketSheet(null);
     });
   }
 
