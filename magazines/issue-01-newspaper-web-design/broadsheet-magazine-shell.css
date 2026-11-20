@@ -759,6 +759,10 @@
     margin-top: 1.25rem;
   }
 
+  .magazine-colophon-grid > * {
+    min-width: 0;
+  }
+
   .magazine-pagination-bar {
     display: flex;
     flex-wrap: wrap;

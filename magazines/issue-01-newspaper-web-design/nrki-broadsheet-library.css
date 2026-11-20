@@ -875,6 +875,7 @@
   pre {
     margin: 1rem 0;
     padding: 1rem 1.25rem;
+    max-width: 100%;
     overflow-x: auto;
     border: 1px solid var(--nrki-border-subtle);
     border-left: 4px solid var(--nrki-accent-primary);
@@ -2491,12 +2492,21 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 0;
+    max-width: 100%;
     padding: 1.25rem;
     border: var(--nrki-card-border);
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-elevated);
     box-shadow: var(--nrki-card-frame-shadow);
     transition: transform var(--nrki-transition-fast), background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), box-shadow var(--nrki-transition-fast);
+  }
+
+  .nrki-card > *,
+  .nrki-pin-card > *,
+  .nrki-media-card > * {
+    min-width: 0;
+    max-width: 100%;
   }
 
   [data-theme="ancient"] .nrki-card,

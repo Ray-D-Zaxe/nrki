@@ -8,10 +8,10 @@ This document defines the **standalone NRKI Broadsheet CSS Library** (the primar
 
 - **Primary Focus:** Build a **standalone, extensible, zero-dependency Newspaper & Editorial CSS Library** (`nrki-broadsheet-library.css` v2.3.0).
 - **Use Cases:**
-  1. Powers **NRKI** (`nrki.in` on `dev` via `assets/styles/nrki-broadsheet-library.css`, replacing legacy `style.css`) and all future NRKI pages/SPAs.
+  1. Powers **NRKI** ([nrki.in](https://nrki.in) on `main` and staging on `dev` via `assets/styles/nrki-broadsheet-library.css`, replacing legacy `style.css`) and all future NRKI pages/SPAs.
   2. Works as a **drop-in standalone CSS library** for external websites, blogs, portfolios, and documentation sites—reusable anywhere with zero build step and **zero `!important`**.
 - **Newspaper Role of Magazine Issue 01:** Replaces `Gallery` with a barebones `Magazines` index at `pages/magazines-index.html`. Issue 01 looks and reads like an authentic multi-edition newspaper—featuring a classic **Broadsheet Spread** on desktop/tablet (`min-width: 768px`) and a vertical **Pocket Newspaper** edition on mobile (`max-width: 767px`).
-- **Production Rollout (`dev`):** On `dev`, `nrki-broadsheet-library.css` has graduated from its Issue 01 prototype to become the primary site stylesheet (`assets/styles/nrki-broadsheet-library.css`) with the global 2-axis header controls (`[data-theme-select]` theme dropdown + `[data-theme-toggle]` Light/Dark toggle). `main` remains untouched with v1 and Under Construction placeholders until staging verification completes.
+- **Production Rollout (`main` & `dev`):** `nrki-broadsheet-library.css` has graduated to become the primary site stylesheet (`assets/styles/nrki-broadsheet-library.css`) on both `main` and `dev`, complete with the global 2-axis header controls (`.nrki-masthead-subbar`), mobile/tablet sticky bottom nav bar (`.nrki-mobile-bottom-bar`), and Magazine Issue 01. On `main`, Home keeps its generic overview while `Projects`, `Works`, and `Media` remain Under Construction with empty production manifests; `dev` hosts staging sample shelves.
 
 ---
 
@@ -119,7 +119,7 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 - On mobile, natural vertical scrolling **is** ergonomic—so Issue 01 shifts into a dedicated mobile newspaper layout:
   1. **Edge-to-Edge Scrollable Stream:** All specimens in the active section stack cleanly with minimal side gutters (`0.75rem`) and tactile print dividers (`SPECIMEN 02 OF 13 · ✦`) so zero horizontal space is wasted and no redundant mobile quick-jump strip clutters the top of the section.
   2. **Top Reading Progress Ink Rule:** 3px fixed top indicator bar tracking scroll progress through the section.
-  3. **Mobile Flow & Inline-Child Safeguards:** Ordered list items (`.nrki-ordered-list li`), checklist entries (`.nrki-checklist-entry`), and accordion summaries (`.nrki-accordion-summary`) keep normal block text flow (`position: relative` with absolutely positioned `::before`/`::after` markers) rather than applying `display: grid` or `display: flex` to text containers, ensuring inline `<code>`, `<strong>`, `<em>`, and `<a>` elements flow naturally inline inside sentences on narrow viewports. Multi-column grids (`.nrki-card-grid`, `.nrki-shelf-grid`, `.nrki-about-columns`, `.nrki-skills-grid`, `.magazine-colophon-grid`, `.magazine-token-swatch-grid`) collapse cleanly to `1fr` with `min-width: 0` on mobile (`max-width: 767px`).
+  3. **Mobile Flow & Inline-Child Safeguards:** Ordered list items (`.nrki-ordered-list li`), checklist entries (`.nrki-checklist-entry`), and accordion summaries (`.nrki-accordion-summary`) keep normal block text flow (`position: relative` with absolutely positioned `::before`/`::after` markers) rather than applying `display: grid` or `display: flex` to text containers, ensuring inline `<code>`, `<strong>`, `<em>`, and `<a>` elements flow naturally inline inside sentences on narrow viewports. Multi-column grids (`.nrki-card-grid`, `.nrki-shelf-grid`, `.nrki-about-columns`, `.nrki-skills-grid`, `.magazine-colophon-grid`, `.magazine-token-swatch-grid`) collapse cleanly to `1fr` with `min-width: 0` on mobile (`max-width: 767px`), and `.nrki-card` / `.magazine-colophon-grid` enforce `min-width: 0` overflow containment so `<pre>` blocks scroll internally inside cards on narrow screens.
   4. **Sticky Bottom Pocket Folio Bar + 1-Tap Theme Drawer:** Fixed bottom navigation (`Front`, `Layouts`, `Elem`, `Comp`, `Info`) paired with a compact theme trigger (`Classic ☀`) that opens an accessible bottom sheet to switch Themes (`Classic / Ancient / Minimalistic / UwU`) & Modes (`Light / Dark`) seamlessly one-handed.
 
 ---
@@ -141,10 +141,10 @@ Per [`GEMINI.md`](./GEMINI.md), every file, folder, variable, and class uses exp
 NRKI AG/
 ├── GEMINI.md                                               # Always-on CSS, naming, rationale & spec-sync rules
 ├── assets/
-│   ├── styles/nrki-broadsheet-library.css                  # Production broadsheet library on `dev` (identical v2.3.0 copy)
-│   └── scripts/main.js                                     # 2-axis theme dropdown + Light/Dark toggle + dateline + filters
+│   ├── styles/nrki-broadsheet-library.css                  # Production broadsheet library on `main` & `dev` (identical v2.3.0 copy)
+│   └── scripts/main.js                                     # 2-axis theme dropdown + Light/Dark toggle + mobile bottom bar + dateline + filters
 ├── pages/
-│   └── magazines-index.html                                # Barebones Magazines index (Under Construction on main)
+│   └── magazines-index.html                                # Barebones Magazines index linking to Issue 01
 └── magazines/
     └── issue-01-newspaper-web-design/
         ├── nrki-broadsheet-library.css                     # Standalone reusable 4-theme × 2-mode CSS library (@layer)
@@ -161,5 +161,5 @@ NRKI AG/
 
 ## 7. Solo-Dev Workflow
 
-1. **Build & stage on `dev` first:** `main` keeps `nrki.in` live with its stable v1 snapshot and Under Construction placeholders until staging QA passes on `dev.nrki.pages.dev`.
-2. **Keep Library & Site Identical:** Both `magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css` and `assets/styles/nrki-broadsheet-library.css` stay byte-identical (v2.3.0) so improvements documented in Issue 01 immediately power every site page on `dev`.
+1. **Build & stage on `dev`, promote cleanly to `main`:** New stylesheets, Magazine Issue updates, and visual architecture changes are staged on `dev` first and selectively promoted to `main` (`nrki.in`), while `main` keeps generic Home copy and Under Construction placeholders for `Projects`, `Works`, and `Media` until those content shelves are ready for public launch.
+2. **Keep Library & Site Identical:** Both `magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css` and `assets/styles/nrki-broadsheet-library.css` stay byte-identical (v2.3.0) so improvements documented in Issue 01 immediately power every site page across `main` and `dev`.
