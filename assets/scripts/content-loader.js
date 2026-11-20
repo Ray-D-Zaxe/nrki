@@ -470,54 +470,54 @@
    */
 
   function createMediaDOMElement(block) {
-    const fig = document.createElement("figure");
-    fig.className = `content-media content-media--${block.type}`;
+    const figureElement = document.createElement("figure");
+    figureElement.className = "nrki-media-figure";
 
     if (block.type === "image") {
-      const img = document.createElement("img");
-      img.src = block.src;
-      img.alt = block.label || "";
-      img.loading = "lazy";
-      img.addEventListener("error", () => {
-        img.style.display = "none";
-        const fallback = document.createElement("div");
-        fallback.className = "content-media__fallback";
-        fallback.textContent = `[Image preview unavailable in browser sandbox: ${block.displayPath}]`;
-        fig.insertBefore(fallback, fig.firstChild);
+      const imageElement = document.createElement("img");
+      imageElement.src = block.src;
+      imageElement.alt = block.label || "";
+      imageElement.loading = "lazy";
+      imageElement.addEventListener("error", () => {
+        imageElement.style.display = "none";
+        const fallbackBox = document.createElement("div");
+        fallbackBox.className = "nrki-media-fallback";
+        fallbackBox.textContent = `[Image preview unavailable in browser sandbox: ${block.displayPath}]`;
+        figureElement.insertBefore(fallbackBox, figureElement.firstChild);
       });
-      fig.appendChild(img);
+      figureElement.appendChild(imageElement);
     } else if (block.type === "audio") {
-      const labelEl = document.createElement("div");
-      labelEl.className = "content-media__header";
-      labelEl.textContent = `♫ Audio · ${block.label}`;
-      fig.appendChild(labelEl);
+      const headerElement = document.createElement("div");
+      headerElement.className = "nrki-media-header";
+      headerElement.textContent = `♫ Audio · ${block.label}`;
+      figureElement.appendChild(headerElement);
 
-      const audio = document.createElement("audio");
-      audio.controls = true;
-      audio.preload = "metadata";
-      audio.src = block.src;
-      fig.appendChild(audio);
+      const audioElement = document.createElement("audio");
+      audioElement.controls = true;
+      audioElement.preload = "metadata";
+      audioElement.src = block.src;
+      figureElement.appendChild(audioElement);
     } else if (block.type === "video") {
-      const labelEl = document.createElement("div");
-      labelEl.className = "content-media__header";
-      labelEl.textContent = `▶ Video · ${block.label}`;
-      fig.appendChild(labelEl);
+      const headerElement = document.createElement("div");
+      headerElement.className = "nrki-media-header";
+      headerElement.textContent = `▶ Video · ${block.label}`;
+      figureElement.appendChild(headerElement);
 
-      const video = document.createElement("video");
-      video.controls = true;
-      video.preload = "metadata";
-      video.src = block.src;
-      fig.appendChild(video);
+      const videoElement = document.createElement("video");
+      videoElement.controls = true;
+      videoElement.preload = "metadata";
+      videoElement.src = block.src;
+      figureElement.appendChild(videoElement);
     }
 
-    const cap = document.createElement("figcaption");
-    cap.className = "content-media__caption";
-    cap.textContent = block.isLocalDrivePath
+    const captionElement = document.createElement("figcaption");
+    captionElement.className = "nrki-media-caption";
+    captionElement.textContent = block.isLocalDrivePath
       ? `${block.label} (${block.displayPath})`
       : block.label;
-    fig.appendChild(cap);
+    figureElement.appendChild(captionElement);
 
-    return fig;
+    return figureElement;
   }
 
   function appendInlineTokensToDOM(parentEl, text) {
@@ -606,14 +606,15 @@
         appendLinesWithBreaksToDOM(bq, block.lines || [block.text]);
         container.appendChild(bq);
       } else if (block.type === "ul" || block.type === "ol") {
-        const listEl = document.createElement(block.type);
-        listEl.className = "formatted-list";
-        (block.items || []).forEach((liText) => {
-          const li = document.createElement("li");
-          appendInlineTokensToDOM(li, liText);
-          listEl.appendChild(li);
+        const listElement = document.createElement(block.type);
+        listElement.className =
+          block.type === "ol" ? "nrki-ordered-list" : "nrki-editorial-list";
+        (block.items || []).forEach((lineText) => {
+          const listEntry = document.createElement("li");
+          appendInlineTokensToDOM(listEntry, lineText);
+          listElement.appendChild(listEntry);
         });
-        container.appendChild(listEl);
+        container.appendChild(listElement);
       } else if (block.type === "pre") {
         const pre = document.createElement("pre");
         const code = document.createElement("code");
@@ -714,37 +715,37 @@
     if (block.type === "image") {
       return h(
         "figure",
-        { key, className: "content-media content-media--image" },
+        { key, className: "nrki-media-figure" },
         h("img", { src: block.src, alt: block.label || "" }),
-        h("figcaption", { className: "content-media__caption" }, captionText)
+        h("figcaption", { className: "nrki-media-caption" }, captionText)
       );
     }
 
     if (block.type === "audio") {
       return h(
         "figure",
-        { key, className: "content-media content-media--audio" },
+        { key, className: "nrki-media-figure" },
         h(
           "div",
-          { className: "content-media__header" },
+          { className: "nrki-media-header" },
           `♫ Audio · ${block.label}`
         ),
         h("audio", { controls: "controls", preload: "metadata", src: block.src }),
-        h("figcaption", { className: "content-media__caption" }, captionText)
+        h("figcaption", { className: "nrki-media-caption" }, captionText)
       );
     }
 
     if (block.type === "video") {
       return h(
         "figure",
-        { key, className: "content-media content-media--video" },
+        { key, className: "nrki-media-figure" },
         h(
           "div",
-          { className: "content-media__header" },
+          { className: "nrki-media-header" },
           `▶ Video · ${block.label}`
         ),
         h("video", { controls: "controls", preload: "metadata", src: block.src }),
-        h("figcaption", { className: "content-media__caption" }, captionText)
+        h("figcaption", { className: "nrki-media-caption" }, captionText)
       );
     }
 
@@ -781,12 +782,16 @@
       if (block.type === "ul" || block.type === "ol") {
         return h(
           block.type,
-          { key, className: "formatted-list" },
-          (block.items || []).map((liText, liIdx) =>
+          {
+            key,
+            className:
+              block.type === "ol" ? "nrki-ordered-list" : "nrki-editorial-list",
+          },
+          (block.items || []).map((lineText, liIdx) =>
             h(
               "li",
               { key: `${key}-li-${liIdx}` },
-              renderInlineTokensToReact(h, liText, `${key}-li-${liIdx}`)
+              renderInlineTokensToReact(h, lineText, `${key}-li-${liIdx}`)
             )
           )
         );

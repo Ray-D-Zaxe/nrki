@@ -1298,5 +1298,217 @@
         );
       },
     },
+
+    /* ----------------------------------------------------------------------
+       13. Notifications & Floating Toast Stack (HTML + CSS + JS)
+       ---------------------------------------------------------------------- */
+    {
+      specimenId: "complex-notifications-toasts",
+      specimenTitle: "13. Notifications & Floating Toast Stack",
+      categoryLabel: "Notifications & Toasts",
+      usageRationale:
+        "Pairs structured alert notifications across 4 semantic levels (Info, Success, Warning, Danger) with a triggerable toast stack featuring dismiss and countdown bar.",
+      previewHtml: `<div class="nrki-stack-md">
+  <div class="nrki-stack-sm">
+    <div class="nrki-notification nrki-notification-info">
+      <span class="nrki-notification-icon" aria-hidden="true">ℹ</span>
+      <div class="nrki-notification-body">
+        <p class="nrki-notification-title">Edition Synchronized</p>
+        <p class="nrki-notification-message">All 4 themes and Light/Dark modes resolve cleanly via native CSS layers.</p>
+      </div>
+      <div class="nrki-notification-actions">
+        <button type="button" class="nrki-button nrki-button-small nrki-button-ghost" data-preview-notify-ack="Info">Acknowledge</button>
+      </div>
+    </div>
+
+    <div class="nrki-notification nrki-notification-success">
+      <span class="nrki-notification-icon" aria-hidden="true">✓</span>
+      <div class="nrki-notification-body">
+        <p class="nrki-notification-title">Stylesheet Published</p>
+        <p class="nrki-notification-message">nrki-broadsheet-library.css compiled with zero !important overrides.</p>
+      </div>
+    </div>
+
+    <div class="nrki-notification nrki-notification-warning">
+      <span class="nrki-notification-icon" aria-hidden="true">!</span>
+      <div class="nrki-notification-body">
+        <p class="nrki-notification-title">Staging Preview Active</p>
+        <p class="nrki-notification-message">Verify token contrast across Light and Dark before merging to production.</p>
+      </div>
+    </div>
+
+    <div class="nrki-notification nrki-notification-danger">
+      <span class="nrki-notification-icon" aria-hidden="true">✕</span>
+      <div class="nrki-notification-body">
+        <p class="nrki-notification-title">Constraint Guard Triggered</p>
+        <p class="nrki-notification-message">Avoid !important declarations or vague variable names across catalog scripts.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nrki-button-group" role="group" aria-label="Trigger sample toast notifications">
+    <button type="button" class="nrki-button nrki-button-primary nrki-button-small" data-preview-spawn-toast="info">Trigger Info Toast</button>
+    <button type="button" class="nrki-button nrki-button-secondary nrki-button-small" data-preview-spawn-toast="success">Trigger Success</button>
+    <button type="button" class="nrki-button nrki-button-secondary nrki-button-small" data-preview-spawn-toast="warning">Trigger Warning</button>
+    <button type="button" class="nrki-button nrki-button-danger nrki-button-small" data-preview-spawn-toast="danger">Trigger Danger</button>
+  </div>
+
+  <div class="nrki-toast-stack nrki-toast-stack-inline" aria-live="polite" data-preview-toast-stack>
+    <article class="nrki-toast nrki-toast-success">
+      <div class="nrki-toast-header">
+        <strong class="nrki-toast-title">Ready · Broadsheet Library</strong>
+        <button type="button" class="nrki-toast-dismiss" aria-label="Dismiss toast" data-preview-toast-close>×</button>
+      </div>
+      <p class="nrki-toast-message">Click any button above to queue additional semantic toast notices.</p>
+      <div class="nrki-toast-progress" aria-hidden="true"></div>
+    </article>
+  </div>
+</div>`,
+      htmlSnippet: `<div class="nrki-notification nrki-notification-success">
+  <span class="nrki-notification-icon" aria-hidden="true">✓</span>
+  <div class="nrki-notification-body">
+    <p class="nrki-notification-title">Saved Successfully</p>
+    <p class="nrki-notification-message">Updated across both Light and Dark tokens.</p>
+  </div>
+</div>
+
+<div class="nrki-toast-stack" aria-live="polite" data-toast-stack>
+  <article class="nrki-toast nrki-toast-info">
+    <div class="nrki-toast-header">
+      <strong class="nrki-toast-title">Notice Title</strong>
+      <button type="button" class="nrki-toast-dismiss" aria-label="Dismiss toast">×</button>
+    </div>
+    <p class="nrki-toast-message">Short contextual feedback message.</p>
+    <div class="nrki-toast-progress" aria-hidden="true"></div>
+  </article>
+</div>`,
+      cssSnippet: `.nrki-notification {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.9rem 1rem;
+  border: var(--nrki-card-border);
+  border-left: 4px solid var(--nrki-border-strong);
+  border-radius: var(--nrki-radius-surface);
+  background-color: var(--nrki-surface-elevated);
+}
+
+.nrki-toast-stack {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 350;
+  width: min(24rem, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.65rem;
+}`,
+      jsSnippet: `function enqueueToastNotification(stackElement, variantKey, titleText, messageText) {
+  const toastCard = document.createElement("article");
+  toastCard.className = "nrki-toast nrki-toast-" + variantKey;
+  toastCard.innerHTML =
+    '<div class="nrki-toast-header"><strong class="nrki-toast-title"></strong><button type="button" class="nrki-toast-dismiss" aria-label="Dismiss toast">×</button></div><p class="nrki-toast-message"></p><div class="nrki-toast-progress" aria-hidden="true"></div>';
+  toastCard.querySelector(".nrki-toast-title").textContent = titleText;
+  toastCard.querySelector(".nrki-toast-message").textContent = messageText;
+  toastCard.querySelector(".nrki-toast-dismiss").addEventListener("click", () => toastCard.remove());
+  stackElement.prepend(toastCard);
+}`,
+      initializePreview(previewStageElement) {
+        const toastStackContainer = previewStageElement.querySelector(
+          "[data-preview-toast-stack]"
+        );
+        if (!toastStackContainer) return;
+
+        const toastCopyCatalog = {
+          info: {
+            titleText: "Edition Notice · Info",
+            bodyText: "Theme personality and ink mode remain cleanly decoupled.",
+          },
+          success: {
+            titleText: "Published · Success",
+            bodyText: "Production CSS layer verified without !important rules.",
+          },
+          warning: {
+            titleText: "Check Contrast · Warning",
+            bodyText: "Inspect buttons in Minimalistic Light and Dark editions.",
+          },
+          danger: {
+            titleText: "Guard Alert · Danger",
+            bodyText: "Action halted due to invalid constraint or configuration.",
+          },
+        };
+
+        function attachDismissHandler(toastArticle) {
+          const closeButton = toastArticle.querySelector(
+            "[data-preview-toast-close]"
+          );
+          if (closeButton) {
+            closeButton.addEventListener("click", () => {
+              toastArticle.remove();
+            });
+          }
+        }
+
+        toastStackContainer
+          .querySelectorAll(".nrki-toast")
+          .forEach(attachDismissHandler);
+
+        previewStageElement
+          .querySelectorAll("[data-preview-spawn-toast]")
+          .forEach((spawnButton) => {
+            spawnButton.addEventListener("click", () => {
+              const variantKey =
+                spawnButton.getAttribute("data-preview-spawn-toast") || "info";
+              const toastDetails =
+                toastCopyCatalog[variantKey] || toastCopyCatalog.info;
+
+              const toastArticle =
+                previewStageElement.ownerDocument.createElement("article");
+              toastArticle.className = `nrki-toast nrki-toast-${variantKey}`;
+
+              const toastHeader =
+                previewStageElement.ownerDocument.createElement("div");
+              toastHeader.className = "nrki-toast-header";
+
+              const toastHeading =
+                previewStageElement.ownerDocument.createElement("strong");
+              toastHeading.className = "nrki-toast-title";
+              toastHeading.textContent = toastDetails.titleText;
+
+              const dismissButton =
+                previewStageElement.ownerDocument.createElement("button");
+              dismissButton.type = "button";
+              dismissButton.className = "nrki-toast-dismiss";
+              dismissButton.setAttribute("aria-label", "Dismiss toast");
+              dismissButton.setAttribute("data-preview-toast-close", "");
+              dismissButton.textContent = "×";
+
+              toastHeader.appendChild(toastHeading);
+              toastHeader.appendChild(dismissButton);
+
+              const toastMessage =
+                previewStageElement.ownerDocument.createElement("p");
+              toastMessage.className = "nrki-toast-message";
+              toastMessage.textContent = toastDetails.bodyText;
+
+              const progressTrack =
+                previewStageElement.ownerDocument.createElement("div");
+              progressTrack.className = "nrki-toast-progress";
+              progressTrack.setAttribute("aria-hidden", "true");
+
+              toastArticle.appendChild(toastHeader);
+              toastArticle.appendChild(toastMessage);
+              toastArticle.appendChild(progressTrack);
+
+              attachDismissHandler(toastArticle);
+              toastStackContainer.prepend(toastArticle);
+
+              while (toastStackContainer.children.length > 3) {
+                toastStackContainer.lastElementChild.remove();
+              }
+            });
+          });
+      },
+    },
   ];
 })(window);

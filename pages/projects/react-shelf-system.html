@@ -1,46 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic" data-mode="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Declarative React Shelf & Gallery SPA — Project overview, architecture, and GitHub links.">
     <title>Declarative React &lt;Shelf /&gt; &amp; Gallery SPA — Projects — NRKI</title>
     <script>
-        (function () {
-            var saved = localStorage.getItem("nrki-theme");
-            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
-    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="../../assets/styles/nrki-broadsheet-library.css">
     <script defer src="../../assets/scripts/main.js"></script>
 </head>
 <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
 
-    <div class="page-shell">
-        <header class="site-header">
-            <div class="masthead-bar">
-                <p class="edition-line">Vol. I · Sec. 02 <span>—</span> Project Dossier 02</p>
-                <div class="masthead-meta">
-                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+    <div class="nrki-page-shell">
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · Sec. 02 <span>—</span> Project Dossier 02</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                         <span data-masthead-time>18:50</span>
                         <span data-masthead-tz>LOCAL</span>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
-                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                     </p>
-                    <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
-                        Ink: Paper ☀
-                    </button>
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <label class="nrki-theme-picker">
+                            <span class="nrki-sr-only">Select broadsheet theme</span>
+                            <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                                <option value="classic">Theme: Classic</option>
+                                <option value="ancient">Theme: Ancient</option>
+                                <option value="minimalistic">Theme: Minimalistic</option>
+                                <option value="uwu">Theme: UwU</option>
+                            </select>
+                        </label>
+                        <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+                            Ink: Paper ☀
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <a class="wordmark" href="../../index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Project architecture, source notes, and repository links.</p>
+            <a class="nrki-wordmark nrki-wordmark-compact" href="../../index.html" aria-label="NRKI home">NRKI</a>
+            <p class="nrki-masthead-tagline">Project architecture, source notes, and repository links.</p>
 
-            <nav class="site-nav" aria-label="Main navigation">
+            <nav class="nrki-site-nav" aria-label="Main navigation">
                 <a href="../../index.html">Home</a>
                 <a href="../magazines-index.html">Magazines</a>
                 <a href="../projects.html" aria-current="page">Projects</a>
@@ -50,40 +71,40 @@
             </nav>
         </header>
 
-        <main id="main" class="article-shell">
-            <a class="back-link" href="../projects.html">← Back to Projects Shelf</a>
+        <main id="main" class="nrki-article-shell">
+            <a class="nrki-back-link" href="../projects.html">← Back to Projects Shelf</a>
 
             <article style="margin-top: 1.5rem;">
-                <header class="article-header">
-                    <p class="eyebrow">Project 02 · Shipped Component System</p>
+                <header class="nrki-article-header">
+                    <p class="nrki-eyebrow">Project 02 · Shipped Component System</p>
                     <h1>Declarative React &lt;Shelf /&gt; &amp; Gallery SPA</h1>
 
-                    <ul class="tag-pills" aria-label="Project tags">
-                        <li class="tag-pill">#react-18</li>
-                        <li class="tag-pill">#spa</li>
-                        <li class="tag-pill">#import-maps</li>
-                        <li class="tag-pill">#ui-components</li>
+                    <ul class="nrki-tag-pills" aria-label="Project tags">
+                        <li class="nrki-tag-pill">#react-18</li>
+                        <li class="nrki-tag-pill">#spa</li>
+                        <li class="nrki-tag-pill">#import-maps</li>
+                        <li class="nrki-tag-pill">#ui-components</li>
                     </ul>
 
-                    <div class="project-links-bar">
-                        <a class="btn-editorial btn-editorial--primary" href="https://github.com/your-handle/nrki" target="_blank" rel="noopener noreferrer">
+                    <div class="nrki-project-links-bar">
+                        <a class="nrki-button nrki-button-primary" href="https://github.com/your-handle/nrki" target="_blank" rel="noopener noreferrer">
                             GitHub Source ↗
                         </a>
-                        <a class="btn-editorial" href="../magazines-index.html">
+                        <a class="nrki-button" href="../magazines-index.html">
                             Open Magazines Index ↗
                         </a>
-                        <a class="btn-editorial" href="../media.html">
+                        <a class="nrki-button" href="../media.html">
                             View Media Shelf ↗
                         </a>
                     </div>
                 </header>
 
-                <div class="article-body">
+                <div class="nrki-article-body">
                     <p>
                         Originally designed for the Media Ledger page, <strong><code>&lt;Shelf /&gt;</code></strong>
                         (<code>assets/scripts/components/Shelf.js</code>) was extracted into a reusable React 18
-                        component that now powers all four collection pages across NRKI: <strong>Gallery</strong>,
-                        <strong>Projects</strong>, <strong>Works</strong>, and <strong>Media</strong>.
+                        component that now powers collection shelves across NRKI:
+                        <strong>Projects</strong>, <strong>Works</strong>, and <strong>Media</strong> (plus the Gallery pinboard SPA pattern).
                     </p>
 
                     <h2>1. How <code>&lt;Shelf /&gt;</code> Works</h2>
@@ -96,8 +117,8 @@
 
                     <h2>2. The Gallery SPA Overlay</h2>
                     <p>
-                        On <code>pages/gallery.html</code>, <code>assets/scripts/gallery-spa.js</code> wraps the
-                        <code>&lt;Shelf /&gt;</code> component inside a stateful Single-Page Application. Each card
+                        In <code>assets/scripts/gallery-spa.js</code>, the
+                        <code>&lt;Shelf /&gt;</code> component is wrapped inside a stateful Single-Page Application. Each card
                         renders its visual study, a brief summary, and an external link to the primary motif. Clicking
                         the card opens an accessible modal overlay containing a short essay and a curated list of all
                         inspirations and motifs, synchronized with the URL hash (e.g. <code>#board-01</code>).
@@ -106,12 +127,11 @@
             </article>
         </main>
 
-        <footer class="site-footer">
-            <a class="footer-mark" href="../../index.html">NRKI</a>
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="../../index.html">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
             <a href="../projects.html">Back to Projects Shelf <span aria-hidden="true">→</span></a>
         </footer>
     </div>
 </body>
 </html>
-

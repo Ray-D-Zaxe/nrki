@@ -6,12 +6,12 @@ This document defines the **standalone NRKI Broadsheet CSS Library** (the primar
 
 ## 1. Core Vision & Scope
 
-- **Primary Focus:** Build a **standalone, extensible, zero-dependency Newspaper & Editorial CSS Library** (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`).
+- **Primary Focus:** Build a **standalone, extensible, zero-dependency Newspaper & Editorial CSS Library** (`nrki-broadsheet-library.css` v2.3.0).
 - **Use Cases:**
-  1. Powers **NRKI** (`nrki.in`) and all future NRKI pages/SPAs.
+  1. Powers **NRKI** (`nrki.in` on `dev` via `assets/styles/nrki-broadsheet-library.css`, replacing legacy `style.css`) and all future NRKI pages/SPAs.
   2. Works as a **drop-in standalone CSS library** for external websites, blogs, portfolios, and documentation sites—reusable anywhere with zero build step and **zero `!important`**.
 - **Newspaper Role of Magazine Issue 01:** Replaces `Gallery` with a barebones `Magazines` index at `pages/magazines-index.html`. Issue 01 looks and reads like an authentic multi-edition newspaper—featuring a classic **Broadsheet Spread** on desktop/tablet (`min-width: 768px`) and a vertical **Pocket Newspaper** edition on mobile (`max-width: 767px`).
-- **Safety:** For now, this CSS library lives independently inside `magazines/issue-01-newspaper-web-design/` on `dev` and does **not** overwrite `assets/styles/style.css`. `main` keeps `pages/magazines-index.html` Under Construction until ready to launch.
+- **Production Rollout (`dev`):** On `dev`, `nrki-broadsheet-library.css` has graduated from its Issue 01 prototype to become the primary site stylesheet (`assets/styles/nrki-broadsheet-library.css`) with the global 2-axis header controls (`[data-theme-select]` theme dropdown + `[data-theme-toggle]` Light/Dark toggle). `main` remains untouched with v1 and Under Construction placeholders until staging verification completes.
 
 ---
 
@@ -46,11 +46,14 @@ Instead of hardcoding 8 separate flat theme stylesheets, **NRKI Broadsheet** spl
 | **`minimalistic`** | Swiss Neo-Editorial: **barely any borders** (`0px` card borders, soft gallery shadow & tonal elevation, subtle hairline dividers). | **Space Grotesk** (`h1`/headings), **Inter / system-ui** (body/UI), **Newsreader** (italic quotes/notes), **IBM Plex Mono** (code). | Pure gallery alabaster (`#fafaf9`), stone panel (`#f1f1ef`), pure carbon ink (`#111213`). | Deep matte obsidian (`#0d0e10`), elevated graphite (`#15171a`), crisp chalk (`#f3f4f6`). |
 | **`uwu`** | Kawaii Pastel Zine: chunky `2px solid` / `2px dashed` pastel frames, offset candy shadows (`3px 3px 0`), rounded `12px–999px` pill geometry, corner sparkles `✦` & floral dividers. | **Fredoka** (display/headings/UI), **Nunito** (body), **Mali** (quotes/captions), **DM Mono** (code). | Sakura milk (`#fff4f9`), strawberry cream (`#fce4ef`), plum-berry ink (`#3f1d38`), sakura magenta (`#cf3581`). | Velvet midnight plum (`#1a101d`), berry dusk (`#25172b`), cotton-candy white (`#fdf2f8`), neon sakura (`#f472b6`). |
 
-### Cascade Layer Order (Zero `!important`)
+### Cascade Layer Order & Specificity Hygiene (Zero `!important`)
 ```css
 @layer nrki.tokens, nrki.reset, nrki.elements, nrki.components, nrki.utilities, nrki.print;
 ```
 *(In Magazine Issue 01, `magazine.shell` slots cleanly between `nrki.components` and `nrki.utilities` so utility states and print rules always win cleanly without `!important`.)*
+
+- **Zero-Specificity Theme Base Selectors (`:where()`):** Base theme overrides on shared UI classes (e.g., `:where([data-theme="minimalistic"]) .nrki-button`, `.nrki-theme-toggle`, `.nrki-theme-select`, `.nrki-badge`, `.nrki-callout`, `.nrki-filter-button`) use `:where(...)` so the selector stays at `(0, 1, 0)` specificity instead of `(0, 2, 0)`. Variant modifiers like `.nrki-button-primary`, `.nrki-button-small`, `.nrki-button-large`, and `.nrki-button-danger` always override base background and ink colors without hover or `!important`.
+- **Site Header Theme + Mode Controls:** Every NRKI site page exposes `<select class="nrki-theme-select" data-theme-select>` inside `.nrki-masthead-badgegroup` alongside `<button class="nrki-theme-toggle" data-theme-toggle>`, synchronized by `assets/scripts/main.js` (`nrki-broadsheet-theme` + `nrki-broadsheet-mode`) and restored pre-paint in `<head>`.
 
 ---
 
@@ -84,7 +87,7 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 12. **Progress Bars, Stat Metrics & Author Byline** (`.nrki-progress`, `.nrki-stat-strip`, `.nrki-author-byline`, `.nrki-avatar`)
 13. **Tooltips, Empty States & Skeletons** (`.nrki-tooltip`, `.nrki-empty-state`, `.nrki-skeleton-card`)
 
-### Page 04: Complex Components (`#components` — 12 Specimens)
+### Page 04: Complex Components (`#components` — 13 Specimens)
 1. **Newspaper Masthead Bar, Wordmark, Live Clock & Nav** *(includes `JS`)*
 2. **Editorial & Interactive Link Cards** (`.nrki-card`, `.nrki-card-link`, `.nrki-framed-panel`)
 3. **Pinboard Card & Media Ledger Card** (`.nrki-pin-card`, `.nrki-media-card`)
@@ -97,6 +100,7 @@ Issue 01 is structured as a **5-Page Newspaper Monograph**:
 10. **Print-Ready Resume Sheet & Site Footer** (cross-browser `@page` + `@media print`)
 11. **Archive Pagination & Editorial Timeline** (`.nrki-pagination`, `.nrki-timeline` *(includes `JS`)*)
 12. **Dropdown Menu & Dismissible Editorial Toast** (`.nrki-dropdown`, `.nrki-toast-banner` *(includes `JS`)*)
+13. **Notifications & Floating Toast Stack** (`.nrki-notification`, `-info`/`-success`/`-warning`/`-danger` + `.nrki-toast-stack`, `.nrki-toast`, interactive spawn/dismiss & countdown bar `@keyframes nrki-toast-countdown` *(includes `JS`)*)
 
 ### Page 05: Colophon — GitHub Stylesheet, Reusability & Credits (`#colophon`)
 - Direct GitHub links to `nrki-broadsheet-library.css`, `@layer` extension snippets, and full lineage/inspirations list.
@@ -136,6 +140,9 @@ Per [`GEMINI.md`](./GEMINI.md), every file, folder, variable, and class uses exp
 ```text
 NRKI AG/
 ├── GEMINI.md                                               # Always-on CSS, naming, rationale & spec-sync rules
+├── assets/
+│   ├── styles/nrki-broadsheet-library.css                  # Production broadsheet library on `dev` (identical v2.3.0 copy)
+│   └── scripts/main.js                                     # 2-axis theme dropdown + Light/Dark toggle + dateline + filters
 ├── pages/
 │   └── magazines-index.html                                # Barebones Magazines index (Under Construction on main)
 └── magazines/
@@ -147,12 +154,12 @@ NRKI AG/
         └── specimen-catalogs/
             ├── broadsheet-layouts-catalog.js               # Page 02: 6 Reusable Broadsheet Layouts
             ├── broadsheet-simple-elements-catalog.js       # Page 03: 13 Simple Element specimens
-            └── broadsheet-complex-components-catalog.js    # Page 04: 12 Complex Component specimens
+            └── broadsheet-complex-components-catalog.js    # Page 04: 13 Complex Component specimens
 ```
 
 ---
 
 ## 7. Solo-Dev Workflow
 
-1. **Build on `dev` only** (`main` keeps `nrki.in` live with resumes, general front page, and Under Construction placeholders—including `pages/magazines-index.html`—while Issue 01 & the CSS library evolve on `dev`).
-2. Refine `nrki-broadsheet-library.css` visually across all 8 Theme × Mode editions inside Issue 01 on `dev.nrki.pages.dev` before migrating main NRKI pages or publishing standalone.
+1. **Build & stage on `dev` first:** `main` keeps `nrki.in` live with its stable v1 snapshot and Under Construction placeholders until staging QA passes on `dev.nrki.pages.dev`.
+2. **Keep Library & Site Identical:** Both `magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css` and `assets/styles/nrki-broadsheet-library.css` stay byte-identical (v2.3.0) so improvements documented in Issue 01 immediately power every site page on `dev`.

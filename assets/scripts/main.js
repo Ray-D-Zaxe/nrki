@@ -2,239 +2,343 @@
  * ============================================================================
  * NRKI — MAIN CLIENT SCRIPT (`assets/scripts/main.js`)
  * ----------------------------------------------------------------------------
- * Plain, zero-dependency JavaScript powering global masthead and page behaviors:
+ * Zero-dependency browser runtime for all NRKI broadsheet pages:
  *
- * 1. initMastheadDateline() — Newspaper dateline in the header showing:
- *                             - Full Date (e.g. "Thursday, Nov 5, 2026")
- *                             - Time (updates every 5 minutes)
- *                             - Time Zone & UTC offset (e.g. "IST · UTC+05:30")
- *                             - Dynamic Edition (Morning / Afternoon / Evening / Night)
- * 2. initThemeToggle()      — Light ("Paper") / Dark ("Night") theme switching
- *                             with localStorage persistence.
- * 3. initFilterGroups()     — Declarative filtering for static HTML lists.
- * 4. initPrintButtons()     — Triggers browser Print-to-PDF on web resume pages.
+ * 1. initializeMastheadDateline()    — Live date, 5-minute clock, time zone,
+ *                                      and edition stamp inside `.nrki-site-header`.
+ * 2. initializeBroadsheetThemeAndMode() — 2-axis theme (`[data-theme]`) +
+ *                                      mode (`[data-mode]`) persistence and
+ *                                      synchronized header controls.
+ * 3. initializeFilterGroups()        — Declarative category filtering on static
+ *                                      HTML shelves using `.nrki-hidden`.
+ * 4. initializePrintButtons()        — Browser Print-to-PDF hooks on resumes.
  * ============================================================================
  */
 
-const STORAGE_KEY_THEME = "nrki-theme";
-const FIVE_MINUTES_MS = 5 * 60 * 1000;
+const STORAGE_KEY_BROADSHEET_THEME = "nrki-broadsheet-theme";
+const STORAGE_KEY_BROADSHEET_MODE = "nrki-broadsheet-mode";
+const LEGACY_STORAGE_KEY_MODE = "nrki-theme";
+const VALID_BROADSHEET_THEMES = ["classic", "ancient", "minimalistic", "uwu"];
+const VALID_COLOR_MODES = ["light", "dark"];
+const THEME_TRANSITION_DURATION_MS = 220;
+const DATELINE_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+
+/* ============================================================================
+   1. NEWSPAPER MASTHEAD DATELINE & 5-MINUTE CLOCK
+   ============================================================================ */
 
 /**
- * 1. NEWSPAPER MASTHEAD DATELINE & 5-MINUTE CLOCK
  * Populates `[data-masthead-date]`, `[data-masthead-time]`, `[data-masthead-tz]`,
- * and `[data-masthead-edition]` inside the site header, and refreshes every
- * 5 minutes (300,000 ms).
+ * and `[data-masthead-edition]` inside the site header, refreshing every 5 min.
  */
-function initMastheadDateline() {
+function initializeMastheadDateline() {
   function formatNewspaperDateline() {
-    const now = new Date();
+    const currentTimestamp = new Date();
 
-    // 1. Format full newspaper date: e.g. "Thursday, Nov 5, 2026"
-    const dateStr = now.toLocaleDateString("en-US", {
+    const formattedDateLabel = currentTimestamp.toLocaleDateString("en-US", {
       weekday: "long",
       month: "short",
       day: "numeric",
       year: "numeric",
     });
 
-    // 2. Format hours & minutes (24-hour or 12-hour editorial style)
-    const timeStr = now.toLocaleTimeString("en-US", {
+    const formattedTimeLabel = currentTimestamp.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
     });
 
-    // 3. Extract short Time Zone name (e.g. "IST", "EST", "PST") + UTC offset
-    const tzShort =
+    const shortTimeZoneName =
       Intl.DateTimeFormat("en-US", { timeZoneName: "short" })
-        .formatToParts(now)
-        .find((part) => part.type === "timeZoneName")?.value || "LOCAL";
+        .formatToParts(currentTimestamp)
+        .find((datePart) => datePart.type === "timeZoneName")?.value || "LOCAL";
 
-    const offsetMinutes = -now.getTimezoneOffset();
-    const sign = offsetMinutes >= 0 ? "+" : "-";
-    const absMins = Math.abs(offsetMinutes);
-    const pad = (n) => String(n).padStart(2, "0");
-    const utcOffset = `UTC${sign}${pad(Math.floor(absMins / 60))}:${pad(
-      absMins % 60
-    )}`;
+    const utcOffsetMinutes = -currentTimestamp.getTimezoneOffset();
+    const offsetSign = utcOffsetMinutes >= 0 ? "+" : "-";
+    const absoluteMinutes = Math.abs(utcOffsetMinutes);
+    const padTwoDigits = (numericValue) => String(numericValue).padStart(2, "0");
+    const utcOffsetString = `UTC${offsetSign}${padTwoDigits(
+      Math.floor(absoluteMinutes / 60)
+    )}:${padTwoDigits(absoluteMinutes % 60)}`;
 
-    // 4. Determine newspaper edition from local hour
-    const hour = now.getHours();
+    const currentHour = currentTimestamp.getHours();
     let editionLabel = "Late Night Dispatch";
-    if (hour >= 5 && hour < 12) {
+    if (currentHour >= 5 && currentHour < 12) {
       editionLabel = "Morning Edition";
-    } else if (hour >= 12 && hour < 17) {
+    } else if (currentHour >= 12 && currentHour < 17) {
       editionLabel = "Afternoon Edition";
-    } else if (hour >= 17 && hour < 22) {
+    } else if (currentHour >= 17 && currentHour < 22) {
       editionLabel = "Evening Edition";
     }
 
-    // Update DOM elements if present
-    document.querySelectorAll("[data-masthead-date]").forEach((el) => {
-      el.textContent = dateStr;
-      el.setAttribute("datetime", now.toISOString().split("T")[0]);
+    document.querySelectorAll("[data-masthead-date]").forEach((dateElement) => {
+      dateElement.textContent = formattedDateLabel;
+      dateElement.setAttribute(
+        "datetime",
+        currentTimestamp.toISOString().split("T")[0]
+      );
     });
 
-    document.querySelectorAll("[data-masthead-time]").forEach((el) => {
-      el.textContent = timeStr;
+    document.querySelectorAll("[data-masthead-time]").forEach((timeElement) => {
+      timeElement.textContent = formattedTimeLabel;
     });
 
-    document.querySelectorAll("[data-masthead-tz]").forEach((el) => {
-      el.textContent = `${tzShort} (${utcOffset})`;
+    document.querySelectorAll("[data-masthead-tz]").forEach((zoneElement) => {
+      zoneElement.textContent = `${shortTimeZoneName} (${utcOffsetString})`;
     });
 
-    document.querySelectorAll("[data-masthead-edition]").forEach((el) => {
-      el.textContent = editionLabel;
-    });
+    document
+      .querySelectorAll("[data-masthead-edition]")
+      .forEach((editionElement) => {
+        editionElement.textContent = editionLabel;
+      });
   }
 
-  // Run immediately on load, then update every 5 minutes
   formatNewspaperDateline();
-  setInterval(formatNewspaperDateline, FIVE_MINUTES_MS);
+  setInterval(formatNewspaperDateline, DATELINE_REFRESH_INTERVAL_MS);
+}
+
+/* ============================================================================
+   2. 2-AXIS BROADSHEET THEME & COLOR MODE SYSTEM
+   ----------------------------------------------------------------------------
+   Maintains orthogonal `[data-theme]` ("classic" | "ancient" | "minimalistic"
+   | "uwu") and `[data-mode]` ("light" | "dark") attributes on `<html>`.
+   Using two independent axes avoids multiplying token blocks by 8 and lets
+   the theme dropdown and the Light/Dark ink button operate independently.
+   ============================================================================ */
+
+/**
+ * Temporarily applies `.nrki-theme-animating` to `<html>` so ink and surface
+ * transitions animate smoothly on user-initiated theme or mode switches.
+ */
+function triggerThemeTransitionAnimation() {
+  const documentRoot = document.documentElement;
+  documentRoot.classList.add("nrki-theme-animating");
+  window.setTimeout(() => {
+    documentRoot.classList.remove("nrki-theme-animating");
+  }, THEME_TRANSITION_DURATION_MS);
 }
 
 /**
- * 2. THEME SYSTEM
- * Reads the user's saved theme ("light" | "dark") from localStorage or falls
- * back to OS preference, applies `data-theme` on `<html>`, and binds clicks
- * on any `[data-theme-toggle]` button.
+ * Applies the selected theme personality to `<html>`, syncs all theme `<select>`
+ * controls on the page, and persists the preference in localStorage.
+ *
+ * @param {string} requestedTheme
  */
-function initThemeToggle() {
-  const root = document.documentElement;
-  const savedTheme = localStorage.getItem(STORAGE_KEY_THEME);
-  const prefersDark =
+function applyBroadsheetTheme(requestedTheme) {
+  const resolvedTheme = VALID_BROADSHEET_THEMES.includes(requestedTheme)
+    ? requestedTheme
+    : "classic";
+
+  document.documentElement.setAttribute("data-theme", resolvedTheme);
+  localStorage.setItem(STORAGE_KEY_BROADSHEET_THEME, resolvedTheme);
+
+  document
+    .querySelectorAll("[data-theme-select]")
+    .forEach((themeSelectElement) => {
+      if (themeSelectElement.value !== resolvedTheme) {
+        themeSelectElement.value = resolvedTheme;
+      }
+    });
+}
+
+/**
+ * Applies the selected color polarity ("light" | "dark") to `<html>`, updates
+ * all Light/Dark ink toggle buttons, and stores the choice in localStorage.
+ *
+ * @param {string} requestedMode
+ */
+function applyColorMode(requestedMode) {
+  const resolvedMode = VALID_COLOR_MODES.includes(requestedMode)
+    ? requestedMode
+    : "light";
+  const isDarkMode = resolvedMode === "dark";
+
+  document.documentElement.setAttribute("data-mode", resolvedMode);
+  localStorage.setItem(STORAGE_KEY_BROADSHEET_MODE, resolvedMode);
+  // Keep legacy key synchronized for backwards compatibility across cached pages.
+  localStorage.setItem(LEGACY_STORAGE_KEY_MODE, resolvedMode);
+
+  document
+    .querySelectorAll("[data-theme-toggle]")
+    .forEach((modeToggleButton) => {
+      modeToggleButton.setAttribute("aria-pressed", String(isDarkMode));
+      modeToggleButton.textContent = isDarkMode
+        ? "Ink: Night ☾"
+        : "Ink: Paper ☀";
+    });
+}
+
+/**
+ * Restores saved theme + mode preferences and binds the masthead dropdown
+ * (`[data-theme-select]`) and Light/Dark ink button (`[data-theme-toggle]`).
+ */
+function initializeBroadsheetThemeAndMode() {
+  const storedTheme = localStorage.getItem(STORAGE_KEY_BROADSHEET_THEME);
+  const storedMode =
+    localStorage.getItem(STORAGE_KEY_BROADSHEET_MODE) ||
+    localStorage.getItem(LEGACY_STORAGE_KEY_MODE);
+
+  const prefersDarkScheme =
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
-  applyTheme(initialTheme);
+  const initialTheme = VALID_BROADSHEET_THEMES.includes(storedTheme)
+    ? storedTheme
+    : "classic";
+  const initialMode = VALID_COLOR_MODES.includes(storedMode)
+    ? storedMode
+    : prefersDarkScheme
+      ? "dark"
+      : "light";
 
-  const toggleButtons = document.querySelectorAll("[data-theme-toggle]");
-  toggleButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const current =
-        root.getAttribute("data-theme") === "dark" ? "dark" : "light";
-      const next = current === "dark" ? "light" : "dark";
-      root.classList.add("theme-transition");
-      applyTheme(next);
-      localStorage.setItem(STORAGE_KEY_THEME, next);
-      setTimeout(() => root.classList.remove("theme-transition"), 220);
+  applyBroadsheetTheme(initialTheme);
+  applyColorMode(initialMode);
+
+  document
+    .querySelectorAll("[data-theme-select]")
+    .forEach((themeSelectElement) => {
+      themeSelectElement.addEventListener("change", (changeEvent) => {
+        triggerThemeTransitionAnimation();
+        applyBroadsheetTheme(changeEvent.currentTarget.value);
+      });
     });
-  });
+
+  document
+    .querySelectorAll("[data-theme-toggle]")
+    .forEach((modeToggleButton) => {
+      modeToggleButton.addEventListener("click", () => {
+        const currentMode =
+          document.documentElement.getAttribute("data-mode") === "dark"
+            ? "dark"
+            : "light";
+        const nextMode = currentMode === "dark" ? "light" : "dark";
+        triggerThemeTransitionAnimation();
+        applyColorMode(nextMode);
+      });
+    });
 }
 
-/**
- * Applies the given theme ("light" | "dark") to `<html>` and updates all
- * theme toggle buttons' text and `aria-pressed` state.
- *
- * @param {"light" | "dark"} theme
- */
-function applyTheme(theme) {
-  const root = document.documentElement;
-  root.setAttribute("data-theme", theme);
-
-  const toggleButtons = document.querySelectorAll("[data-theme-toggle]");
-  toggleButtons.forEach((btn) => {
-    const isDark = theme === "dark";
-    btn.setAttribute("aria-pressed", String(isDark));
-    btn.textContent = isDark ? "Ink: Night ☾" : "Ink: Paper ☀";
-  });
-}
+/* ============================================================================
+   3. DECLARATIVE CATEGORY FILTERING (Static HTML Shelves)
+   ============================================================================ */
 
 /**
- * 3. DECLARATIVE CATEGORY FILTERING (For static HTML lists)
+ * Wires `[data-filter-scope]` groups so clicking filter pills hides
+ * non-matching rows using `.nrki-hidden` without inline display styles.
  */
-function initFilterGroups() {
-  const scopes = document.querySelectorAll("[data-filter-scope]");
+function initializeFilterGroups() {
+  const filterScopes = document.querySelectorAll("[data-filter-scope]");
 
-  scopes.forEach((scope) => {
-    const activeFilters = {};
-    const buttons = scope.querySelectorAll(
+  filterScopes.forEach((filterScope) => {
+    const activeFiltersByKey = {};
+    const filterButtons = filterScope.querySelectorAll(
       "[data-filter-key][data-filter-value]"
     );
-    const items = scope.querySelectorAll("[data-filter-item]");
-    const emptyState = scope.querySelector("[data-filter-empty]");
+    const filterableEntries =
+      filterScope.querySelectorAll("[data-filter-item]");
+    const emptyStateElement = filterScope.querySelector("[data-filter-empty]");
 
-    buttons.forEach((btn) => {
-      const key = btn.getAttribute("data-filter-key");
-      const val = btn.getAttribute("data-filter-value");
-      if (btn.classList.contains("is-active") || !(key in activeFilters)) {
-        activeFilters[key] = btn.classList.contains("is-active") ? val : "all";
+    filterButtons.forEach((filterButton) => {
+      const filterKey = filterButton.getAttribute("data-filter-key");
+      const filterValue = filterButton.getAttribute("data-filter-value");
+      if (
+        filterButton.classList.contains("is-active") ||
+        !(filterKey in activeFiltersByKey)
+      ) {
+        activeFiltersByKey[filterKey] = filterButton.classList.contains(
+          "is-active"
+        )
+          ? filterValue
+          : "all";
       }
     });
 
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const key = btn.getAttribute("data-filter-key");
-        const val = btn.getAttribute("data-filter-value");
-        activeFilters[key] = val;
+    filterButtons.forEach((filterButton) => {
+      filterButton.addEventListener("click", () => {
+        const selectedKey = filterButton.getAttribute("data-filter-key");
+        const selectedValue = filterButton.getAttribute("data-filter-value");
+        activeFiltersByKey[selectedKey] = selectedValue;
 
-        buttons.forEach((peer) => {
-          if (peer.getAttribute("data-filter-key") === key) {
-            const isMatch = peer.getAttribute("data-filter-value") === val;
-            peer.classList.toggle("is-active", isMatch);
-            peer.setAttribute("aria-pressed", String(isMatch));
+        filterButtons.forEach((peerButton) => {
+          if (peerButton.getAttribute("data-filter-key") === selectedKey) {
+            const isMatchingButton =
+              peerButton.getAttribute("data-filter-value") === selectedValue;
+            peerButton.classList.toggle("is-active", isMatchingButton);
+            peerButton.setAttribute("aria-pressed", String(isMatchingButton));
           }
         });
 
-        let visibleCount = 0;
-        items.forEach((item) => {
-          const matchesAll = Object.entries(activeFilters).every(
-            ([filterKey, filterVal]) => {
-              if (!filterVal || filterVal === "all") return true;
-              const itemVal = item.getAttribute(`data-${filterKey}`) || "";
-              return itemVal.split(" ").includes(filterVal);
-            }
-          );
+        let visibleEntryCount = 0;
+        filterableEntries.forEach((entryElement) => {
+          const matchesAllActiveFilters = Object.entries(
+            activeFiltersByKey
+          ).every(([filterKey, requiredValue]) => {
+            if (!requiredValue || requiredValue === "all") return true;
+            const entryTokens =
+              entryElement.getAttribute(`data-${filterKey}`) || "";
+            return entryTokens.split(" ").includes(requiredValue);
+          });
 
-          item.classList.toggle("is-hidden", !matchesAll);
-          if (matchesAll) visibleCount += 1;
+          entryElement.classList.toggle("nrki-hidden", !matchesAllActiveFilters);
+          if (matchesAllActiveFilters) {
+            visibleEntryCount += 1;
+          }
         });
 
-        if (emptyState) {
-          emptyState.classList.toggle("is-hidden", visibleCount > 0);
+        if (emptyStateElement) {
+          emptyStateElement.classList.toggle(
+            "nrki-hidden",
+            visibleEntryCount > 0
+          );
         }
       });
     });
   });
 }
 
-/**
- * 4. RESUME PRINT / SAVE AS PDF
- */
-function initPrintButtons() {
-  const printTitleEl = document.querySelector("[data-print-title]");
-  const printTitle = printTitleEl
-    ? printTitleEl.getAttribute("data-print-title")
-    : null;
-  const originalTitle = document.title;
+/* ============================================================================
+   4. RESUME PRINT / SAVE AS PDF
+   ============================================================================ */
 
-  if (printTitle) {
+/**
+ * Sets clean PDF filenames via `[data-print-title]` and binds print triggers.
+ */
+function initializePrintButtons() {
+  const printTitleElement = document.querySelector("[data-print-title]");
+  const desiredPrintTitle = printTitleElement
+    ? printTitleElement.getAttribute("data-print-title")
+    : null;
+  const originalDocumentTitle = document.title;
+
+  if (desiredPrintTitle) {
     window.addEventListener("beforeprint", () => {
-      document.title = printTitle;
+      document.title = desiredPrintTitle;
     });
     window.addEventListener("afterprint", () => {
-      document.title = originalTitle;
+      document.title = originalDocumentTitle;
     });
   }
 
-  const printButtons = document.querySelectorAll(
-    '[data-action="print-resume"]'
-  );
-  printButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (printTitle) {
-        document.title = printTitle;
-      }
-      window.print();
+  document
+    .querySelectorAll('[data-action="print-resume"]')
+    .forEach((printButton) => {
+      printButton.addEventListener("click", () => {
+        if (desiredPrintTitle) {
+          document.title = desiredPrintTitle;
+        }
+        window.print();
+      });
     });
-  });
 }
 
-// Initialize all modules once the DOM is parsed
+/* ============================================================================
+   5. INITIALIZATION ENTRYPOINT
+   ============================================================================ */
+
 document.addEventListener("DOMContentLoaded", () => {
-  initMastheadDateline();
-  initThemeToggle();
-  initFilterGroups();
-  initPrintButtons();
+  initializeMastheadDateline();
+  initializeBroadsheetThemeAndMode();
+  initializeFilterGroups();
+  initializePrintButtons();
 });

@@ -398,7 +398,7 @@
       projectNumber: "Project 01",
       status: "active",
       statusLabel: "Active",
-      badgeVariant: "badge--accent",
+      badgeVariant: "nrki-badge-accent",
       title: "NRKI Broadsheet & Publishing Engine",
       summary:
         "The source architecture behind this personal site: a botanical newsprint CSS token system, printable web resumes, and a flat-file JSON + TXT content workflow running with zero build step.",
@@ -409,7 +409,7 @@ NRKI is a personal publishing system designed around a simple premise: a persona
 ## 1. Design Goals & Philosophy
 - Zero-bloat foundation: Semantic HTML5 landmarks, fluid CSS Grid typography, and plain JavaScript + local React that run without requiring a complex bundler.
 - Flat-file JSON + TXT Content: Every collection tab (Gallery, Projects, Works, Media) reads its metadata from a single index.json file and its body copy from plain .txt files.
-- Botanical Newsprint Palette: Custom CSS variables in assets/styles/style.css model warm dried-sage newsprint in light mode and reversed pine-charcoal ink in dark mode, with an inline head script that eliminates any white flicker between page loads.
+- Broadsheet Multi-Theme Palette: Custom CSS variables in assets/styles/nrki-broadsheet-library.css model four editorial personalities across light paper and reversed dark ink modes, with an inline head script that eliminates white flicker between page loads.
 - Web + Print/PDF Resumes: Dedicated resume pages include a custom @media print stylesheet so clicking Print / Save as PDF outputs a crisp A4/Letter CV.
 
 ## 2. How New Content Is Added
@@ -427,7 +427,7 @@ To publish a new project, work, gallery pin, or media review, you never have to 
       projectNumber: "Project 02",
       status: "shipped",
       statusLabel: "Shipped",
-      badgeVariant: "badge--gold",
+      badgeVariant: "nrki-badge-highlight",
       title: "Declarative React <Shelf /> & Pinboard SPA",
       summary:
         "A reusable collection & multi-facet filter component in React that powers the Gallery Pinboard SPA, Projects index, Works archive, and Media Ledger from plain .json and .txt files.",
@@ -597,7 +597,7 @@ For this line I used shift.
       shelf: "review",
       medium: "screen",
       badgeLabel: "Review · Film",
-      badgeVariant: "badge--accent",
+      badgeVariant: "nrki-badge-accent",
       title: "Stalker (1979)",
       creator: "Dir. Andrei Tarkovsky",
       ratingOrStatus: "9.5 / 10",
@@ -613,7 +613,7 @@ For this line I used shift.
       shelf: "review",
       medium: "music",
       badgeLabel: "Review · Album",
-      badgeVariant: "badge--accent",
+      badgeVariant: "nrki-badge-accent",
       title: "Untrue (2007)",
       creator: "Burial",
       ratingOrStatus: "10 / 10",
@@ -629,7 +629,7 @@ For this line I used shift.
       shelf: "review",
       medium: "game",
       badgeLabel: "Review · Game",
-      badgeVariant: "badge--accent",
+      badgeVariant: "nrki-badge-accent",
       title: "Disco Elysium",
       creator: "ZA/UM",
       ratingOrStatus: "9.8 / 10",
@@ -645,7 +645,7 @@ For this line I used shift.
       shelf: "watchlist",
       medium: "screen",
       badgeLabel: "Watchlist · Series",
-      badgeVariant: "badge--gold",
+      badgeVariant: "nrki-badge-highlight",
       title: "Serial Experiments Lain",
       creator: "Dir. Ryutaro Nakamura (1998)",
       ratingOrStatus: "Up Next",
@@ -661,7 +661,7 @@ For this line I used shift.
       shelf: "watchlist",
       medium: "book",
       badgeLabel: "Reading List · Book",
-      badgeVariant: "badge--gold",
+      badgeVariant: "nrki-badge-highlight",
       title: "The Elements of Typographic Style",
       creator: "Robert Bringhurst",
       ratingOrStatus: "Reading Now",
@@ -677,7 +677,7 @@ For this line I used shift.
       shelf: "watchlist",
       medium: "screen",
       badgeLabel: "Watchlist · Film",
-      badgeVariant: "badge--gold",
+      badgeVariant: "nrki-badge-highlight",
       title: "Perfect Days (2023)",
       creator: "Dir. Wim Wenders",
       ratingOrStatus: "Queued",

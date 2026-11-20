@@ -3,7 +3,7 @@
  * NRKI BROADSHEET — STANDALONE 4-THEME × 2-MODE EDITORIAL CSS LIBRARY
  * (`magazines/issue-01-newspaper-web-design/nrki-broadsheet-library.css`)
  * ----------------------------------------------------------------------------
- * Version: 2.2.0
+ * Version: 2.3.0
  *
  * Orthogonal 2-Axis Architecture:
  *   1. `[data-theme="classic" | "ancient" | "minimalistic" | "uwu"]`
@@ -1135,20 +1135,24 @@
     transition: background-color var(--nrki-transition-fast), color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), transform var(--nrki-transition-fast);
   }
 
-  [data-theme="minimalistic"] .nrki-button,
-  [data-theme="minimalistic"] .nrki-theme-toggle {
+  /* Why `:where([data-theme=...])` wraps base button overrides:
+     Using zero-specificity `:where()` keeps base rules at (0, 1, 0) so
+     variant classes like `.nrki-button-primary` always win in cascade order
+     rather than losing to a (0, 2, 0) theme-scoped background color. */
+  :where([data-theme="minimalistic"]) .nrki-button,
+  :where([data-theme="minimalistic"]) .nrki-theme-toggle {
     border-color: var(--nrki-border-faint);
     background-color: var(--nrki-surface-panel);
   }
 
-  [data-theme="uwu"] .nrki-button,
-  [data-theme="uwu"] .nrki-theme-toggle {
+  :where([data-theme="uwu"]) .nrki-button,
+  :where([data-theme="uwu"]) .nrki-theme-toggle {
     border-width: 2px;
     border-color: var(--nrki-border-strong);
   }
 
-  [data-theme="ancient"] .nrki-button,
-  [data-theme="ancient"] .nrki-theme-toggle {
+  :where([data-theme="ancient"]) .nrki-button,
+  :where([data-theme="ancient"]) .nrki-theme-toggle {
     border-style: double;
     border-width: 3px;
   }
@@ -1302,7 +1306,7 @@
     line-height: 1.3;
   }
 
-  [data-theme="minimalistic"] .nrki-badge {
+  :where([data-theme="minimalistic"]) .nrki-badge {
     border-color: transparent;
   }
 
@@ -1609,16 +1613,16 @@
     transition: border-color var(--nrki-transition-fast), background-color var(--nrki-transition-fast);
   }
 
-  [data-theme="minimalistic"] .nrki-input,
-  [data-theme="minimalistic"] .nrki-textarea,
-  [data-theme="minimalistic"] .nrki-select {
+  :where([data-theme="minimalistic"]) .nrki-input,
+  :where([data-theme="minimalistic"]) .nrki-textarea,
+  :where([data-theme="minimalistic"]) .nrki-select {
     border-color: transparent;
     background-color: var(--nrki-surface-panel);
   }
 
-  [data-theme="uwu"] .nrki-input,
-  [data-theme="uwu"] .nrki-textarea,
-  [data-theme="uwu"] .nrki-select {
+  :where([data-theme="uwu"]) .nrki-input,
+  :where([data-theme="uwu"]) .nrki-textarea,
+  :where([data-theme="uwu"]) .nrki-select {
     border-width: 2px;
   }
 
@@ -1784,7 +1788,7 @@
     margin-block: 1rem;
   }
 
-  [data-theme="uwu"] .nrki-callout {
+  :where([data-theme="uwu"]) .nrki-callout {
     border-style: dashed;
     border-width: 2px;
   }
@@ -2263,6 +2267,62 @@
     text-transform: uppercase;
   }
 
+  .nrki-dateline-sep {
+    color: var(--nrki-ink-faint);
+    user-select: none;
+  }
+
+  .nrki-masthead-badgegroup {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-theme-picker {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .nrki-theme-select {
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color var(--nrki-transition-fast), border-color var(--nrki-transition-fast), color var(--nrki-transition-fast);
+  }
+
+  :where([data-theme="ancient"]) .nrki-theme-select {
+    border-style: double;
+    border-width: 3px;
+  }
+
+  :where([data-theme="minimalistic"]) .nrki-theme-select {
+    border-color: var(--nrki-border-faint);
+    background-color: var(--nrki-surface-panel);
+  }
+
+  :where([data-theme="uwu"]) .nrki-theme-select {
+    border-width: 2px;
+    border-color: var(--nrki-border-strong);
+  }
+
+  .nrki-theme-select:hover {
+    border-color: var(--nrki-accent-primary);
+  }
+
+  .nrki-theme-select option {
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-heading);
+  }
+
   .nrki-dateline-edition {
     padding: 0.12rem 0.45rem;
     border: 1px solid var(--nrki-border-faint);
@@ -2281,22 +2341,28 @@
     margin-block: 0.35rem 0.1rem;
     color: var(--nrki-ink-heading);
     font-family: var(--nrki-font-display);
-    font-size: clamp(2.8rem, 8vw, 5.2rem);
+    font-size: clamp(3.4rem, 10vw, 6.8rem);
     font-weight: 700;
     letter-spacing: -0.05em;
     line-height: 1.02;
     text-decoration: none;
   }
 
+  [data-theme="ancient"] .nrki-wordmark {
+    letter-spacing: 0.02em;
+    font-weight: 700;
+  }
+
   .nrki-wordmark-compact {
-    font-size: clamp(1.85rem, 4.5vw, 2.85rem);
+    font-size: clamp(1.8rem, 4.8vw, 3rem);
+    font-weight: 600;
     letter-spacing: -0.04em;
   }
 
   .nrki-masthead-tagline {
     margin-bottom: 0.9rem;
     color: var(--nrki-ink-muted);
-    font-family: var(--nrki-font-body);
+    font-family: var(--nrki-font-quote);
     font-style: italic;
     font-size: 0.95rem;
   }
@@ -2509,12 +2575,90 @@
     gap: 0.35rem;
   }
 
+  .nrki-lead-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  .nrki-section-intro {
+    max-width: var(--reading-max-width);
+    margin-bottom: 1.5rem;
+    color: var(--nrki-ink-heading);
+    font-size: clamp(1.08rem, 1.9vw, 1.35rem);
+    line-height: 1.44;
+  }
+
+  .nrki-section-content {
+    max-width: 100%;
+  }
+
+  .nrki-about-intro {
+    padding-block: clamp(1.75rem, 4.5vw, 3.25rem);
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-about-intro h1 {
+    max-width: 17ch;
+    margin-bottom: 0.85rem;
+    font-family: var(--nrki-font-display);
+    font-size: clamp(2.1rem, 5vw, 3.85rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+
+  .nrki-about-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .nrki-project-links-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 1.15rem;
+  }
+
+  .nrki-media-fallback {
+    padding: 0.75rem;
+    border: 1px dashed var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-canvas);
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.76rem;
+  }
+
+  .nrki-card-media-caption {
+    position: absolute;
+    bottom: 0.45rem;
+    right: 0.55rem;
+    padding: 0.12rem 0.45rem;
+    background-color: var(--nrki-surface-canvas);
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.64rem;
+    color: var(--nrki-ink-body);
+  }
+
   .nrki-media-card-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 0.75rem;
     margin-bottom: 0.45rem;
+  }
+
+  .nrki-media-card-title {
+    margin-top: 0.35rem;
+    margin-bottom: 0.15rem;
+    font-size: 1.2rem;
+    line-height: 1.25;
   }
 
   .nrki-media-card-creator {
@@ -2540,6 +2684,20 @@
     margin-bottom: 1.15rem;
     padding-bottom: 0.9rem;
     border-bottom: var(--nrki-section-rule-minor);
+  }
+
+  .nrki-shelf-header-titles h2 {
+    margin-bottom: 0.25rem;
+    font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .nrki-shelf-header-note {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--nrki-ink-muted);
+    font-size: 0.94rem;
+    line-height: 1.5;
   }
 
   .nrki-filter-controls {
@@ -2577,7 +2735,7 @@
     transition: all var(--nrki-transition-fast);
   }
 
-  [data-theme="minimalistic"] .nrki-filter-button {
+  :where([data-theme="minimalistic"]) .nrki-filter-button {
     border-color: transparent;
     background-color: var(--nrki-surface-elevated);
   }
@@ -2718,12 +2876,112 @@
     border-bottom: var(--nrki-section-rule-minor);
   }
 
+  .nrki-modal-media {
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--nrki-border-subtle);
+    border-radius: var(--nrki-radius-control);
+    background-color: var(--nrki-surface-panel);
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .nrki-modal-media img,
+  .nrki-modal-media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   .nrki-modal-motifs-box {
     margin-top: 1.35rem;
     padding: 1.1rem;
     border: var(--nrki-panel-border);
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-panel);
+  }
+
+  .nrki-modal-motifs-list {
+    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0;
+  }
+
+  .nrki-modal-motifs-list li {
+    padding-block: 0.55rem;
+    border-bottom: 1px solid var(--nrki-border-faint);
+    font-size: 0.92rem;
+  }
+
+  .nrki-modal-motifs-list li:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* --- Long-Form Article / Project / Work Dossier Reader --- */
+  .nrki-article-shell {
+    max-width: var(--nrki-reading-max-width);
+    margin-inline: auto;
+    padding-block: 2.25rem 3.5rem;
+  }
+
+  .nrki-article-header {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+    border-bottom: var(--nrki-section-rule-major);
+  }
+
+  .nrki-article-header h1 {
+    font-size: clamp(2.1rem, 4.8vw, 3.45rem);
+    line-height: 1.08;
+    margin-bottom: 0.75rem;
+  }
+
+  .nrki-article-byline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-article-body p,
+  .nrki-article-body ul,
+  .nrki-article-body ol,
+  .nrki-article-body blockquote,
+  .nrki-article-body pre,
+  .nrki-modal-article p,
+  .nrki-modal-article ul,
+  .nrki-modal-article ol,
+  .nrki-modal-article blockquote,
+  .nrki-modal-article pre {
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+
+  .nrki-article-body h2,
+  .nrki-modal-article h2 {
+    margin-top: 1.85rem;
+    margin-bottom: 0.65rem;
+    font-size: 1.52rem;
+  }
+
+  .nrki-article-body h3,
+  .nrki-modal-article h3 {
+    margin-top: 1.4rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.24rem;
+  }
+
+  .nrki-article-body a,
+  .nrki-modal-article a {
+    color: var(--nrki-link-ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   /* --- Tabs, Segmented Controls & Expandable Accordions --- */
@@ -3013,20 +3271,288 @@
     box-shadow: var(--nrki-card-frame-shadow);
   }
 
-  /* --- Web Resume Sheet & Action Toolbar --- */
+  /* --- Notifications & Floating Toast Stack (Semantic Variants) --- */
+  .nrki-notification {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 0.9rem 1rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    box-shadow: var(--nrki-card-frame-shadow);
+  }
+
+  .nrki-notification-icon {
+    width: 1.65rem;
+    height: 1.65rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--nrki-radius-pill);
+    background-color: var(--nrki-surface-panel);
+    color: var(--nrki-ink-heading);
+    font-family: var(--nrki-font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .nrki-notification-body {
+    min-width: 0;
+  }
+
+  .nrki-notification-title {
+    margin: 0 0 0.18rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-notification-message {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .nrki-notification-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .nrki-notification-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-notification-info .nrki-notification-icon {
+    background-color: var(--nrki-status-info-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-info .nrki-notification-title {
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-notification-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-notification-success .nrki-notification-icon {
+    background-color: var(--nrki-status-success-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-success .nrki-notification-title {
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-notification-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-notification-warning .nrki-notification-icon {
+    background-color: var(--nrki-status-warning-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-warning .nrki-notification-title {
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-notification-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-notification-danger .nrki-notification-icon {
+    background-color: var(--nrki-status-danger-border);
+    color: var(--nrki-surface-elevated);
+  }
+
+  .nrki-notification-danger .nrki-notification-title {
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-toast-stack {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 350;
+    width: min(24rem, calc(100vw - 2rem));
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .nrki-toast-stack-inline {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    width: 100%;
+  }
+
+  .nrki-toast {
+    position: relative;
+    padding: 0.85rem 1rem 0.95rem;
+    border: var(--nrki-card-border);
+    border-left: 4px solid var(--nrki-border-strong);
+    border-radius: var(--nrki-radius-surface);
+    background-color: var(--nrki-surface-elevated);
+    color: var(--nrki-ink-body);
+    box-shadow: var(--nrki-card-frame-shadow), 0 12px 26px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+  }
+
+  .nrki-toast-info {
+    border-color: var(--nrki-status-info-border);
+    background-color: var(--nrki-status-info-surface);
+    color: var(--nrki-status-info-ink);
+  }
+
+  .nrki-toast-success {
+    border-color: var(--nrki-status-success-border);
+    background-color: var(--nrki-status-success-surface);
+    color: var(--nrki-status-success-ink);
+  }
+
+  .nrki-toast-warning {
+    border-color: var(--nrki-status-warning-border);
+    background-color: var(--nrki-status-warning-surface);
+    color: var(--nrki-status-warning-ink);
+  }
+
+  .nrki-toast-danger {
+    border-color: var(--nrki-status-danger-border);
+    background-color: var(--nrki-status-danger-surface);
+    color: var(--nrki-status-danger-ink);
+  }
+
+  .nrki-toast-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .nrki-toast-title {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .nrki-toast-message {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .nrki-toast-dismiss {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-family: var(--nrki-font-mono);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0.1rem 0.3rem;
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .nrki-toast-dismiss:hover {
+    opacity: 1;
+  }
+
+  .nrki-toast-progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    background-color: currentColor;
+    opacity: 0.45;
+    transform-origin: left center;
+    animation: nrki-toast-countdown 5s linear forwards;
+  }
+
+  @keyframes nrki-toast-countdown {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  /* --- Web Resume Sheet, Directory Cards & Action Toolbar --- */
+  .nrki-resume-page {
+    padding-block: 2rem 4rem;
+  }
+
   .nrki-resume-toolbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.85rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
     border-bottom: var(--nrki-section-rule-minor);
   }
 
+  .nrki-resume-toolbar-actions,
+  .nrki-resume-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.55rem;
+  }
+
+  .nrki-resume-row-planned {
+    opacity: 0.72;
+  }
+
+  .nrki-resume-number {
+    color: var(--nrki-ink-muted);
+    font-family: var(--nrki-font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .nrki-resume-copy strong {
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--nrki-ink-heading);
+    font-size: 1.12rem;
+  }
+
+  .nrki-resume-copy > span {
+    display: block;
+    color: var(--nrki-ink-muted);
+    font-size: 0.92rem;
+  }
+
   .nrki-resume-sheet {
-    padding: clamp(1.25rem, 3.2vw, 2.25rem);
+    padding: clamp(1.5rem, 4.5vw, 3.25rem);
     border: var(--nrki-panel-border);
     border-radius: var(--nrki-radius-surface);
     background-color: var(--nrki-surface-elevated);
@@ -3051,9 +3577,15 @@
     justify-content: space-between;
     align-items: flex-end;
     gap: 1.25rem;
-    padding-bottom: 1.05rem;
+    padding-bottom: 1.25rem;
     border-bottom: 2px solid var(--nrki-border-strong);
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .nrki-resume-title h1 {
+    margin-bottom: 0.35rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.2rem);
+    letter-spacing: -0.04em;
   }
 
   .nrki-resume-role {
@@ -3076,11 +3608,15 @@
     text-align: right;
   }
 
+  .nrki-resume-contact li {
+    margin-bottom: 0.2rem;
+  }
+
   .nrki-resume-section {
     display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: 1.35rem;
-    padding-block: 0.95rem;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 1.75rem;
+    padding-block: 1.35rem;
     border-bottom: 1px solid var(--nrki-border-faint);
   }
 
@@ -3099,10 +3635,68 @@
     color: var(--nrki-ink-muted);
   }
 
+  .nrki-resume-item {
+    margin-bottom: 1.35rem;
+  }
+
+  .nrki-resume-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .nrki-resume-item-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .nrki-resume-item-header h3 {
+    margin: 0;
+    font-size: 1.12rem;
+  }
+
+  .nrki-resume-item-org {
+    color: var(--nrki-accent-primary);
+    font-weight: 400;
+  }
+
+  .nrki-resume-item-date {
+    font-family: var(--nrki-font-ui);
+    font-size: 0.75rem;
+    color: var(--nrki-ink-muted);
+  }
+
+  .nrki-resume-bullets {
+    margin: 0.5rem 0 0;
+    padding-left: 1.15rem;
+  }
+
+  .nrki-resume-bullets li {
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+  }
+
   .nrki-skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
     gap: 1rem;
+  }
+
+  .nrki-skill-group h4 {
+    margin-bottom: 0.3rem;
+    font-family: var(--nrki-font-ui);
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--nrki-ink-heading);
+  }
+
+  .nrki-skill-group p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--nrki-ink-body);
   }
 
   /* --- Site Footer --- */
@@ -3113,7 +3707,7 @@
     justify-content: space-between;
     gap: 0.75rem 1.5rem;
     margin-top: 1.35rem;
-    padding-block: 1.25rem;
+    padding-block: 1.5rem 2.25rem;
     border-top: var(--nrki-section-rule-major);
     color: var(--nrki-ink-muted);
     font-family: var(--nrki-font-ui);
@@ -3123,10 +3717,21 @@
   .nrki-footer-mark {
     color: var(--nrki-ink-heading);
     font-family: var(--nrki-font-display);
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     font-weight: 700;
     letter-spacing: -0.05em;
     text-decoration: none;
+  }
+
+  @media screen and (max-width: 1100px) and (min-width: 768px) {
+    .nrki-masthead-bar {
+      justify-content: center;
+    }
+
+    .nrki-masthead-meta {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 
   /* Mobile-only layout stacking wrapped cleanly in `@media screen` so print
@@ -3134,6 +3739,36 @@
   @media screen and (max-width: 767px) {
     .nrki-page-shell {
       width: min(100% - 1.5rem, var(--nrki-shell-max-width));
+    }
+
+    .nrki-masthead-bar {
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .nrki-masthead-meta {
+      justify-content: center;
+    }
+
+    .nrki-masthead-dateline {
+      justify-content: center;
+    }
+
+    .nrki-masthead-dateline .nrki-dateline-sep:last-child {
+      display: none;
+    }
+
+    .nrki-masthead-badgegroup {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .nrki-site-nav {
+      position: sticky;
+      top: 0;
+      gap: 0.65rem 1rem;
+      font-size: 0.7rem;
     }
 
     .nrki-layout-frontpage,
@@ -3146,7 +3781,8 @@
     .nrki-sidenote-layout,
     .nrki-work-row,
     .nrki-resume-row,
-    .nrki-stat-strip {
+    .nrki-stat-strip,
+    .nrki-notification {
       grid-template-columns: 1fr;
     }
 
@@ -3179,8 +3815,20 @@
       position: static;
     }
 
+    .nrki-resume-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     .nrki-resume-contact {
       text-align: left;
+    }
+
+    .nrki-toast-stack {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      width: auto;
     }
   }
 }
@@ -3258,10 +3906,18 @@
 
 @layer nrki.print {
   @media print {
+    /* Reset any active theme or dark polarity cleanly to crisp black-on-white
+       print ink and standard serif/sans CV typography without using `!important` */
     :root,
-    [data-theme][data-mode="dark"],
-    [data-theme="ancient"],
-    [data-theme="uwu"] {
+    [data-theme],
+    [data-theme][data-mode="dark"] {
+      color-scheme: light;
+      --nrki-font-display: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-heading: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-body: Georgia, "Times New Roman", Baskerville, serif;
+      --nrki-font-quote: Georgia, serif;
+      --nrki-font-ui: Arial, Helvetica, system-ui, sans-serif;
+      --nrki-font-mono: "Courier New", Courier, monospace;
       --nrki-surface-canvas: #ffffff;
       --nrki-surface-panel: #ffffff;
       --nrki-surface-inset: #f4f4f4;
@@ -3269,22 +3925,37 @@
       --nrki-ink-heading: #000000;
       --nrki-ink-body: #1a1a1a;
       --nrki-ink-muted: #444444;
+      --nrki-ink-faint: #666666;
+      --nrki-link-ink: #000000;
+      --nrki-link-hover-ink: #000000;
       --nrki-border-strong: #000000;
       --nrki-border-subtle: #888888;
       --nrki-border-faint: #dddddd;
       --nrki-accent-primary: #000000;
       --nrki-surface-texture: none;
+      --nrki-code-surface: #f0f0f0;
+      --nrki-code-ink: #111111;
+      --nrki-radius-control: 0px;
+      --nrki-radius-surface: 0px;
+      --nrki-radius-pill: 0px;
+      --nrki-card-frame-shadow: none;
+      --nrki-card-border: 1px solid #888888;
+      --nrki-panel-border: 1px solid #888888;
     }
 
     html,
-    body {
+    body,
+    html.nrki-theme-animating,
+    html.nrki-theme-animating body {
       margin: 0;
       padding: 0;
       background-color: #ffffff;
       background-image: none;
       color: #000000;
       font-size: 9.8pt;
+      font-weight: 400;
       line-height: 1.4;
+      transition: none;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
@@ -3293,7 +3964,8 @@
     .nrki-site-header,
     .nrki-site-footer,
     .nrki-resume-toolbar,
-    .nrki-skip-link {
+    .nrki-skip-link,
+    .nrki-toast-stack {
       display: none;
     }
 
@@ -3302,21 +3974,114 @@
       max-width: none;
       margin: 0;
       padding: 12mm 14mm;
+      box-sizing: border-box;
+    }
+
+    .nrki-resume-page {
+      padding: 0;
     }
 
     .nrki-resume-sheet {
       padding: 0;
       border: 0;
+      border-image: none;
       background-color: transparent;
       box-shadow: none;
     }
 
+    .nrki-resume-header {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
+      padding-bottom: 0.9rem;
+      margin-bottom: 1rem;
+      border-bottom: 1.5pt solid #000000;
+    }
+
+    .nrki-resume-title .nrki-eyebrow {
+      font-size: 7.5pt;
+      margin-bottom: 0.25rem;
+    }
+
+    .nrki-resume-title h1 {
+      font-size: 22pt;
+      line-height: 1.08;
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nrki-resume-role {
+      font-size: 8.5pt;
+    }
+
+    .nrki-resume-contact {
+      text-align: right;
+      flex-shrink: 0;
+      font-size: 8.5pt;
+      line-height: 1.35;
+    }
+
+    .nrki-resume-contact li {
+      margin-bottom: 0.15rem;
+    }
+
     .nrki-resume-section {
+      display: grid;
       grid-template-columns: 8.5rem minmax(0, 1fr);
       gap: 1.15rem;
       padding-block: 0.65rem;
       break-inside: avoid;
       page-break-inside: avoid;
+    }
+
+    .nrki-resume-section-title {
+      font-size: 8pt;
+    }
+
+    .nrki-resume-item {
+      margin-bottom: 0.85rem;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .nrki-resume-item-header {
+      margin-bottom: 0.25rem;
+    }
+
+    .nrki-resume-item-header h3 {
+      font-size: 10.5pt;
+    }
+
+    .nrki-resume-item-date {
+      font-size: 8pt;
+    }
+
+    .nrki-resume-bullets {
+      margin: 0.35rem 0 0;
+      padding-left: 1.1rem;
+    }
+
+    .nrki-resume-bullets li {
+      margin-bottom: 0.2rem;
+      font-size: 9.4pt;
+    }
+
+    .nrki-skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    .nrki-skill-group h4 {
+      font-size: 7.8pt;
+      margin-bottom: 0.2rem;
+    }
+
+    .nrki-skill-group p {
+      font-size: 9pt;
     }
 
     a {

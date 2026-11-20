@@ -1,49 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic" data-mode="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="NRKI Broadsheet & Publishing Engine — Project overview, architecture, and GitHub links.">
     <title>NRKI Broadsheet &amp; Publishing Engine — Projects — NRKI</title>
     <script>
-        (function () {
-            var saved = localStorage.getItem("nrki-theme");
-            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
-    <link rel="stylesheet" href="../../assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="../../assets/styles/nrki-broadsheet-library.css">
     <script defer src="../../assets/scripts/main.js"></script>
 </head>
 <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
 
-    <div class="page-shell">
+    <div class="nrki-page-shell">
         <!-- ================================================================
              SITE MASTHEAD & PRIMARY NAVIGATION
              ================================================================ -->
-        <header class="site-header">
-            <div class="masthead-bar">
-                <p class="edition-line">Vol. I · Sec. 02 <span>—</span> Project Dossier 01</p>
-                <div class="masthead-meta">
-                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · Sec. 02 <span>—</span> Project Dossier 01</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                         <span data-masthead-time>18:50</span>
                         <span data-masthead-tz>LOCAL</span>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
-                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                     </p>
-                    <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
-                        Ink: Paper ☀
-                    </button>
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <label class="nrki-theme-picker">
+                            <span class="nrki-sr-only">Select broadsheet theme</span>
+                            <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                                <option value="classic">Theme: Classic</option>
+                                <option value="ancient">Theme: Ancient</option>
+                                <option value="minimalistic">Theme: Minimalistic</option>
+                                <option value="uwu">Theme: UwU</option>
+                            </select>
+                        </label>
+                        <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+                            Ink: Paper ☀
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <a class="wordmark" href="../../index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Project architecture, source notes, and repository links.</p>
+            <a class="nrki-wordmark nrki-wordmark-compact" href="../../index.html" aria-label="NRKI home">NRKI</a>
+            <p class="nrki-masthead-tagline">Project architecture, source notes, and repository links.</p>
 
-            <nav class="site-nav" aria-label="Main navigation">
+            <nav class="nrki-site-nav" aria-label="Main navigation">
                 <a href="../../index.html">Home</a>
                 <a href="../magazines-index.html">Magazines</a>
                 <a href="../projects.html" aria-current="page">Projects</a>
@@ -55,39 +76,37 @@
 
         <!-- ================================================================
              PROJECT DETAIL VIEW
-             Copy this file inside `pages/projects/` whenever you add a new
-             project card to `PROJECT_ITEMS` in `assets/scripts/data/site-data.js`.
              ================================================================ -->
-        <main id="main" class="article-shell">
-            <a class="back-link" href="../projects.html">← Back to Projects Shelf</a>
+        <main id="main" class="nrki-article-shell">
+            <a class="nrki-back-link" href="../projects.html">← Back to Projects Shelf</a>
 
             <article style="margin-top: 1.5rem;">
-                <header class="article-header">
-                    <p class="eyebrow">Project 01 · Active Build</p>
+                <header class="nrki-article-header">
+                    <p class="nrki-eyebrow">Project 01 · Active Build</p>
                     <h1>NRKI Broadsheet &amp; Publishing Engine</h1>
 
-                    <ul class="tag-pills" aria-label="Project tags">
-                        <li class="tag-pill">#html5</li>
-                        <li class="tag-pill">#css-tokens</li>
-                        <li class="tag-pill">#es-modules</li>
-                        <li class="tag-pill">#print-css</li>
+                    <ul class="nrki-tag-pills" aria-label="Project tags">
+                        <li class="nrki-tag-pill">#html5</li>
+                        <li class="nrki-tag-pill">#css-tokens</li>
+                        <li class="nrki-tag-pill">#es-modules</li>
+                        <li class="nrki-tag-pill">#print-css</li>
                     </ul>
 
                     <!-- GitHub & External Project Links -->
-                    <div class="project-links-bar">
-                        <a class="btn-editorial btn-editorial--primary" href="https://github.com/your-handle/nrki" target="_blank" rel="noopener noreferrer">
+                    <div class="nrki-project-links-bar">
+                        <a class="nrki-button nrki-button-primary" href="https://github.com/your-handle/nrki" target="_blank" rel="noopener noreferrer">
                             GitHub Repository ↗
                         </a>
-                        <a class="btn-editorial" href="../../index.html">
+                        <a class="nrki-button" href="../../index.html">
                             Live Front Page ↗
                         </a>
-                        <a class="btn-editorial" href="../about.html#resumes">
+                        <a class="nrki-button" href="../about.html#resumes">
                             Printable CV Demo ↗
                         </a>
                     </div>
                 </header>
 
-                <div class="article-body">
+                <div class="nrki-article-body">
                     <p>
                         <strong>NRKI</strong> is a personal publishing system designed around a simple premise: a personal
                         website should feel as durable, legible, and self-contained as a printed broadsheet newspaper,
@@ -95,47 +114,48 @@
                     </p>
 
                     <h2>1. Design Goals &amp; Philosophy</h2>
-                    <ul>
+                    <ul class="nrki-editorial-list">
                         <li><strong>Zero-bloat foundation:</strong> Semantic HTML5 landmarks, fluid CSS Grid typography, and native ES Modules that run directly in the browser without requiring a complex bundler just to edit text.</li>
-                        <li><strong>Botanical Newsprint Palette:</strong> Custom CSS variables in <code>assets/styles/style.css</code> model warm dried-sage newsprint in light mode and reversed pine-charcoal ink in dark mode.</li>
+                        <li><strong>Multi-Theme Broadsheet Palette:</strong> Orthogonal CSS custom properties in <code>assets/styles/nrki-broadsheet-library.css</code> drive four personalities (Classic, Ancient, Minimalistic, UwU) across Paper (light) and Night (dark) ink modes.</li>
                         <li><strong>Web + Print/PDF Resumes:</strong> Dedicated resume pages include a custom <code>@media print</code> stylesheet so clicking <em>Print / Save as PDF</em> outputs a crisp A4/Letter CV.</li>
                     </ul>
 
                     <h2>2. How the Codebase Is Organized</h2>
                     <pre><code>NRKI AG/
-├── index.html                        # Front page overview
-├── SITE_GUIDE.md                     # Step-by-step owner's manual
+├── index.html                                    # Front page overview
+├── MAGAZINES_SPEC.md                             # Broadsheet library &amp; issue spec
 ├── assets/
-│   ├── styles/style.css              # Design tokens, grids, modal &amp; print styles
+│   ├── styles/nrki-broadsheet-library.css        # Standalone layered CSS library
 │   └── scripts/
-│       ├── main.js                   # Theme toggle &amp; print-to-PDF handlers
-│       ├── components/Shelf.js       # Shared React &lt;Shelf /&gt; component
-│       ├── gallery-spa.js            # Gallery React SPA + article overlay
-│       ├── shelf-pages.js            # Mounts &lt;Shelf /&gt; on Projects, Works &amp; Media
-│       └── data/site-data.js         # Central data store for all cards &amp; tags
+│       ├── main.js                               # 2-axis theme/mode switcher &amp; print-to-PDF
+│       ├── components/Shelf.js                   # Shared React &lt;Shelf /&gt; component
+│       ├── content-loader.js                     # Flat-file JSON + TXT block parser
+│       ├── shelf-pages.js                        # Mounts &lt;Shelf /&gt; on Projects, Works &amp; Media
+│       └── data/site-data.js                     # Offline fallback data store for all shelves
+├── magazines/
+│   └── issue-01-newspaper-web-design/            # Interactive Broadsheet UI Specimen Issue
 └── pages/
-    ├── gallery.html                  # Gallery React SPA
-    ├── projects.html                 # Projects Shelf page
-    ├── works.html                    # Works Shelf page
-    ├── media.html                    # Media Ledger Shelf page
-    └── about.html                    # About &amp; Resumes directory</code></pre>
+    ├── magazines-index.html                      # Editions catalog
+    ├── projects.html                             # Projects Shelf page
+    ├── works.html                                # Works Shelf page
+    ├── media.html                                # Media Ledger Shelf page
+    └── about.html                                # About &amp; Resumes directory</code></pre>
 
                     <h2>3. Links &amp; Resources</h2>
                     <p>
                         Browse the source code on <a href="https://github.com/your-handle/nrki" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        or inspect <code>SITE_GUIDE.md</code> in the root of the repository for instructions on adding
-                        new projects, works, and gallery boards.
+                        or inspect <code>MAGAZINES_SPEC.md</code> in the root of the repository for details on the
+                        layered CSS architecture and specimen system.
                     </p>
                 </div>
             </article>
         </main>
 
-        <footer class="site-footer">
-            <a class="footer-mark" href="../../index.html">NRKI</a>
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="../../index.html">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
             <a href="../projects.html">Back to Projects Shelf <span aria-hidden="true">→</span></a>
         </footer>
     </div>
 </body>
 </html>
-

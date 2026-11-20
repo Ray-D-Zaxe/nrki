@@ -2,7 +2,8 @@
  * ============================================================================
  * NRKI — GALLERY ART / STORY / INSPIRATION BOARD SPA (`assets/scripts/gallery-spa.js`)
  * ----------------------------------------------------------------------------
- * Powers the Single-Page Application (SPA) on `pages/gallery.html`.
+ * Powers the Single-Page Application (SPA) when mounted onto a gallery shelf
+ * container (`#gallery-spa-root`).
  *
  * Data Source:
  * Reads board metadata from `content/gallery/index.json` and each board's
@@ -25,52 +26,53 @@
   function GalleryOverlayModal({ board, allItems, onClose, onSelectBoard }) {
     useEffect(() => {
       if (!board) return;
-      const handleKeyDown = (e) => {
-        if (e.key === "Escape") onClose();
+      const handleKeyDown = (keyboardEvent) => {
+        if (keyboardEvent.key === "Escape") onClose();
       };
       window.addEventListener("keydown", handleKeyDown);
-      const prevOverflow = document.body.style.overflow;
+      const previousBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
 
       return () => {
         window.removeEventListener("keydown", handleKeyDown);
-        document.body.style.overflow = prevOverflow;
+        document.body.style.overflow = previousBodyOverflow;
       };
     }, [board, onClose]);
 
     if (!board) return null;
 
-    const findById = (id) => allItems.find((it) => it.id === id) || null;
+    const findBoardById = (boardId) =>
+      allItems.find((candidateBoard) => candidateBoard.id === boardId) || null;
     const relatedBoards = (board.relatedIds || [])
-      .map(findById)
+      .map(findBoardById)
       .filter(Boolean);
 
     return h(
       "div",
       {
-        className: "modal-backdrop",
+        className: "nrki-modal-backdrop",
         role: "dialog",
         "aria-modal": "true",
         "aria-labelledby": "modal-board-title",
-        onClick: (e) => {
-          if (e.target === e.currentTarget) onClose();
+        onClick: (clickEvent) => {
+          if (clickEvent.target === clickEvent.currentTarget) onClose();
         },
       },
       h(
         "article",
-        { className: "modal-dialog" },
+        { className: "nrki-modal-dialog" },
         // 1. Top Bar: Pin Metadata + Close Button
         h(
           "div",
-          { className: "modal-topbar" },
+          { className: "nrki-modal-topbar" },
           h(
             "div",
-            { className: "card-meta", style: { marginBottom: 0 } },
+            { className: "nrki-card-meta", style: { marginBottom: 0 } },
             h("span", null, `${board.boardNumber} · ${board.date}`),
             h(
               "span",
               {
-                className: "badge badge--accent",
+                className: "nrki-badge nrki-badge-accent",
                 style: { marginLeft: "0.6rem" },
               },
               board.categoryLabel
@@ -80,7 +82,7 @@
             "button",
             {
               type: "button",
-              className: "btn-editorial",
+              className: "nrki-button",
               onClick: onClose,
               "aria-label": "Close article overlay",
             },
@@ -91,7 +93,7 @@
         // 2. Full Artwork / Visual Media Frame
         h(
           "div",
-          { className: "modal-media" },
+          { className: "nrki-modal-media" },
           h("img", { src: board.image, alt: board.title })
         ),
 
@@ -100,9 +102,13 @@
         Array.isArray(board.tags) && board.tags.length > 0
           ? h(
               "ul",
-              { className: "tag-pills", "aria-label": "Board tags" },
-              board.tags.map((tag) =>
-                h("li", { key: tag, className: "tag-pill" }, `#${tag}`)
+              { className: "nrki-tag-pills", "aria-label": "Board tags" },
+              board.tags.map((tagLabel) =>
+                h(
+                  "li",
+                  { key: tagLabel, className: "nrki-tag-pill" },
+                  `#${tagLabel}`
+                )
               )
             )
           : null,
@@ -110,7 +116,7 @@
         // 4. Short Article / Story Notes (Loaded & formatted from `content/gallery/<id>.txt`)
         h(
           "div",
-          { className: "modal-article" },
+          { className: "nrki-modal-article" },
           renderBlocksToReact(h, board)
         ),
 
@@ -118,21 +124,21 @@
         relatedBoards.length > 0
           ? h(
               "div",
-              { className: "connected-row", style: { marginTop: "1.25rem" } },
+              { className: "nrki-connected-row", style: { marginTop: "1.25rem" } },
               h("strong", null, "Connected Ideas on This Board (Click to jump):"),
               h(
                 "div",
-                { className: "connected-links" },
-                relatedBoards.map((rel) =>
+                { className: "nrki-connected-links" },
+                relatedBoards.map((relatedBoard) =>
                   h(
                     "button",
                     {
-                      key: rel.id,
+                      key: relatedBoard.id,
                       type: "button",
-                      className: "connected-chip",
-                      onClick: () => onSelectBoard(rel.id),
+                      className: "nrki-connected-chip",
+                      onClick: () => onSelectBoard(relatedBoard.id),
                     },
-                    `${rel.boardNumber}: ${rel.title} →`
+                    `${relatedBoard.boardNumber}: ${relatedBoard.title} →`
                   )
                 )
               )
@@ -143,42 +149,42 @@
         h(
           "aside",
           {
-            className: "modal-motifs-box",
+            className: "nrki-modal-motifs-box",
             "aria-label": "Inspirations and motifs",
           },
           h(
             "p",
-            { className: "aside-label" },
+            { className: "nrki-aside-label" },
             "Inspirations, Motifs & Source Links"
           ),
           h(
             "ul",
-            { className: "modal-motifs-list" },
-            (board.inspirations || []).map((insp, idx) =>
+            { className: "nrki-modal-motifs-list" },
+            (board.inspirations || []).map((inspirationEntry, entryIndex) =>
               h(
                 "li",
-                { key: idx },
+                { key: entryIndex },
                 h(
                   "a",
                   {
-                    href: insp.url,
+                    href: inspirationEntry.url,
                     target: "_blank",
                     rel: "noopener noreferrer",
                     style: { fontWeight: 700 },
                   },
-                  `${insp.title} ↗`
+                  `${inspirationEntry.title} ↗`
                 ),
-                insp.note
+                inspirationEntry.note
                   ? h(
                       "div",
                       {
                         style: {
-                          color: "var(--ink-tertiary)",
+                          color: "var(--nrki-ink-muted)",
                           fontSize: "0.86rem",
                           marginTop: "0.15rem",
                         },
                       },
-                      insp.note
+                      inspirationEntry.note
                     )
                   : null
               )
@@ -193,28 +199,29 @@
    * Main Gallery Pinboard SPA Component
    */
   function GallerySPA({ filters, items }) {
-    const findById = (id) => items.find((it) => it.id === id) || null;
+    const findBoardById = (boardId) =>
+      items.find((candidateBoard) => candidateBoard.id === boardId) || null;
 
     const [selectedBoardId, setSelectedBoardId] = useState(() => {
-      const hash = window.location.hash.replace("#", "");
-      return findById(hash) ? hash : null;
+      const hashId = window.location.hash.replace("#", "");
+      return findBoardById(hashId) ? hashId : null;
     });
 
     useEffect(() => {
-      const onHashChange = () => {
-        const hash = window.location.hash.replace("#", "");
-        setSelectedBoardId(findById(hash) ? hash : null);
+      const handleHashChange = () => {
+        const hashId = window.location.hash.replace("#", "");
+        setSelectedBoardId(findBoardById(hashId) ? hashId : null);
       };
-      window.addEventListener("hashchange", onHashChange);
-      return () => window.removeEventListener("hashchange", onHashChange);
+      window.addEventListener("hashchange", handleHashChange);
+      return () => window.removeEventListener("hashchange", handleHashChange);
     }, [items]);
 
-    const openBoard = (id) => {
-      setSelectedBoardId(id);
+    const openBoard = (boardId) => {
+      setSelectedBoardId(boardId);
       if (history.pushState) {
-        history.pushState(null, "", `#${id}`);
+        history.pushState(null, "", `#${boardId}`);
       } else {
-        window.location.hash = id;
+        window.location.hash = boardId;
       }
     };
 
@@ -231,7 +238,7 @@
       }
     };
 
-    const activeBoard = findById(selectedBoardId);
+    const activeBoard = findBoardById(selectedBoardId);
 
     return h(
       Fragment,
@@ -243,25 +250,25 @@
         filters,
         items,
         enableTagFilter: true,
-        gridClassName: "board-grid",
-        renderCard: (item) => {
-          const relatedBoards = (item.relatedIds || [])
-            .map(findById)
+        gridClassName: "nrki-shelf-grid",
+        renderCard: (boardEntry) => {
+          const relatedBoards = (boardEntry.relatedIds || [])
+            .map(findBoardById)
             .filter(Boolean);
 
           return h(
             "article",
             {
-              key: item.id,
-              className: "pin-card",
+              key: boardEntry.id,
+              className: "nrki-pin-card",
               role: "button",
               tabIndex: 0,
-              "aria-label": `Open story and motif notes for ${item.title}`,
-              onClick: () => openBoard(item.id),
-              onKeyDown: (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  openBoard(item.id);
+              "aria-label": `Open story and motif notes for ${boardEntry.title}`,
+              onClick: () => openBoard(boardEntry.id),
+              onKeyDown: (keyboardEvent) => {
+                if (keyboardEvent.key === "Enter" || keyboardEvent.key === " ") {
+                  keyboardEvent.preventDefault();
+                  openBoard(boardEntry.id);
                 }
               },
             },
@@ -270,37 +277,41 @@
               null,
               h(
                 "div",
-                { className: "card-media" },
-                h("img", { src: item.image, alt: item.title }),
-                item.caption
-                  ? h("span", { className: "card-media__caption" }, item.caption)
+                { className: "nrki-card-media" },
+                h("img", { src: boardEntry.image, alt: boardEntry.title }),
+                boardEntry.caption
+                  ? h(
+                      "span",
+                      { className: "nrki-card-media-caption" },
+                      boardEntry.caption
+                    )
                   : null
               ),
               h(
                 "div",
-                { className: "card-meta" },
-                h("span", null, `${item.boardNumber} · ${item.date}`),
-                h("span", { className: "badge" }, item.categoryLabel)
+                { className: "nrki-card-meta" },
+                h("span", null, `${boardEntry.boardNumber} · ${boardEntry.date}`),
+                h("span", { className: "nrki-badge" }, boardEntry.categoryLabel)
               ),
-              h("h3", null, item.title),
-              h("p", null, item.summary),
+              h("h3", null, boardEntry.title),
+              h("p", null, boardEntry.summary),
 
-              item.mainMotif
+              boardEntry.mainMotif
                 ? h(
                     "div",
                     {
-                      className: "motif-row",
-                      onClick: (e) => e.stopPropagation(),
+                      className: "nrki-motif-row",
+                      onClick: (clickEvent) => clickEvent.stopPropagation(),
                     },
                     h("strong", null, "Main Motif:"),
                     h(
                       "a",
                       {
-                        href: item.mainMotif.url,
+                        href: boardEntry.mainMotif.url,
                         target: "_blank",
                         rel: "noopener noreferrer",
                       },
-                      `${item.mainMotif.label} ↗`
+                      `${boardEntry.mainMotif.label} ↗`
                     )
                   )
                 : null,
@@ -309,51 +320,55 @@
                 ? h(
                     "div",
                     {
-                      className: "connected-row",
-                      onClick: (e) => e.stopPropagation(),
+                      className: "nrki-connected-row",
+                      onClick: (clickEvent) => clickEvent.stopPropagation(),
                     },
                     h("strong", null, "Connects to:"),
                     h(
                       "div",
-                      { className: "connected-links" },
-                      relatedBoards.map((rel) =>
+                      { className: "nrki-connected-links" },
+                      relatedBoards.map((relatedBoard) =>
                         h(
                           "button",
                           {
-                            key: rel.id,
+                            key: relatedBoard.id,
                             type: "button",
-                            className: "connected-chip",
-                            title: `Open connected idea: ${rel.title}`,
-                            onClick: () => openBoard(rel.id),
+                            className: "nrki-connected-chip",
+                            title: `Open connected idea: ${relatedBoard.title}`,
+                            onClick: () => openBoard(relatedBoard.id),
                           },
-                          `${rel.boardNumber} · ${rel.title}`
+                          `${relatedBoard.boardNumber} · ${relatedBoard.title}`
                         )
                       )
                     )
                   )
                 : null,
 
-              Array.isArray(item.tags) && item.tags.length > 0
+              Array.isArray(boardEntry.tags) && boardEntry.tags.length > 0
                 ? h(
                     "ul",
-                    { className: "tag-pills", "aria-label": "Tags" },
-                    item.tags.map((t) =>
-                      h("li", { key: t, className: "tag-pill" }, `#${t}`)
+                    { className: "nrki-tag-pills", "aria-label": "Tags" },
+                    boardEntry.tags.map((tagLabel) =>
+                      h(
+                        "li",
+                        { key: tagLabel, className: "nrki-tag-pill" },
+                        `#${tagLabel}`
+                      )
                     )
                   )
                 : null
             ),
             h(
               "div",
-              { className: "card-footer" },
+              { className: "nrki-card-footer" },
               h(
                 "span",
                 null,
-                `${(item.inspirations || []).length} source motifs`
+                `${(boardEntry.inspirations || []).length} source motifs`
               ),
               h(
                 "span",
-                { className: "text-link", style: { margin: 0 } },
+                { className: "nrki-text-link", style: { margin: 0 } },
                 "Open article & links ↗"
               )
             )
@@ -370,11 +385,11 @@
     );
   }
 
-  const container = document.getElementById("gallery-spa-root");
-  if (container) {
+  const mountContainer = document.getElementById("gallery-spa-root");
+  if (mountContainer) {
     loadTabCollection("gallery").then(({ filters, items }) => {
-      const root = createRoot(container);
-      root.render(h(GallerySPA, { filters, items }));
+      const reactRoot = createRoot(mountContainer);
+      reactRoot.render(h(GallerySPA, { filters, items }));
     });
   }
 })(window);

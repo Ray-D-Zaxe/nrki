@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="classic" data-mode="light">
 
 <head>
     <meta charset="UTF-8">
@@ -7,15 +7,25 @@
     <meta name="description"
         content="NRKI Media Ledger - reviews, ratings, and watchlist across film, television, books, music, and games.">
     <title>Media Ledger - NRKI</title>
-    <!-- Synchronous theme script: applies dark/light theme before first paint to prevent white flash -->
+    <!-- Synchronous theme + mode script: applies [data-theme] and [data-mode] before first paint to prevent flicker -->
     <script>
-        (function () {
-            var saved = localStorage.getItem("nrki-theme");
-            var dark = saved ? saved === "dark" : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-            document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
         })();
     </script>
-    <link rel="stylesheet" href="../assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="../assets/styles/nrki-broadsheet-library.css">
     <script defer src="../assets/scripts/main.js"></script>
     <script defer src="../assets/scripts/vendor/react-local.js"></script>
     <script defer src="../assets/scripts/data/site-data.js"></script>
@@ -25,36 +35,45 @@
 </head>
 
 <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
 
-    <div class="page-shell">
+    <div class="nrki-page-shell">
         <!-- ================================================================
              SITE MASTHEAD & PRIMARY NAVIGATION
              ================================================================ -->
-        <header class="site-header">
-            <div class="masthead-bar">
-                <p class="edition-line">Vol. I · Sec. 04 <span>-</span> Critic’s Ledger &amp; Watchlist</p>
-                <div class="masthead-meta">
-                    <p class="masthead-dateline" aria-label="Issue dateline and local time">
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · Sec. 04 <span>-</span> Critic’s Ledger &amp; Watchlist</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
                         <time data-masthead-date>Thursday, Nov 5, 2026</time>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                         <span data-masthead-time>18:50</span>
                         <span data-masthead-tz>LOCAL</span>
-                        <span class="dateline-sep" aria-hidden="true">·</span>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
                     </p>
-                    <div class="masthead-badgegroup">
-                        <span class="dateline-edition" data-masthead-edition>Evening Edition</span>
-                        <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Evening Edition</span>
+                        <label class="nrki-theme-picker">
+                            <span class="nrki-sr-only">Select broadsheet theme</span>
+                            <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                                <option value="classic">Theme: Classic</option>
+                                <option value="ancient">Theme: Ancient</option>
+                                <option value="minimalistic">Theme: Minimalistic</option>
+                                <option value="uwu">Theme: UwU</option>
+                            </select>
+                        </label>
+                        <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
                             Ink: Paper ☀
                         </button>
                     </div>
                 </div>
             </div>
 
-            <a class="wordmark accent" href="../index.html" aria-label="NRKI home">NRKI</a>
-            <p class="masthead-note">Notes on films, shows, books, albums, and games-plus what’s next in the queue.</p>
+            <a class="nrki-wordmark nrki-wordmark-compact" href="../index.html" aria-label="NRKI home">NRKI</a>
+            <p class="nrki-masthead-tagline">Notes on films, shows, books, albums, and games-plus what’s next in the queue.</p>
 
-            <nav class="site-nav" aria-label="Main navigation">
+            <nav class="nrki-site-nav" aria-label="Main navigation">
                 <a href="../index.html">Home</a>
                 <a href="./magazines-index.html">Magazines</a>
                 <a href="./projects.html">Projects</a>
@@ -68,10 +87,10 @@
             <!-- ============================================================
                  PAGE HERO
                  ============================================================ -->
-            <section class="page-hero" aria-labelledby="media-title">
-                <p class="eyebrow">04 / Ledger</p>
+            <section class="nrki-page-hero" aria-labelledby="media-title">
+                <p class="nrki-eyebrow">04 / Ledger</p>
                 <h1 id="media-title">Reviews, ratings &amp; watchlist.</h1>
-                <p class="lead-summary">
+                <p class="nrki-lead-summary">
                     A running log of media I’ve finished and reviewed alongside my active watch/read/listen queue.
                     Use the full-width React Shelf below to filter between completed reviews, the watchlist, mediums,
                     and tags.
@@ -84,10 +103,10 @@
                  in `assets/scripts/data/site-data.js`.
                  ============================================================ -->
             <div id="shelf-root" data-shelf-page="media">
-                <section class="shelf-section">
-                    <div class="shelf-header">
-                        <div class="shelf-header__titles">
-                            <p class="eyebrow">04 / Ledger</p>
+                <section class="nrki-shelf-section">
+                    <div class="nrki-shelf-header">
+                        <div class="nrki-shelf-header-titles">
+                            <p class="nrki-eyebrow">04 / Ledger</p>
                             <h2>The Media Shelf</h2>
                         </div>
                     </div>
@@ -98,8 +117,8 @@
         <!-- ================================================================
              SITE FOOTER
              ================================================================ -->
-        <footer class="site-footer">
-            <a class="footer-mark" href="../index.html">NRKI</a>
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="../index.html">NRKI</a>
             <p>A personal broadsheet, made one page at a time.</p>
             <a href="../index.html">Back to the front page <span aria-hidden="true">→</span></a>
         </footer>
