@@ -29,6 +29,7 @@
 | **Works** | `pages/works.html` → `pages/work-view.html` | Under Construction on `main` / React `<Shelf />` on `dev` | Blogs, poems, dev logs, articles, and web art rendered from plain `.txt` files. |
 | **Media Ledger** | `pages/media.html` | Under Construction on `main` / React `<Shelf />` on `dev` | Reviews, ratings, and watchlist filtered by shelf, medium, and tags. |
 | **About & Resumes** | `pages/about.html` → `pages/resumes/*.html` | Static HTML + Print CSS | Colophon, bio, printable web resumes, and static PDF downloads (`assets/resumes/`). |
+| **Master Index & SEO** | `pages/site-index.html` · `sitemap.xml` · `robots.txt` | Searchable HTML Ledger + XML Sitemap | Live keyword/category directory of all pages, resumes, and 32 Issue 01 CSS specimens, paired with canonical/OpenGraph/JSON-LD metadata and XML sitemap for search engines. |
 
 ---
 

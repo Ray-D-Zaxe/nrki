@@ -140,11 +140,16 @@ Per [`GEMINI.md`](./GEMINI.md), every file, folder, variable, and class uses exp
 ```text
 NRKI AG/
 ├── GEMINI.md                                               # Always-on CSS, naming, rationale & spec-sync rules
+├── robots.txt                                              # Search engine crawler policy referencing https://nrki.in/sitemap.xml
+├── sitemap.xml                                             # XML sitemap of all indexable NRKI pages, Issue 01 & PDF resumes
 ├── assets/
 │   ├── styles/nrki-broadsheet-library.css                  # Production broadsheet library on `main` & `dev` (identical v2.3.0 copy)
-│   └── scripts/main.js                                     # 2-axis theme dropdown + Light/Dark toggle + mobile bottom bar + dateline + filters
+│   └── scripts/
+│       ├── main.js                                         # 2-axis theme dropdown + Light/Dark toggle + mobile bottom bar + dateline + filters
+│       └── broadsheet-site-index.js                        # Instant keyword search & section filter controller for `pages/site-index.html`
 ├── pages/
-│   └── magazines-index.html                                # Barebones Magazines index linking to Issue 01
+│   ├── magazines-index.html                                # Barebones Magazines index linking to Issue 01
+│   └── site-index.html                                     # Master on-site A-Z directory & searchable index (pages, resumes, Issue 01 specimens)
 └── magazines/
     └── issue-01-newspaper-web-design/
         ├── nrki-broadsheet-library.css                     # Standalone reusable 4-theme × 2-mode CSS library (@layer)

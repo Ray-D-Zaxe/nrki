@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="classic" data-mode="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="NRKI Master Broadsheet Index — Searchable A–Z directory of all NRKI pages, web & PDF resumes, Magazine Issue 01 CSS specimens, projects, works, media ledger, and XML sitemap.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Raj Aryan (NRKI)">
+    <link rel="canonical" href="https://nrki.in/pages/site-index.html">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NRKI">
+    <meta property="og:title" content="Master Broadsheet Index &amp; Directory — NRKI">
+    <meta property="og:description"
+        content="Complete searchable index of all NRKI pages, resumes, Magazine Issue 01 CSS layouts/elements/components, and published shelves.">
+    <meta property="og:url" content="https://nrki.in/pages/site-index.html">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Master Broadsheet Index &amp; Directory — NRKI">
+    <meta name="twitter:description"
+        content="Complete searchable index of all NRKI pages, resumes, Magazine Issue 01 CSS layouts/elements/components, and published shelves.">
+    <title>Master Index &amp; Directory - NRKI</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "NRKI Master Broadsheet Index & Directory",
+      "url": "https://nrki.in/pages/site-index.html",
+      "description": "Complete searchable index of all NRKI pages, web & PDF resumes, Magazine Issue 01 CSS specimens, projects, works, and media ledger.",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "NRKI",
+        "url": "https://nrki.in/"
+      }
+    }
+    </script>
+    <!-- Synchronous theme + mode script: applies [data-theme] and [data-mode] before first paint to prevent flicker -->
+    <script>
+        (function restoreBroadsheetThemeAndMode() {
+            var storedTheme = localStorage.getItem("nrki-broadsheet-theme");
+            var storedMode = localStorage.getItem("nrki-broadsheet-mode") || localStorage.getItem("nrki-theme");
+            var validThemes = ["classic", "ancient", "minimalistic", "uwu"];
+            var resolvedTheme = validThemes.indexOf(storedTheme) !== -1 ? storedTheme : "classic";
+            var resolvedMode = (storedMode === "light" || storedMode === "dark")
+                ? storedMode
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+            document.documentElement.setAttribute("data-theme", resolvedTheme);
+            document.documentElement.setAttribute("data-mode", resolvedMode);
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Fredoka:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&family=IM+Fell+English:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Libre+Franklin:wght@500;600;700&family=Mali:ital,wght@0,500;1,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,600&family=Space+Grotesk:wght@600;700&family=UnifrakturCook:wght@700&display=swap">
+    <link rel="stylesheet" href="../assets/styles/nrki-broadsheet-library.css">
+    <script defer src="../assets/scripts/main.js"></script>
+    <script defer src="../assets/scripts/data/site-data.js"></script>
+    <script defer src="../assets/scripts/broadsheet-site-index.js"></script>
+</head>
+
+<body>
+    <a class="nrki-skip-link" href="#main">Skip to content</a>
+
+    <div class="nrki-page-shell">
+        <!-- ================================================================
+             SITE MASTHEAD & PRIMARY NAVIGATION
+             ================================================================ -->
+        <header class="nrki-site-header">
+            <div class="nrki-masthead-bar">
+                <p class="nrki-edition-line">Vol. I · Sec. 06 <span>-</span> Master Broadsheet Index &amp; Search Directory</p>
+                <div class="nrki-masthead-meta">
+                    <p class="nrki-masthead-dateline" aria-label="Issue dateline and local time">
+                        <time data-masthead-date>Wednesday, Nov 25, 2026</time>
+                        <span class="nrki-dateline-sep" aria-hidden="true">·</span>
+                        <span data-masthead-time>15:50</span>
+                        <span data-masthead-tz>LOCAL</span>
+                    </p>
+                    <div class="nrki-masthead-badgegroup">
+                        <span class="nrki-dateline-edition" data-masthead-edition>Afternoon Edition</span>
+                    </div>
+                </div>
+            </div>
+
+            <a class="nrki-wordmark nrki-wordmark-compact" href="../index.html" aria-label="NRKI home">NRKI</a>
+            <div class="nrki-masthead-subbar">
+                <label class="nrki-theme-picker">
+                    <span class="nrki-sr-only">Select broadsheet theme</span>
+                    <select class="nrki-theme-select" data-theme-select aria-label="Select broadsheet theme">
+                        <option value="classic">Theme: Classic</option>
+                        <option value="ancient">Theme: Ancient</option>
+                        <option value="minimalistic">Theme: Minimalistic</option>
+                        <option value="uwu">Theme: UwU</option>
+                    </select>
+                </label>
+                <p class="nrki-masthead-tagline">Complete directory of pages, resumes, Magazine Issue 01 specimens, and crawler feeds.</p>
+                <button type="button" class="nrki-theme-toggle" data-theme-toggle aria-pressed="false">
+                    Ink: Paper ☀
+                </button>
+            </div>
+
+            <nav class="nrki-site-nav" aria-label="Main navigation">
+                <a href="../index.html">Home</a>
+                <a href="./magazines-index.html">Magazines</a>
+                <a href="./projects.html">Projects</a>
+                <a href="./works.html">Works</a>
+                <a href="./media.html">Media</a>
+                <a href="./about.html">About &amp; CV</a>
+                <a href="./site-index.html" aria-current="page">Index</a>
+            </nav>
+        </header>
+
+        <main id="main" data-site-index-root>
+            <!-- ============================================================
+                 PAGE HERO
+                 ============================================================ -->
+            <section class="nrki-page-hero" aria-labelledby="site-index-title">
+                <p class="nrki-eyebrow">06 / Master Index &amp; Sitemap</p>
+                <h1 id="site-index-title">Complete broadsheet index.</h1>
+                <p class="nrki-lead-summary">
+                    Every page, printable resume, Magazine Issue 01 CSS specimen, and content shelf across
+                    <strong>nrki.in</strong>—cataloged in one searchable newspaper ledger alongside our XML sitemap and
+                    crawler feeds.
+                </p>
+            </section>
+
+            <!-- ============================================================
+                 LIVE SEARCH & SECTION FILTER BAR
+                 ============================================================ -->
+            <section class="nrki-filter-bar" aria-label="Search and filter the site index" style="margin-top: 1.5rem;">
+                <div class="nrki-field" style="margin-bottom: 0.85rem;">
+                    <label class="nrki-field-label" for="site-index-search-input">Search Index by Keyword, Page, Specimen, or Tag</label>
+                    <div class="nrki-button-group" style="align-items: stretch;">
+                        <input
+                            id="site-index-search-input"
+                            class="nrki-input"
+                            type="search"
+                            placeholder="Try &quot;resume&quot;, &quot;toast&quot;, &quot;tufte&quot;, &quot;accordion&quot;, &quot;table&quot;, &quot;sitemap&quot;..."
+                            autocomplete="off"
+                            data-site-index-search-input
+                            style="width: auto; flex: 1 1 18rem;">
+                        <button type="button" class="nrki-button" data-site-index-reset-button>
+                            Reset Filter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="nrki-filter-group" role="group" aria-label="Filter index by broadsheet section">
+                    <span class="nrki-filter-label">Section:</span>
+                    <button type="button" class="nrki-filter-button is-active" data-site-index-category-button="all" aria-pressed="true">All Entries</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="pages" aria-pressed="false">Core Pages &amp; SEO</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="resumes" aria-pressed="false">Resumes &amp; PDFs</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="issue-01" aria-pressed="false">Issue 01 Specimens (37)</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="projects" aria-pressed="false">Projects</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="works" aria-pressed="false">Works</button>
+                    <button type="button" class="nrki-filter-button" data-site-index-category-button="media" aria-pressed="false">Media Ledger</button>
+                </div>
+
+                <p class="nrki-folio" data-site-index-count-display aria-live="polite" style="margin-top: 0.75rem; margin-bottom: 0;">
+                    Showing all indexed entries
+                </p>
+            </section>
+
+            <!-- Empty state when search query matches 0 entries -->
+            <div class="nrki-empty-state nrki-hidden" data-site-index-empty style="margin-top: 1.5rem;">
+                <h3>No matching entries in the broadsheet index.</h3>
+                <p>Try clearing your search keyword or switching the section filter back to <strong>All Entries</strong>.</p>
+            </div>
+
+            <!-- ============================================================
+                 SECTION I: CORE BROADSHEET PAGES & CRAWLER FEEDS
+                 ============================================================ -->
+            <section class="nrki-section-block" id="index-core-pages" data-site-index-section aria-labelledby="index-core-heading">
+                <div class="nrki-section-heading">
+                    <p class="nrki-eyebrow">I / Primary Sections</p>
+                    <h2 id="index-core-heading">Core Pages &amp; Crawler Feeds</h2>
+                    <p class="nrki-section-heading-note">
+                        All top-level HTML pages plus machine-readable indexing files (<code>sitemap.xml</code> &amp; <code>robots.txt</code>).
+                    </p>
+                </div>
+
+                <div class="nrki-section-content">
+                    <div class="nrki-works-ledger">
+                        <a class="nrki-work-row" href="../index.html" data-site-index-entry data-index-category="pages"
+                            data-index-keywords="home front page lead story nrki index.html main">
+                            <span class="nrki-work-category">Front Page</span>
+                            <span class="nrki-work-main">
+                                <strong>NRKI — The Front Page (Home)</strong>
+                                <span>Lead dispatch, issue directory, and overview of Magazines, Projects, Works, Media, and Resumes.</span>
+                            </span>
+                            <span class="nrki-work-date">/index.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./magazines-index.html" data-site-index-entry data-index-category="pages issue-01"
+                            data-index-keywords="magazines index monographs design systems css issues">
+                            <span class="nrki-work-category">01 / Editions</span>
+                            <span class="nrki-work-main">
+                                <strong>Magazines Directory</strong>
+                                <span>Index of self-contained design monographs and standalone UI/CSS system issues.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/magazines-index.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html"
+                            data-site-index-entry data-index-category="pages issue-01"
+                            data-index-keywords="issue 01 the nrki broadsheet newspaper web design magazine css library classic ancient minimalistic uwu light dark">
+                            <span class="nrki-work-category">Issue 01</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01: The NRKI Broadsheet — Newspaper Web Design Magazine</strong>
+                                <span>Interactive 5-page monograph documenting <code>nrki-broadsheet-library.css</code> across 4 themes × Light/Dark modes.</span>
+                            </span>
+                            <span class="nrki-work-date">Issue 01 Monograph →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./projects.html" data-site-index-entry data-index-category="pages projects"
+                            data-index-keywords="projects shelf software builds engineering repositories github tools">
+                            <span class="nrki-work-category">02 / Build</span>
+                            <span class="nrki-work-main">
+                                <strong>Projects &amp; Software Builds Shelf</strong>
+                                <span>Selected software repositories, web experiments, and standalone engineering tools.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/projects.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./works.html" data-site-index-entry data-index-category="pages works"
+                            data-index-keywords="works archive essays blogs poems verse dev logs articles web art">
+                            <span class="nrki-work-category">03 / Publish</span>
+                            <span class="nrki-work-main">
+                                <strong>Works, Essays &amp; Verse Archive</strong>
+                                <span>Long-form essays, developer logs, poems, and experimental web writing.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/works.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./media.html" data-site-index-entry data-index-category="pages media"
+                            data-index-keywords="media ledger reviews ratings watchlist film cinema books music games">
+                            <span class="nrki-work-category">04 / Ledger</span>
+                            <span class="nrki-work-main">
+                                <strong>Critic’s Media Ledger &amp; Watchlist</strong>
+                                <span>Running ledger of completed reviews, ratings, and active reading/viewing queue.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/media.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./about.html" data-site-index-entry data-index-category="pages resumes"
+                            data-index-keywords="about colophon bio contact raj aryan resumes cv directory">
+                            <span class="nrki-work-category">05 / Colophon</span>
+                            <span class="nrki-work-main">
+                                <strong>About NRKI &amp; Curriculum Vitae Directory</strong>
+                                <span>Author biography, broadsheet design philosophy, contact channels, and specialized resumes.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/about.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./site-index.html" data-site-index-entry data-index-category="pages"
+                            data-index-keywords="master site index directory search archive catalog">
+                            <span class="nrki-work-category">06 / Index</span>
+                            <span class="nrki-work-main">
+                                <strong>Master Broadsheet Index &amp; Searchable Directory</strong>
+                                <span>This complete A–Z and section-by-section directory of all NRKI pages and specimens.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/site-index.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../sitemap.xml" data-site-index-entry data-index-category="pages"
+                            data-index-keywords="sitemap.xml xml search engine indexing google search console bing crawler seo">
+                            <span class="nrki-work-category">XML Sitemap</span>
+                            <span class="nrki-work-main">
+                                <strong>Search Engine XML Sitemap (<code>/sitemap.xml</code>)</strong>
+                                <span>Standard sitemaps.org XML feed listing canonical URLs across <code>https://nrki.in</code> for search engine indexing.</span>
+                            </span>
+                            <span class="nrki-work-date">/sitemap.xml ↗</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../robots.txt" data-site-index-entry data-index-category="pages"
+                            data-index-keywords="robots.txt crawler directives user-agent allow sitemap seo">
+                            <span class="nrki-work-category">Robots.txt</span>
+                            <span class="nrki-work-main">
+                                <strong>Crawler Directives (<code>/robots.txt</code>)</strong>
+                                <span>Public <code>robots.txt</code> policy granting search crawlers full indexing access and referencing <code>sitemap.xml</code>.</span>
+                            </span>
+                            <span class="nrki-work-date">/robots.txt ↗</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SECTION II: CURRICULUM VITAE & PRINTABLE DOSSIERS
+                 ============================================================ -->
+            <section class="nrki-section-block" id="index-resumes" data-site-index-section aria-labelledby="index-resumes-heading">
+                <div class="nrki-section-heading">
+                    <p class="nrki-eyebrow">II / Curriculum Vitae</p>
+                    <h2 id="index-resumes-heading">Resumes &amp; Printable PDFs</h2>
+                    <p class="nrki-section-heading-note">
+                        Interactive A4 print-ready HTML resumes and direct static PDF downloads for Raj Aryan.
+                    </p>
+                </div>
+
+                <div class="nrki-section-content">
+                    <div class="nrki-works-ledger">
+                        <a class="nrki-work-row" href="./resumes/general.html" data-site-index-entry data-index-category="resumes"
+                            data-index-keywords="general cv curriculum vitae raj aryan software engineer full stack c++ python react node sql web print">
+                            <span class="nrki-work-category">Web CV · 01</span>
+                            <span class="nrki-work-main">
+                                <strong>General Software Engineering CV — Raj Aryan (Web &amp; Print Edition)</strong>
+                                <span>Full-stack software engineering, systems, database optimization, and project experience with 1-page `@media print` layout.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/resumes/general.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../assets/resumes/Raj_CV_General.pdf" download="Raj_CV_General.pdf"
+                            data-site-index-entry data-index-category="resumes"
+                            data-index-keywords="general cv pdf download raj_cv_general.pdf raj aryan resume">
+                            <span class="nrki-work-category">PDF · 01</span>
+                            <span class="nrki-work-main">
+                                <strong>General Software Engineering CV — Static PDF (<code>Raj_CV_General.pdf</code>)</strong>
+                                <span>Direct downloadable 1-page PDF edition of Raj Aryan’s General CV.</span>
+                            </span>
+                            <span class="nrki-work-date">Download PDF ↓</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="./resumes/resume.html" data-site-index-entry data-index-category="resumes"
+                            data-index-keywords="front-end engineering resume frontend react typescript html5 css design systems raj aryan web print">
+                            <span class="nrki-work-category">Web CV · 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Front-End Engineering Resume — Raj Aryan (Web &amp; Print Edition)</strong>
+                                <span>Specialized front-end architecture, React/TypeScript interfaces, CSS token systems, and performance engineering resume.</span>
+                            </span>
+                            <span class="nrki-work-date">/pages/resumes/resume.html →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../assets/resumes/Raj_CV_Frontend.pdf" download="Raj_CV_Frontend.pdf"
+                            data-site-index-entry data-index-category="resumes"
+                            data-index-keywords="front-end resume pdf download raj_cv_frontend.pdf raj aryan frontend">
+                            <span class="nrki-work-category">PDF · 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Front-End Engineering Resume — Static PDF (<code>Raj_CV_Frontend.pdf</code>)</strong>
+                                <span>Direct downloadable 1-page PDF edition of Raj Aryan’s Front-End Engineering resume.</span>
+                            </span>
+                            <span class="nrki-work-date">Download PDF ↓</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SECTION III: ISSUE 01 — THE NRKI BROADSHEET SPECIMEN DIRECTORY
+                 ============================================================ -->
+            <section class="nrki-section-block" id="index-issue-01" data-site-index-section aria-labelledby="index-issue01-heading">
+                <div class="nrki-section-heading">
+                    <p class="nrki-eyebrow">III / Issue 01 Catalog</p>
+                    <h2 id="index-issue01-heading">Issue 01: Broadsheet CSS Specimens</h2>
+                    <p class="nrki-section-heading-note">
+                        All 5 magazine pages and 32 interactive specimens (6 Layouts, 13 Simple Elements, 13 Complex Components) documented in <code>nrki-broadsheet-library.css</code>.
+                    </p>
+                </div>
+
+                <div class="nrki-section-content">
+                    <div class="nrki-works-ledger">
+                        <!-- Issue 01 Sections -->
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#intro"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="issue 01 page 01 front page editorial manifesto live token swatches 4 themes classic ancient minimalistic uwu">
+                            <span class="nrki-work-category">Page 01</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01 · Page 01: Front Page, Editorial Manifesto &amp; Live Token Swatches</strong>
+                                <span>3-column newspaper front page, theme matrix, and live computed CSS custom property inspector.</span>
+                            </span>
+                            <span class="nrki-work-date">#intro →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="issue 01 page 02 reusable broadsheet layouts 6 specimens">
+                            <span class="nrki-work-category">Page 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01 · Page 02: Reusable Broadsheet Layouts (6 Specimens)</strong>
+                                <span>Structural newspaper page grids, front-page 3-column leads, Tufte marginalia, and open spreads.</span>
+                            </span>
+                            <span class="nrki-work-date">#layouts →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="issue 01 page 03 simple elements catalog 13 specimens atomic primitives">
+                            <span class="nrki-work-category">Page 03</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01 · Page 03: Simple Elements Catalog (13 Specimens)</strong>
+                                <span>Atomic editorial primitives: typography, sidenotes, buttons, badges, lists, quotes, forms, tables, callouts, and media plates.</span>
+                            </span>
+                            <span class="nrki-work-date">#elements →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="issue 01 page 04 complex components catalog 13 specimens interactive widgets">
+                            <span class="nrki-work-category">Page 04</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01 · Page 04: Complex Components Catalog (13 Specimens)</strong>
+                                <span>Multi-part interactive widgets: masthead, cards, pinboard, filter shelf, modal, accordions, tabs, print sheet, timeline, dropdowns, and toast stack.</span>
+                            </span>
+                            <span class="nrki-work-date">#components →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#colophon"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="issue 01 page 05 colophon github stylesheet reusability layer api credits tufte pico matcha papercss open props">
+                            <span class="nrki-work-category">Page 05</span>
+                            <span class="nrki-work-main">
+                                <strong>Issue 01 · Page 05: Colophon, GitHub Stylesheet &amp; @layer Extensibility</strong>
+                                <span>Direct links to standalone <code>nrki-broadsheet-library.css</code>, <code>@layer</code> override snippets, and open-source lineage.</span>
+                            </span>
+                            <span class="nrki-work-date">#colophon →</span>
+                        </a>
+
+                        <!-- 6 Layouts -->
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 01 front-page 3-column broadsheet grid .nrki-layout-frontpage">
+                            <span class="nrki-work-category">Layout 01</span>
+                            <span class="nrki-work-main">
+                                <strong>Front-Page 3-Column Broadsheet Grid (<code>.nrki-layout-frontpage</code>)</strong>
+                                <span>Asymmetric 3-column newspaper lead layout with vertical column hairlines.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #01 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 02 asymmetric lead story + indexed directory aside .nrki-lead-story .nrki-lead-aside">
+                            <span class="nrki-work-category">Layout 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Asymmetric Lead Story + Indexed Directory Aside (<code>.nrki-lead-story</code>)</strong>
+                                <span>2-column hero split pairing a display headline with a ruled table-of-contents rail.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #02 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 03 editorial reading measure + tufte marginalia rail .nrki-layout-marginalia">
+                            <span class="nrki-work-category">Layout 03</span>
+                            <span class="nrki-work-main">
+                                <strong>Editorial Reading Measure + Tufte Marginalia Rail (<code>.nrki-layout-marginalia</code>)</strong>
+                                <span>43rem long-form reading column paired with a dedicated right-hand marginalia and sidenote column.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #03 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 04 flowing multi-column newspaper prose & spanning elements .nrki-columns-prose .nrki-column-span-all">
+                            <span class="nrki-work-category">Layout 04</span>
+                            <span class="nrki-work-main">
+                                <strong>Flowing Multi-Column Newspaper Prose (<code>.nrki-columns-prose</code>)</strong>
+                                <span>CSS multi-column text flow with internal column rules and full-span pull quotes.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #04 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 05 collection shelf with sticky left filter sidebar .nrki-layout-shelf-sidebar">
+                            <span class="nrki-work-category">Layout 05</span>
+                            <span class="nrki-work-main">
+                                <strong>Collection Shelf with Sticky Left Filter Sidebar (<code>.nrki-layout-shelf-sidebar</code>)</strong>
+                                <span>Two-column archive layout with a sticky filter rail and responsive card grid.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #05 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#layouts"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="layout 06 two-page open newspaper spread recto verso .nrki-spread-grid">
+                            <span class="nrki-work-category">Layout 06</span>
+                            <span class="nrki-work-main">
+                                <strong>Two-Page Open Newspaper Spread (<code>.nrki-spread-grid</code>)</strong>
+                                <span>Facing recto/verso pages separated by a tactile center spine fold.</span>
+                            </span>
+                            <span class="nrki-work-date">Layouts · #06 →</span>
+                        </a>
+
+                        <!-- 13 Simple Elements -->
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 01 editorial typography hierarchy emphasis drop cap .nrki-eyebrow .nrki-lead-summary .nrki-drop-cap">
+                            <span class="nrki-work-category">Element 01</span>
+                            <span class="nrki-work-main">
+                                <strong>Editorial Typography, Hierarchy &amp; Emphasis (<code>.nrki-drop-cap</code>, <code>.nrki-eyebrow</code>)</strong>
+                                <span>Display headings, lead summaries, drop caps, quiet notes, and small-caps hierarchy.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #01 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 02 inline semantics keyboard shortcuts tufte sidenotes .nrki-sidenote kbd mark abbr">
+                            <span class="nrki-work-category">Element 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Inline Semantics, Keyboard Shortcuts &amp; Tufte Sidenotes (<code>.nrki-sidenote</code>)</strong>
+                                <span>Semantic inline tags (<code>kbd</code>, <code>mark</code>, <code>abbr</code>, <code>code</code>) and numbered marginalia sidenotes.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #02 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 03 buttons all variants sizes states .nrki-button .nrki-button-primary .nrki-button-danger">
+                            <span class="nrki-work-category">Element 03</span>
+                            <span class="nrki-work-main">
+                                <strong>Buttons — Variants, Sizes &amp; States (<code>.nrki-button</code>)</strong>
+                                <span>Default, primary, secondary, ghost, danger, small, large, and disabled button primitives.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #03 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 04 links breadcrumbs ornament dividers .nrki-text-link .nrki-breadcrumb .nrki-divider-ornament">
+                            <span class="nrki-work-category">Element 04</span>
+                            <span class="nrki-work-main">
+                                <strong>Links, Breadcrumbs &amp; Ornament Dividers (<code>.nrki-breadcrumb</code>, <code>.nrki-divider-ornament</code>)</strong>
+                                <span>Editorial action links, slash-separated breadcrumbs, double rules, and theme glyph dividers.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #04 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 05 badges status stamps rating seal tag pills .nrki-badge .nrki-rating-stamp .nrki-tag-pill">
+                            <span class="nrki-work-category">Element 05</span>
+                            <span class="nrki-work-main">
+                                <strong>Badges, Status Stamps, Rating Seal &amp; Tag Pills (<code>.nrki-badge</code>, <code>.nrki-tag-pill</code>)</strong>
+                                <span>Metadata chips, semantic status badges, critic rating stamps, and interactive tag pills.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #05 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 06 lists editorial ordered checklists ruled definitions .nrki-ordered-list .nrki-checklist .nrki-definition-list">
+                            <span class="nrki-work-category">Element 06</span>
+                            <span class="nrki-work-main">
+                                <strong>Lists — Editorial, Ordered, Checklists, Ruled &amp; Definitions (<code>.nrki-ordered-list</code>)</strong>
+                                <span>Theme-adaptive list markers, tabular ordered lists, checklists, and two-column definition lists.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #06 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 07 blockquotes syntax-framed code blocks .nrki-quote .nrki-code-block">
+                            <span class="nrki-work-category">Element 07</span>
+                            <span class="nrki-work-main">
+                                <strong>Blockquotes &amp; Syntax-Framed Code Blocks (<code>.nrki-quote</code>, <code>.nrki-code-block</code>)</strong>
+                                <span>Editorial pull-quotes with attribution and syntax-highlighted code frames.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #07 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 08 form inputs textareas switches sliders .nrki-input .nrki-select .nrki-switch .nrki-range">
+                            <span class="nrki-work-category">Element 08</span>
+                            <span class="nrki-work-main">
+                                <strong>Form Inputs, Textareas, Switches &amp; Sliders (<code>.nrki-input</code>, <code>.nrki-switch</code>)</strong>
+                                <span>Accessible form fields, validation states, toggle switches, and range sliders.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #08 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 09 newspaper tables structured ledgers .nrki-table .nrki-table-striped .nrki-cell-numeric">
+                            <span class="nrki-work-category">Element 09</span>
+                            <span class="nrki-work-main">
+                                <strong>Newspaper Tables &amp; Structured Ledgers (<code>.nrki-table</code>)</strong>
+                                <span>Financial and archival data tables with tabular numerals and responsive scroll wrappers.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #09 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 10 editorial callouts status notices .nrki-callout .nrki-callout-info .nrki-callout-warning">
+                            <span class="nrki-work-category">Element 10</span>
+                            <span class="nrki-work-main">
+                                <strong>Editorial Callouts &amp; Status Notices (<code>.nrki-callout</code>)</strong>
+                                <span>Neutral, info, success, warning, and danger editorial notice boxes.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #10 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 11 media figure frame captioned plate .nrki-media-figure">
+                            <span class="nrki-work-category">Element 11</span>
+                            <span class="nrki-work-main">
+                                <strong>Media Figure Frame &amp; Captioned Plate (<code>.nrki-media-figure</code>)</strong>
+                                <span>Framed archival illustration plate with ruled caption and credit stamp.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #11 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 12 progress bars stat metrics author byline .nrki-progress .nrki-stat-strip .nrki-author-byline">
+                            <span class="nrki-work-category">Element 12</span>
+                            <span class="nrki-work-main">
+                                <strong>Progress Bars, Stat Metrics &amp; Author Byline (<code>.nrki-stat-strip</code>)</strong>
+                                <span>Meter bars, key-value KPI stat strips, and newspaper correspondent byline blocks.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #12 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#elements"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="element 13 tooltips empty states skeletons .nrki-tooltip .nrki-empty-state .nrki-skeleton-card">
+                            <span class="nrki-work-category">Element 13</span>
+                            <span class="nrki-work-main">
+                                <strong>Tooltips, Empty States &amp; Skeletons (<code>.nrki-tooltip</code>, <code>.nrki-empty-state</code>)</strong>
+                                <span>Pure-CSS focus/hover tooltips, zero-result notices, and shimmer loading placeholders.</span>
+                            </span>
+                            <span class="nrki-work-date">Elements · #13 →</span>
+                        </a>
+
+                        <!-- 13 Complex Components -->
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 01 newspaper masthead bar wordmark live clock nav .nrki-site-header .nrki-masthead-bar">
+                            <span class="nrki-work-category">Component 01</span>
+                            <span class="nrki-work-main">
+                                <strong>Newspaper Masthead Bar, Wordmark, Live Clock &amp; Nav (<code>.nrki-site-header</code>)</strong>
+                                <span>Complete broadsheet header with volume/edition bar, centered wordmark, and double-ruled navigation.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #01 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 02 editorial interactive link cards .nrki-card .nrki-card-link .nrki-framed-panel">
+                            <span class="nrki-work-category">Component 02</span>
+                            <span class="nrki-work-main">
+                                <strong>Editorial &amp; Interactive Link Cards (<code>.nrki-card</code>, <code>.nrki-framed-panel</code>)</strong>
+                                <span>Theme-bordered project and dispatch cards with metadata headers and footer actions.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #02 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 03 pinboard card media ledger card .nrki-pin-card .nrki-media-card">
+                            <span class="nrki-work-category">Component 03</span>
+                            <span class="nrki-work-main">
+                                <strong>Pinboard Card &amp; Media Ledger Card (<code>.nrki-pin-card</code>, <code>.nrki-media-card</code>)</strong>
+                                <span>Brass-pinned visual study cards with connected-motif chips and critic review cards.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #03 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 04 lead story split section grid prose columns .nrki-section-block">
+                            <span class="nrki-work-category">Component 04</span>
+                            <span class="nrki-work-main">
+                                <strong>Lead Story Split, Section Grid &amp; Prose Columns (<code>.nrki-section-block</code>)</strong>
+                                <span>Two-column editorial section template pairing a sticky section title rail with content grids.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #04 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 05 interactive filter bar shelf controls .nrki-filter-bar .nrki-filter-button">
+                            <span class="nrki-work-category">Component 05</span>
+                            <span class="nrki-work-main">
+                                <strong>Interactive Filter Bar &amp; Shelf Controls (<code>.nrki-filter-bar</code>)</strong>
+                                <span>Multi-facet category and tag filter bar with live result counter.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #05 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 06 works newspaper index resume dossier rows .nrki-works-ledger .nrki-resume-row">
+                            <span class="nrki-work-category">Component 06</span>
+                            <span class="nrki-work-main">
+                                <strong>Works Newspaper Index &amp; Resume Dossier Rows (<code>.nrki-works-ledger</code>)</strong>
+                                <span>3-column ruled archive rows for essays, logs, and downloadable CV editions.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #06 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 07 accessible modal article overlay .nrki-modal-backdrop .nrki-modal-card">
+                            <span class="nrki-work-category">Component 07</span>
+                            <span class="nrki-work-main">
+                                <strong>Accessible Modal &amp; Article Overlay (<code>.nrki-modal-card</code>)</strong>
+                                <span>Dialog overlay with keyboard Escape handling, focus return, and related-motif chips.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #07 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 08 accordions flush hairline boxed exclusive variants .nrki-accordion .nrki-accordion-boxed">
+                            <span class="nrki-work-category">Component 08</span>
+                            <span class="nrki-work-main">
+                                <strong>Accordions — Flush Hairline &amp; Boxed Exclusive Variants (<code>.nrki-accordion</code>)</strong>
+                                <span>Native <code>&lt;details&gt;</code> disclosures with Expand All / Collapse All controls.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #08 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 09 newspaper tabs segmented controls .nrki-tabs .nrki-segmented-control">
+                            <span class="nrki-work-category">Component 09</span>
+                            <span class="nrki-work-main">
+                                <strong>Newspaper Tabs &amp; Segmented Controls (<code>.nrki-tabs</code>, <code>.nrki-segmented-control</code>)</strong>
+                                <span>ARIA tablist switcher and pill segmented controls with keyboard arrow navigation.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #09 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 10 print-ready resume sheet site footer .nrki-resume-sheet .nrki-site-footer">
+                            <span class="nrki-work-category">Component 10</span>
+                            <span class="nrki-work-main">
+                                <strong>Print-Ready Resume Sheet &amp; Site Footer (<code>.nrki-resume-sheet</code>)</strong>
+                                <span>A4 dossier sheet engineered with <code>@page</code> and <code>@media print</code> rules.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #10 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 11 archive pagination editorial timeline .nrki-pagination .nrki-timeline">
+                            <span class="nrki-work-category">Component 11</span>
+                            <span class="nrki-work-main">
+                                <strong>Archive Pagination &amp; Editorial Timeline (<code>.nrki-pagination</code>, <code>.nrki-timeline</code>)</strong>
+                                <span>Interactive page-number bar and vertical chronological milestone ledger.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #11 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 12 dropdown menu dismissible editorial toast banner .nrki-dropdown .nrki-toast-banner">
+                            <span class="nrki-work-category">Component 12</span>
+                            <span class="nrki-work-main">
+                                <strong>Dropdown Menu &amp; Dismissible Editorial Toast (<code>.nrki-dropdown</code>, <code>.nrki-toast-banner</code>)</strong>
+                                <span>Popover action menu and inline dismissible dispatch notification banner.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #12 →</span>
+                        </a>
+
+                        <a class="nrki-work-row" href="../magazines/issue-01-newspaper-web-design/newspaper-design-magazine.html#components"
+                            data-site-index-entry data-index-category="issue-01"
+                            data-index-keywords="component 13 notifications floating toast stack .nrki-notification .nrki-toast-stack .nrki-toast">
+                            <span class="nrki-work-category">Component 13</span>
+                            <span class="nrki-work-main">
+                                <strong>Notifications &amp; Floating Toast Stack (<code>.nrki-notification</code>, <code>.nrki-toast-stack</code>)</strong>
+                                <span>Semantic alert banners and interactive spawner for timed countdown floating toasts.</span>
+                            </span>
+                            <span class="nrki-work-date">Components · #13 →</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SECTION IV: PUBLISHED SHELF ENTRIES (PROJECTS, WORKS & MEDIA)
+                 Populated progressively from `window.NRKI_DATA` when items exist,
+                 with a fallback status ledger when shelves are under construction.
+                 ============================================================ -->
+            <section class="nrki-section-block" id="index-shelf-entries" data-site-index-section aria-labelledby="index-shelves-heading">
+                <div class="nrki-section-heading">
+                    <p class="nrki-eyebrow">IV / Shelf Dispatches</p>
+                    <h2 id="index-shelves-heading">Projects, Works &amp; Media Entries</h2>
+                    <p class="nrki-section-heading-note">
+                        Individual project dossiers, essays, poems, dev logs, and media reviews indexed from the site shelves.
+                    </p>
+                </div>
+
+                <div class="nrki-section-content">
+                    <div id="dynamic-shelf-index-list" class="nrki-works-ledger">
+                        <!-- Fallback rows shown when shelf datasets are empty on main, or augmented by broadsheet-site-index.js -->
+                        <a id="dynamic-shelf-empty-callout" class="nrki-work-row" href="./projects.html"
+                            data-site-index-entry data-index-category="projects works media"
+                            data-index-keywords="projects works media shelves archive status under construction">
+                            <span class="nrki-work-category">Shelf Status</span>
+                            <span class="nrki-work-main">
+                                <strong>Projects, Works &amp; Media Shelves</strong>
+                                <span>Browse the Projects, Works, and Media section pages as new dispatches and dossiers are published to production.</span>
+                            </span>
+                            <span class="nrki-work-date">Browse Shelves →</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ================================================================
+             SITE FOOTER
+             ================================================================ -->
+        <footer class="nrki-site-footer">
+            <a class="nrki-footer-mark" href="../index.html">NRKI</a>
+            <p>A personal broadsheet, made one page at a time.</p>
+            <div>
+                <a href="./magazines-index.html">Magazines</a>
+                <span> · </span>
+                <a href="./projects.html">Projects</a>
+                <span> · </span>
+                <a href="./works.html">Works</a>
+                <span> · </span>
+                <a href="./media.html">Media</a>
+                <span> · </span>
+                <a href="./about.html">About &amp; CV</a>
+                <span> · </span>
+                <a href="./site-index.html" aria-current="page">Index</a>
+                <span> · </span>
+                <a href="../sitemap.xml">Sitemap.xml <span aria-hidden="true">↗</span></a>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

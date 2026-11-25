@@ -1,0 +1,9 @@
+# ============================================================================
+# NRKI — Search Engine Crawler Directives (https://nrki.in/robots.txt)
+# Allows full indexing of all broadsheet pages, magazines, resumes, and shelves.
+# ============================================================================
+
+User-agent: *
+Allow: /
+
+Sitemap: https://nrki.in/sitemap.xml

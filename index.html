@@ -6,7 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
         content="NRKI - a personal broadsheet for software projects, writing, ideas, resumes, and media notes.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Raj Aryan (NRKI)">
+    <link rel="canonical" href="https://nrki.in/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NRKI">
+    <meta property="og:title" content="NRKI - Personal Broadsheet &amp; Portfolio">
+    <meta property="og:description"
+        content="NRKI - a personal broadsheet for software projects, writing, ideas, resumes, and media notes.">
+    <meta property="og:url" content="https://nrki.in/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="NRKI - Personal Broadsheet &amp; Portfolio">
+    <meta name="twitter:description"
+        content="NRKI - a personal broadsheet for software projects, writing, ideas, resumes, and media notes.">
     <title>NRKI - Personal Broadsheet &amp; Portfolio</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://nrki.in/#website",
+          "url": "https://nrki.in/",
+          "name": "NRKI",
+          "alternateName": "NRKI Broadsheet",
+          "description": "Personal broadsheet of software projects, design magazines, reusable CSS, essays, poems, and printable resumes by Raj Aryan.",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://nrki.in/pages/site-index.html?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://nrki.in/#person",
+          "name": "Raj Aryan",
+          "alternateName": "NRKI",
+          "url": "https://nrki.in/pages/about.html",
+          "jobTitle": "Software & Front-End Engineer",
+          "email": "mailto:raj@nrki.in",
+          "sameAs": [
+            "https://github.com/Ray-D-Zaxe",
+            "https://www.linkedin.com/in/raj-aryan-zaxe"
+          ]
+        }
+      ]
+    }
+    </script>
     <!-- Synchronous theme + mode script: applies [data-theme] and [data-mode] before first paint to prevent flicker -->
     <script>
         (function restoreBroadsheetThemeAndMode() {
@@ -77,6 +124,7 @@
                 <a href="./pages/works.html">Works</a>
                 <a href="./pages/media.html">Media</a>
                 <a href="./pages/about.html">About &amp; CV</a>
+                <a href="./pages/site-index.html">Index</a>
             </nav>
         </header>
 
@@ -111,6 +159,7 @@
                         <li><a href="./pages/works.html">Works - Blogs, poems, dev logs &amp; articles (Coming soon)</a></li>
                         <li><a href="./pages/magazines-index.html">Magazines - Design monographs &amp; Issue 01 Broadsheet CSS</a></li>
                         <li><a href="./pages/media.html">Media - Reviews, ratings &amp; watchlist (Coming soon)</a></li>
+                        <li><a href="./pages/site-index.html">Master Index - Searchable A–Z site &amp; specimen directory</a></li>
                     </ol>
                     <p class="nrki-folio">No. 01 <span>·</span> Built with HTML, CSS, JavaScript &amp; React</p>
                 </aside>
@@ -221,7 +270,11 @@
                 <span> · </span>
                 <a href="./pages/media.html">Media</a>
                 <span> · </span>
-                <a href="./pages/about.html">About &amp; CV <span aria-hidden="true">→</span></a>
+                <a href="./pages/about.html">About &amp; CV</a>
+                <span> · </span>
+                <a href="./pages/site-index.html">Index</a>
+                <span> · </span>
+                <a href="./sitemap.xml">Sitemap.xml <span aria-hidden="true">↗</span></a>
             </div>
         </footer>
     </div>

@@ -4024,6 +4024,11 @@
       gap: 0.55rem;
     }
 
+    /* Span an odd trailing nav item cleanly across both columns so 7-item menus have no orphan gap */
+    .nrki-mobile-nav-list li:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+
     .nrki-mobile-nav-menu-link {
       display: flex;
       align-items: center;
