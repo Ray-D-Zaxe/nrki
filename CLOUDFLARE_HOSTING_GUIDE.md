@@ -235,3 +235,27 @@ Inside your Cloudflare Pages project, any file placed in a `functions/` folder b
 | **Adding a New Standalone React SPA** | New GitHub Repo → Cloudflare Pages → Custom Domain `app.nrki.in` | Free |
 | **Adding a Personal SQL Database** | `npx wrangler d1 create <name>` + `functions/api/...` | Free (up to 5 GB & 5M reads/day) |
 
+---
+
+## Step 7: Getting `nrki.in` Indexed on Google Search Console & Bing Webmaster Tools
+
+Your repository includes everything search engines need out of the box:
+- **`https://nrki.in/robots.txt`** — Grants crawlers full indexing access and points automatically to `https://nrki.in/sitemap.xml`.
+- **`https://nrki.in/sitemap.xml`** — Lists all canonical URLs (Front Page, Master Index, Magazines, Issue 01, About, Web & PDF Resumes, Projects, Works, and Media).
+- **`https://nrki.in/pages/site-index.html`** — On-site Master Broadsheet Index with semantic crawlable HTML links to every page and all 32 Issue 01 specimens.
+- **Canonical, OpenGraph, Twitter Card & JSON-LD Schema** — Embedded in `<head>` across all pages so search results display rich titles, descriptions, and author/site metadata.
+
+### 7A. Verify `nrki.in` in Google Search Console (1-Click via Cloudflare DNS)
+1. Open [Google Search Console](https://search.google.com/search-console/) and sign in with your Google account.
+2. In the **Domain** property box on the left, enter **`nrki.in`** (without `https://`) and click **Continue**.
+3. Google will detect that `nrki.in` uses **Cloudflare DNS**:
+   - Click **Start verification** → sign in to Cloudflare when prompted → click **Authorize** to let Google add the `TXT` verification record automatically.
+   - *(Alternative manual method)* Copy the `google-site-verification=...` TXT string shown by Google → in Cloudflare dashboard go to **Websites** → **`nrki.in`** → **DNS** → **Records** → **Add record** (`Type: TXT`, `Name: @`, `Content: <paste token>`) → Save → click **Verify** in Google Search Console.
+4. In the Google Search Console left sidebar, click **Sitemaps**:
+   - Under **Add a new sitemap**, type **`sitemap.xml`** (`https://nrki.in/sitemap.xml`) and click **Submit**.
+5. Optional fast-track: Paste `https://nrki.in/` and `https://nrki.in/pages/site-index.html` into the top **Inspect any URL** bar in Google Search Console and click **Request Indexing**.
+
+### 7B. Import into Bing Webmaster Tools (Covers Bing, DuckDuckGo, Yahoo & Ecosia)
+1. Open [Bing Webmaster Tools](https://www.bing.com/webmasters/) and sign in.
+2. Choose **Import from Google Search Console** → click **Import** (this verifies `nrki.in` and imports `https://nrki.in/sitemap.xml` in one click without adding another DNS record!).
+
